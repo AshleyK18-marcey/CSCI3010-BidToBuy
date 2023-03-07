@@ -11,6 +11,7 @@ public:
     unsigned int GetID(){ return product_id_; };
     void OpenBid();
     void CloseBid();
+    void SetSellerId(unsigned int newId);
 private:
     const unsigned int product_id_;
     float current_bid_ = 0;  //dollar value of current highest bid
