@@ -1,6 +1,7 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 #include <string>
+#include <vector>
 
 enum class ProductCategory {Car, Furniture, Book, Computer, Jewelry};
 
@@ -13,7 +14,8 @@ public:
 private:
     const unsigned int product_id_;
     float current_bid_ = 0;  //dollar value of current highest bid
-    unsigned int highest_bidder_ = 0;    //id of current highest bidder
+    std::vector<unsigned int> bidders_;    //id of current highest bidder
+    std::vector<unsigned int> bid_vals_;
     unsigned int seller_id_ = 0;
     bool active;
 };
