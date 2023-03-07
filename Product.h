@@ -6,14 +6,17 @@ class Product{
 public:
 	void MakeBid(float bid, unsigned int user_id);
     unsigned int GetID(){ return product_id_; };
+    void OpenBid();
+    void CloseBid();
 private:
     const unsigned int product_id_;
     float current_bid_ = 0;  //dollar value of current highest bid
     unsigned int highest_bidder_ = 0;    //id of current highest bidder
     unsigned int seller_id_ = 0;
+    bool active;
 };
 class Car: public Product{
-public:
+public: 
     std::string GetMake(){ return make_; };
     std::string GetModel(){ return model_; };
     unsigned int GetYear(){ return year_; };
