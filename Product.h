@@ -12,8 +12,11 @@ public:
     void OpenBid();
     void CloseBid();
     void SetSellerId(unsigned int newId);
+    void SetUUID(unsigned int newUUID);
+    unsigned int GetUUID() { return uuid_; };
 private:
     const unsigned int product_id_;
+    unsigned int uuid_ = 0;
     float current_bid_ = 0;  //dollar value of current highest bid
     std::vector<unsigned int> bidders_;    //id of current highest bidder
     std::vector<unsigned int> bid_vals_;
@@ -84,12 +87,12 @@ class Jewelry: public Product{
 public:
     Jewelry();
     std::string GetMaterial(){ return material_; };
-    int GetNumDiamonds() { return numDIamonds_; };
+    int GetNumDiamonds() { return numDiamonds_; };
     void SetMaterial(std::string newMaterial);
     void SetNumDiamonds(unsigned int newNumDiamonds);
 private:
     std::string material_;
-    int numDIamonds_;
+    int numDiamonds_;
     const unsigned int product_id_ = 5;
 };
 
