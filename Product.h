@@ -21,6 +21,7 @@ private:
     float current_bid_ = 0;  //dollar value of current highest bid
     std::vector<unsigned int> bidders_;    //id of current highest bidder
     std::vector<unsigned int> bid_vals_;
+    unsigned int buyer_id_ = 0;
     unsigned int seller_id_ = 0;
     bool active;
 };

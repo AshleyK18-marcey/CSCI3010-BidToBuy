@@ -58,7 +58,7 @@ public:
  	Driver();  // private constructor
     std::vector<Conversation*> conversations_;
     std::vector<Product*> unsold_products_;
-    std::vector<Product*> sold_products_;
+    std::vector<Product> sold_products_;
     std::vector<User> users_;
     User * active_user_;
 
