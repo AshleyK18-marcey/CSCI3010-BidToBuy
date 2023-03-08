@@ -22,7 +22,8 @@ Driver::Driver() {
         std::getline(rowStream, bal, ',');
 
         User tempUser(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
-        // this->users_.push_back(tempUser);
+        // User tempUser((std::string)id, (std::string)name, (std::string)phone, (std::string)address, stof(bal));
+        this->users_.push_back(tempUser);
     }
     fs.close();
     // fs.open("runtime_data/products.csv");
@@ -32,7 +33,7 @@ void Driver::DisplayUsers() {
     std::cout << "Number of users: " << this->users_.size() << std::endl;
     for (unsigned int i = 0; i < this->users_.size(); i++)
     {
-        // std::cout << i << this->users_.at(i) << std::endl;
-        std::cout << i << std::endl;
+        std::cout << i << ") " << this->users_.at(i) << std::endl;
+        // std::cout << i << std::endl;
     }
 }

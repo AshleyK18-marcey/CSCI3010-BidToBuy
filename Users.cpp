@@ -23,6 +23,6 @@ void User::SetAddress(std::string newAddress) {
 }
 
 std::ostream& operator<<(std::ostream& os, const User &u) {
-    os << "name: " << u.name_ << ", balance: " << u.balance_ << ", phone: " << u.phone_ << ", address: " << u.address_;
+    os << "Name: " << u.name_ << ", Balance: " << u.balance_ << ", Phone: " << u.phone_ << ", Address: " << u.address_;
     return os;
 }
