@@ -1,5 +1,7 @@
 class User{
 public:
+  User(unsigned int id, std::string name, std::string phone, std::string address, float balance);
+  
   float get_balance();
 
   unsigned int get_userid();
@@ -16,7 +18,7 @@ public:
 
   void SetAddress(std::string newAddress);
 
-  void UpdateInformation(std::string infoToChange, std::string newValue);
+  void UpdateInformation(std::string infoToChange);
 
 private:
 
@@ -29,19 +31,10 @@ private:
 };
 class Seller: public User{
 public:
-  void addProductForSale(Product* object); 
-
   void AddBalanace(float amount);
-
-  void OpenBid(Product* product);
-
-  void CloseBid(Product* product); 
-
- 
   
 private:
-  std::vector<Products*> open_bids_;
-  std::vector<Products*> closed_bids_;
+  
 
   
 };
@@ -50,9 +43,7 @@ public:
 
   void DeductBalanace(float amount);
   
-  void addBidToProduct();
-
-  void sendMessage();
+  void addBidToProduct(Product* product); //could check if balace is enough
 private:
   
 };

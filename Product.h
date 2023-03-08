@@ -8,12 +8,12 @@ enum class ProductCategory {Car, Furniture, Book, Computer, Jewelry};
 class Product{
 public:
 	void MakeBid(float bid, unsigned int user_id);
-    unsigned int GetID(){ return product_id_; };
+    unsigned int get_id(){ return product_id_; };
     void OpenBid();
     void CloseBid();
     void SetSellerId(unsigned int newId);
     void SetUUID(unsigned int newUUID);
-    unsigned int GetUUID() { return uuid_; };
+    unsigned int get_UUID() { return uuid_; };
 private:
     const unsigned int product_id_;
     unsigned int uuid_ = 0;

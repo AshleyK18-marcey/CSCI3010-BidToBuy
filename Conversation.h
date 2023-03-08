@@ -2,8 +2,9 @@
 #define PRODUCT_H
 #include <string>
 struct Message{
-    unsigned int sent_from_id_;
+    User sent_from_;
     std::string message_content_;
+    
 }
 class Conversation{
     public: 
@@ -15,7 +16,8 @@ class Conversation{
 
         unsigned int get_sellerid();
 
-        void SendMessage(Message* message);
+        void SendMessage(std::string message);
+
 
 
     private:
