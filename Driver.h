@@ -1,6 +1,10 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
+#include <vector>
+#include "Product.h"
+#include "Conversation.h"
+#include "Users.h"
 
 class Driver {
 public:
