@@ -1,3 +1,6 @@
+#include <string>
+#include <vector>
+
 class User{
 public:
   User(unsigned int id, std::string name, std::string phone, std::string address, float balance);
@@ -18,7 +21,7 @@ public:
 
   void SetAddress(std::string newAddress);
 
-  void UpdateInformation(std::string infoToChange);
+  void UpdateInformation(std::string , std::string newValue);
 
 private:
 
