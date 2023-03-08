@@ -1,5 +1,9 @@
+#ifndef USERS_H
+#define USERS_H
+
 #include <string>
 #include <vector>
+#include "Product.h"
 
 class User{
 public:
@@ -50,3 +54,5 @@ public:
 private:
   
 };
+
+#endif // USERS_H ehader guard
