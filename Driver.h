@@ -20,11 +20,24 @@ public:
 	Driver(Driver const&) = delete; // copy constructor
 	void operator=(Driver const&) = delete; // assignment operator
 
-    std::vector<Conversation*> get_users_conversations(unsigned int userid);
+	void PostProductForSale(Product* newProduct);
 
+	void OpenBid(Product* product);
 
+	void CloseBid(Product* product);
 
-    
+	void DisplaySimilarProductsSold(const unsigned int product_id);
+
+	void DisplayConversationsForUser(unsigned int userid);
+
+	void DisplayActiveProducts(unsigned int userid);
+
+	void DisplayInactiveProducts(unsigned int userid);
+
+	void DisplayBoughtProducts(unsigned int userid);
+
+    void DisplayCurrentBids(unsigned int userid);
+
  private:
  	Driver();  // private constructor
     std::vector<Conversation*> conversations_;
