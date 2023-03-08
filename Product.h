@@ -7,6 +7,7 @@ enum class ProductCategory {Car, Furniture, Book, Computer, Jewelry};
 
 class Product{
 public:
+    Product();
 	void MakeBid(float bid, unsigned int user_id);
     unsigned int get_id(){ return product_id_; };
     void OpenBid();
@@ -31,7 +32,7 @@ public:
     unsigned int GetYear(){ return year_; };
     void SetMake(std::string newMake);
     void SetModel(std::string newModel);
-    void SetYear(int newYear);
+    void SetYear(unsigned int newYear);
 private:
     std::string make_;
     std::string model_;

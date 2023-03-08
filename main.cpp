@@ -6,5 +6,6 @@
 // because of this a map of bids in main doesn't really make sense, I hope it is OK to not have in this submission
 
 int main() {
-    Driver &mainDriver = Driver::GetInstance();
+    // Driver &mainDriver = Driver::GetInstance();
+    Driver * mainDriver = Driver::GetInstance();
 }

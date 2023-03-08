@@ -3,21 +3,22 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include "Product.h"
 
 class User{
 public:
   User(unsigned int id, std::string name, std::string phone, std::string address, float balance);
   
-  float get_balance();
+  float get_balance() { return balance_; };
 
-  unsigned int get_userid();
+  unsigned int get_userid() { return userid_; };
 
-  std::string get_name();
+  std::string get_name() { return name_; };
 
-  std::string get_phone();
+  std::string get_phone() { return phone_; };
 
-  std::string get_address();  
+  std::string get_address() { return address_; };
 
   void SetName(std::string newName);
 
@@ -25,7 +26,9 @@ public:
 
   void SetAddress(std::string newAddress);
 
-  void UpdateInformation(std::string , std::string newValue);
+  void UpdateInformation(std::string infoToChange, std::string newValue);
+
+  friend std::ostream& operator<<(std::ostream& os, const User &u);
 
 private:
 

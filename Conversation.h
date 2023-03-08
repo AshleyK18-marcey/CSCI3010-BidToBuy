@@ -1,6 +1,8 @@
 #ifndef CONVERSATION_H
 #define CONVERSATION_H
 #include <string>
+#include "Users.h"
+
 struct Message{
     User sent_from_;
     std::string message_content_;

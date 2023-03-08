@@ -2,19 +2,32 @@
 #define DRIVER_H
 
 #include <vector>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include "Product.h"
 #include "Conversation.h"
 #include "Users.h"
 
 class Driver {
 public:
-	
-	static Driver& GetInstance() {
-		// gets instantiated the first time
-		static Driver instance; // guaranteed to be destroyed
-
-		return instance;
+	static Driver* GetInstance() {
+		if (DriverPtr == NULL)	// no instance created yet
+		{
+			DriverPtr = new Driver();
+			return DriverPtr;
+		} else {
+			return DriverPtr;
+		}
 	}
+	
+	// static Driver& GetInstance() {
+	// 	// gets instantiated the first time
+	// 	static Driver instance; // guaranteed to be destroyed
+
+	// 	return instance;
+	// }
 
 	// Delete the methods we don't want
 	Driver(Driver const&) = delete; // copy constructor
@@ -38,13 +51,16 @@ public:
 
     void DisplayCurrentBids(unsigned int userid);
 
+	void DisplayUsers();
+
  private:
+	static Driver * DriverPtr;
  	Driver();  // private constructor
     std::vector<Conversation*> conversations_;
     std::vector<Product*> unsold_products_;
     std::vector<Product*> sold_products_;
-    std::vector<User*> users_;
-    User active_user_;
+    std::vector<User> users_;
+    User * active_user_;
 
   
 };  // class Driver
