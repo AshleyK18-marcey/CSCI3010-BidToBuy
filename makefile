@@ -7,8 +7,8 @@ all: main
 main: main.cpp Driver.o
 	$(CXX) $(CXXFLAGS) main.cpp Driver.o -o main
 
-test: Users.o Driver.o test.cpp
-	$(CXX) $(CXXFLAGS) Users.o Driver.o test.cpp -o test
+test: Users.o Product.o Driver.o test.cpp
+	$(CXX) $(CXXFLAGS) Product.o Users.o Driver.o test.cpp -o test
 
 Driver.o: Driver.cpp
 	$(CXX) $(CXXFLAGS) -c Driver.cpp

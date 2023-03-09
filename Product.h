@@ -2,6 +2,7 @@
 #define PRODUCT_H
 #include <string>
 #include <vector>
+#include <iostream>
 
 enum class ProductCategory {Car, Furniture, Book, Computer, Jewelry};
 
@@ -13,14 +14,18 @@ public:
     void OpenBid();
     void CloseBid();
     void SetSellerId(unsigned int newId);
+    void SetBuyerId(unsigned int newId);
     void SetUUID(unsigned int newUUID);
+    void SetFinalBid(float bid);
     unsigned int get_UUID() { return uuid_; };
+    friend std::ostream& operator<<(std::ostream& os, const Product &p);
 private:
     const unsigned int product_id_;
     unsigned int uuid_ = 0;
     float current_bid_ = 0;  //dollar value of current highest bid
     std::vector<unsigned int> bidders_;    //id of current highest bidder
-    std::vector<unsigned int> bid_vals_;
+    std::vector<float> bid_vals_;
+    float final_bid_ = 0;
     unsigned int buyer_id_ = 0;
     unsigned int seller_id_ = 0;
     bool active;
@@ -97,5 +102,7 @@ private:
     int numDiamonds_;
     const unsigned int product_id_ = 5;
 };
+
+Product* productFactory(ProductCategory pc, unsigned int sellerId);
 
 #endif  //header gaurd

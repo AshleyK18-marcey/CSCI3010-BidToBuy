@@ -56,6 +56,28 @@ void Product::SetSellerId(unsigned int newId) {
     }
 }
 
+void Product::SetBuyerId(unsigned int newId) {
+    if (newId > 0)
+    {
+        this->buyer_id_ = newId;
+    }
+}
+
+void Product::SetFinalBid(float bid) {
+    if (bid >= 0)
+    {
+        this->final_bid_ = bid;
+    } else {
+        this->final_bid_ = 0;
+    }
+    
+}
+
+std::ostream& operator<<(std::ostream& os, const Product &p) {
+    os << "ID: " << p.product_id_ << ", seller -> buyer: " << p.seller_id_ << " -> " << p.buyer_id_ << ", final price: " << p.final_bid_;
+    return os;
+}
+
 // -----Car-----
 
 void Car::SetMake(std::string newMake) {

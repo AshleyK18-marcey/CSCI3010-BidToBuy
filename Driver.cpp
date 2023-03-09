@@ -40,6 +40,10 @@ Driver::Driver() {
         std::getline(rowStream, s_id, ',');
         std::getline(rowStream, b_id, ',');
         std::getline(rowStream, finalBid, ',');
+
+        Product* tempProduct = productFactory(static_cast<ProductCategory>(stoi(id)), stoi(s_id));
+        tempProduct->SetBuyerId(stoi(b_id));
+        tempProduct->SetFinalBid(stof(finalBid));
     }
 
     fs.close();
@@ -51,5 +55,13 @@ void Driver::DisplayUsers() {
     {
         std::cout << i << ") " << this->users_.at(i) << std::endl;
         // std::cout << i << std::endl;
+    }
+}
+
+void Driver::DisplaySoldProducts() {
+    std::cout << "Number of sold products: " << this->sold_products_.size() << std::endl;
+    for (unsigned int i = 0; i < this->sold_products_.size(); i++)
+    {
+        std::cout << i << ") " << this->sold_products_.at(i) << std::endl;
     }
 }
