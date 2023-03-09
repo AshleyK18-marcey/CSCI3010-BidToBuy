@@ -4,29 +4,33 @@
 #include "Users.h"
 
 struct Message{
-    User sent_from_;
+    User* sent_from_;
     std::string message_content_;
-    
 };
 
 class Conversation{
     public: 
-        Conversation(unsigned int buyerid_, unsigned int sellerid_);
+        Conversation(User* buyer, User* seller);
 
         void DisplayMessages();
 
-        unsigned int get_buyerid();
+        unsigned int get_buyerid(){ return buyerPtr_->get_userid();  };
 
-        unsigned int get_sellerid();
+        unsigned int get_sellerid(){ return sellerPtr_->get_userid(); };
 
-        void SendMessage(std::string message);
+        User* get_buyer_ptr(){ return buyerPtr_; };
 
+        User* get_seller_ptr(){ return sellerPtr_; };
 
+        void SendMessage(std::string message, User* senderPtr);
+
+        bool UserPresent(User* user);
 
     private:
-        unsigned int buyerid_;
+        User* buyerPtr_;
+        User* sellerPtr_;
         unsigned int sellerid_;
-        std::vector<Message*> message_history_;
+        std::vector<Message> message_history_;
 };
 
 #endif // CONVERSATION_H header guard

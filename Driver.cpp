@@ -1,5 +1,12 @@
 #include "Driver.h"
 
+// retrieved from: https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
+bool is_number(const std::string& s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}
 
 Driver* Driver::DriverPtr = NULL;
 
@@ -65,5 +72,77 @@ void Driver::DisplaySoldProducts() {
     for (unsigned int i = 0; i < this->sold_products_.size(); i++)
     {
         std::cout << i << ") " << *this->sold_products_.at(i) << std::endl;
+    }
+}
+
+void Driver::CreateConversation(User* buyer, User* seller) {
+    Conversation* convPtr = new Conversation(buyer, seller);
+    this->conversations_.push_back(convPtr);
+}
+
+void Driver::handleConversing(User* userPtr) {
+    std::vector<Conversation*> validConversations;  //stores conversation that thuis user is a part of
+    for (unsigned int i = 0; i < this->conversations_.size(); i++)
+    {
+        if (this->conversations_.at(i)->UserPresent(userPtr))
+        {
+            validConversations.push_back(this->conversations_.at(i));
+        }
+    }
+
+    // print conversations to enter
+    // std::cout << "select desired conversation" << std::endl;
+    std::cout << "index) Buyer, Seller" << std::endl;
+    for (unsigned int i = 0; i < validConversations.size(); i++)
+    {        
+        std::cout << i << ") " << validConversations.at(i)->get_buyer_ptr()->get_name() << ", " << validConversations.at(i)->get_seller_ptr()->get_name() << std::endl;
+    }
+    bool validInput = false;
+    std::string userInput;
+    Conversation* selectedConversation;
+
+    // select desired conversation
+    while(!validInput) {
+        std::cout << "select desired conversation or (q)uit: ";
+        std::getline(std::cin, userInput);
+        if (userInput == "q")
+        {
+            return;
+        }
+        if (is_number(userInput) && stoi(userInput) >= 0 && stoi(userInput) < validConversations.size())
+        {
+            validInput = true;
+            selectedConversation = validConversations.at(stoi(userInput));
+        }
+    }
+    
+    bool conversing = true;
+    while(conversing) {
+        selectedConversation->DisplayMessages();
+        validInput = false;
+        while (!validInput)
+        {
+            std::cout << std::endl << "(s)end message or (q)uit?: ";
+            std::getline(std::cin, userInput);
+            if (userInput == "q" || userInput == "s")
+            {
+                validInput = true;
+            }
+        }
+        if (userInput == "q")
+        {
+            break;
+        }
+        validInput = false;
+        while (!validInput)
+        {
+            std::cout << std::endl << "Message: ";
+            std::getline(std::cin, userInput);
+            if (userInput.length() > 0)
+            {
+                validInput = true;
+            }
+        }
+        selectedConversation->SendMessage(userInput, userPtr);
     }
 }

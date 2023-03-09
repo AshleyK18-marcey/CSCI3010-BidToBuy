@@ -41,7 +41,9 @@ public:
 
 	void DisplaySimilarProductsSold(const unsigned int product_id);
 
-	void DisplayConversationsForUser(unsigned int userid);
+	void CreateConversation(User* buyer, User* seller);
+
+	void handleConversing(User* userPtr);
 
 	void DisplayActiveProducts(unsigned int userid);
 
