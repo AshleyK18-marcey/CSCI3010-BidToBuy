@@ -8,7 +8,7 @@ enum class ProductCategory {Car, Furniture, Book, Computer, Jewelry};
 
 class Product{
 public:
-    Product();
+    Product(){};
 	void MakeBid(float bid, unsigned int user_id);
     unsigned int get_id(){ return product_id_; };
     void OpenBid();
@@ -20,7 +20,7 @@ public:
     unsigned int get_UUID() { return uuid_; };
     friend std::ostream& operator<<(std::ostream& os, const Product &p);
 private:
-    const unsigned int product_id_;
+    const unsigned int product_id_ = 0;
     unsigned int uuid_ = 0;
     float current_bid_ = 0;  //dollar value of current highest bid
     std::vector<unsigned int> bidders_;    //id of current highest bidder
@@ -32,7 +32,7 @@ private:
 };
 class Car: public Product{
 public:
-    Car();
+    Car(){};
     std::string GetMake(){ return make_; };
     std::string GetModel(){ return model_; };
     unsigned int GetYear(){ return year_; };
@@ -47,7 +47,7 @@ private:
 };
 class Furniture: public Product{
 public:
-    Furniture();
+    Furniture(){};
     std::string GetMaterial(){ return material_; };
     float GetLength(){ return length_; };
     float GetWidth(){ return width_; };
@@ -65,7 +65,7 @@ private:
 };
 class Book: public Product{
 public:
-    Book();
+    Book(){};
     std::string GetTitle(){ return title_; };
     std::string GetAuthor(){ return author_; };
     void SetTitle(std::string newTitle);
@@ -77,7 +77,7 @@ private:
 };
 class Computer: public Product{
 public:
-    Computer();
+    Computer(){};
     float GetScreenSize(){ return screenSize_; };
     float GetProcessorSpeed(){ return processorSpeed_; };
     int GetMemory() { return memory_; };
@@ -92,7 +92,7 @@ private:
 };
 class Jewelry: public Product{
 public:
-    Jewelry();
+    Jewelry(){};
     std::string GetMaterial(){ return material_; };
     int GetNumDiamonds() { return numDiamonds_; };
     void SetMaterial(std::string newMaterial);

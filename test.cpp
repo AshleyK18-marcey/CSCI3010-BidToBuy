@@ -5,4 +5,5 @@ int main() {
     std::cout << "BidToBuy Test" << std::endl;
     Driver * mainDriver = Driver::GetInstance();
     mainDriver->DisplayUsers();
+    mainDriver->DisplaySoldProducts();
 }
