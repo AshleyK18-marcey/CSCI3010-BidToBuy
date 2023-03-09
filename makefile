@@ -4,8 +4,8 @@ CXXGDB = -ggdb
 
 all: main
 
-main: main.cpp Driver.o
-	$(CXX) $(CXXFLAGS) main.cpp Driver.o -o main
+main: Conversation.o Users.o Product.o Driver.o main.cpp
+	$(CXX) $(CXXFLAGS) Conversation.o Users.o Product.o Driver.o main.cpp -o main
 
 test: Conversation.o Users.o Product.o Driver.o test.cpp
 	$(CXX) $(CXXFLAGS) Product.o Users.o Conversation.o Driver.o test.cpp -o test
