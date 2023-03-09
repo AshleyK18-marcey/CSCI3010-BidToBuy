@@ -57,6 +57,12 @@ public:
 
 	void DisplaySoldProducts();
 
+	bool UserExists(std::string name);
+
+	void MainLoop();
+
+	void signIn();
+
  private:
 	static Driver * DriverPtr;
  	Driver();  // private constructor
@@ -66,7 +72,7 @@ public:
     std::vector<User> users_;
     User * active_user_;
 
-  
+	bool running_;
 };  // class Driver
 
 #endif  // Driver_H

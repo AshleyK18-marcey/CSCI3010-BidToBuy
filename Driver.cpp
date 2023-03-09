@@ -146,3 +146,45 @@ void Driver::handleConversing(User* userPtr) {
         selectedConversation->SendMessage(userInput, userPtr);
     }
 }
+
+bool Driver::UserExists(std::string name) {
+    for (unsigned int i = 0; i < users_.size(); i++)
+    {
+        if(users_.at(i).get_name() == name) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Driver::signIn() {
+    std::string userName;
+    bool validInput = false;
+    while (!validInput)
+    {
+        std::cout << std::endl << "Enter your name: ";
+        std::getline(std::cin, userName);
+        if(userName.length() > 0 && UserExists(userName)) {
+            validInput = true;
+        }
+    }
+    validInput = false;
+    std::string selection;
+    while (!validInput) {
+        std::cout << std::endl << "Do you wish to (b)uy or (s)ell?: ";
+        std::getline(std::cin, selection);
+        if(selection == "b" || selection == "s") {
+            validInput = true;
+        }
+    }
+    if (selection == "b")
+    {
+        // User* properUser = new Buyer;
+    }
+    
+}
+
+void Driver::MainLoop() {
+
+}
+
