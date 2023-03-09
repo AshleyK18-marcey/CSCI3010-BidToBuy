@@ -133,7 +133,7 @@ void User::UpdateInformation()
                 std::cout << "What would you like to change it to? Enter Cancel if you no longer want to change your information" << std::endl;
                 std::cout << "==================================================================================================" <<std::endl;
                 std::string change_to;
-                std::getline(std::cin, change_to);
+                std::getline(std::cin >> std::ws, change_to);
                 std::string custom_case = change_to;
                 std::cout << custom_case << std::endl;
                 std::transform(change_to.begin(), change_to.end(), change_to.begin(), ::toupper); // translate their choice to uppercase
