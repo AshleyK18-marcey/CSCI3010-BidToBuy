@@ -11,4 +11,5 @@ int main() {
 
     mainDriver->CreateConversation(userPtr1, userPtr2);
     mainDriver->handleConversing(userPtr1);
+    mainDriver->handleConversing(userPtr2);
 }
