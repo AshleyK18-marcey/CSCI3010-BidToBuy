@@ -26,7 +26,7 @@ public:
 
   void SetAddress(std::string newAddress);
 
-  void UpdateInformation(std::string infoToChange, std::string newValue);
+  void UpdateInformation();
 
   friend std::ostream& operator<<(std::ostream& os, const User &u);
 
