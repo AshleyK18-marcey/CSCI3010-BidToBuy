@@ -104,7 +104,7 @@ void Driver::handleConversing(User* userPtr) {
     // select desired conversation
     while(!validInput) {
         std::cout << "select desired conversation or (q)uit: ";
-        std::cin >> userInput;
+        std::getline(std::cin, userInput);
         if (userInput == "q")
         {
             return;
@@ -123,7 +123,7 @@ void Driver::handleConversing(User* userPtr) {
         while (!validInput)
         {
             std::cout << std::endl << "(s)end message or (q)uit?: ";
-            std::cin >> userInput;
+            std::getline(std::cin, userInput);
             if (userInput == "q" || userInput == "s")
             {
                 validInput = true;
@@ -137,7 +137,7 @@ void Driver::handleConversing(User* userPtr) {
         while (!validInput)
         {
             std::cout << std::endl << "Message: ";
-            std::cin >> userInput;
+            std::getline(std::cin, userInput);
             if (userInput.length() > 0)
             {
                 validInput = true;
