@@ -7,8 +7,8 @@ all: main
 main: main.cpp Driver.o
 	$(CXX) $(CXXFLAGS) main.cpp Driver.o -o main
 
-test: Users.o Product.o Driver.o test.cpp
-	$(CXX) $(CXXFLAGS) Product.o Users.o Driver.o test.cpp -o test
+test: Conversation.o Users.o Product.o Driver.o test.cpp
+	$(CXX) $(CXXFLAGS) Product.o Users.o Conversation.o Driver.o test.cpp -o test
 
 Driver.o: Driver.cpp
 	$(CXX) $(CXXFLAGS) -c Driver.cpp
@@ -19,5 +19,11 @@ Product.o: Product.cpp
 Users.o: Users.cpp
 	$(CXX) $(CXXFLAGS) -c Users.cpp
 
+Conversation.o: Conversation.cpp
+	$(CXX) $(CXXFLAGS) -c Conversation.cpp
+
 clean:
-	rm -f main test Product.o Users.o Driver.o
+	rm -f main test Product.o Users.o Driver.o Conversation.o
+
+clean_temp:
+	rm -f Product.o Users.o Driver.o Conversation.o

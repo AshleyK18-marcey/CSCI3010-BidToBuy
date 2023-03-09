@@ -1,6 +1,7 @@
 Driver.o
 Product.o
 Users.o
+Conversation.o
 test
 main
 settings.json

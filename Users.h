@@ -39,6 +39,7 @@ private:
   std::string address_;
 
 };
+
 class Seller: public User{
 public:
   void AddBalanace(float amount);
@@ -48,6 +49,7 @@ private:
 
   
 };
+
 class Buyer: public User{
 public:
 
