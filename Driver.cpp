@@ -177,9 +177,17 @@ void Driver::signIn() {
             validInput = true;
         }
     }
-    if (selection == "b")
+    for (unsigned int i = 0; i < this->users_.size(); i++)
     {
-        // User* properUser = new Buyer;
+        if (this->users_.at(i).get_name() == userName)
+        {
+            if (selection == "b")
+            {
+                active_user_ = new Buyer(users_.at(i).get_userid(), users_.at(i).get_name(), users_.at(i).get_phone(), users_.at(i).get_address(), users_.at(i).get_balance());
+            } else {    // seller
+                active_user_ = new Seller(users_.at(i).get_userid(), users_.at(i).get_name(), users_.at(i).get_phone(), users_.at(i).get_address(), users_.at(i).get_balance());
+            }
+        }
     }
     
 }
