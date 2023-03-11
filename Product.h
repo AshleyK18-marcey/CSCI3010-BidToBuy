@@ -17,14 +17,14 @@ class Product
 {
 public:
     Product(){};
-    void MakeBid(float bid, unsigned int user_id);
+    void MakeBid(double bid, unsigned int user_id);
     unsigned int get_id() { return product_id_; };
     void OpenBid();
     void CloseBid();
     void SetSellerId(unsigned int newId);
     void SetBuyerId(unsigned int newId);
     void SetUUID(unsigned int newUUID);
-    void SetFinalBid(float bid);
+    void SetFinalBid(double bid);
     unsigned int get_UUID() { return uuid_; };
     friend std::ostream &operator<<(std::ostream &os, const Product &p);
 

@@ -1,11 +1,20 @@
 #include "Conversation.h"
-
+/**
+    Constructor for a conversation that assigns the buyer and seller 
+*/
 Conversation::Conversation(User *buyer, User *seller)
 {
     this->buyerPtr_ = buyer;
     this->sellerPtr_ = seller;
 }
 
+/**
+    Adds the new message and adds it to the conversation 
+
+    @param message The message that the user wants to add
+    @param senderPtr pointer to the user who is sending the message
+    
+*/
 void Conversation::SendMessage(std::string message, User *senderPtr)
 {
     if (message.length() == 0 || (senderPtr != this->buyerPtr_ && senderPtr != sellerPtr_))
@@ -19,6 +28,9 @@ void Conversation::SendMessage(std::string message, User *senderPtr)
     this->message_history_.push_back(tempMesg);
 }
 
+/**
+   Displays the messages within the conversation between the buyer and seller
+*/
 void Conversation::DisplayMessages()
 {
     std::cout << "Buyer: " << buyerPtr_->get_name() << ", Seller: " << sellerPtr_->get_name() << std::endl;
@@ -28,6 +40,11 @@ void Conversation::DisplayMessages()
     }
 }
 
+/**
+    Checks that the user sending the message is involved in the conversation 
+
+    @param user the user sending the message
+*/
 bool Conversation::UserPresent(User *user)
 {
     if (user == this->buyerPtr_ || user == this->sellerPtr_)

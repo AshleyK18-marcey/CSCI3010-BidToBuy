@@ -2,6 +2,10 @@
 #include <algorithm>
 #include "Users.h"
 
+
+/**
+    Constructor for a user
+*/
 User::User(unsigned int id, std::string name, std::string phone, std::string address, double balance)
 {
     this->userid_ = id;
@@ -11,6 +15,9 @@ User::User(unsigned int id, std::string name, std::string phone, std::string add
     this->balance_ = balance;
 }
 
+/**
+    Sets the name of the user
+*/
 void User::SetName(std::string newName)
 {
     if (newName.length() > 0)
@@ -19,6 +26,9 @@ void User::SetName(std::string newName)
     }
 }
 
+/**
+    Sets the phone number of the user
+*/
 void User::SetPhone(std::string newPhone)
 {
     if (newPhone.length() > 0)
@@ -27,6 +37,9 @@ void User::SetPhone(std::string newPhone)
     }
 }
 
+/**
+    Sets the address of the user
+*/
 void User::SetAddress(std::string newAddress)
 {
     if (newAddress.length() > 0)
@@ -35,10 +48,13 @@ void User::SetAddress(std::string newAddress)
     }
 }
 
+/**
+    Asks the user what information they want to change, checks for valid input and changes the user information
+*/
 void User::UpdateInformation()
 {
     bool active = true;
-    while (active)
+    while (active) //menu of options
     {
         std::cout << "===========================================" << std::endl;
         std::cout << "What information would you like to change?" << std::endl
@@ -166,18 +182,34 @@ void User::UpdateInformation()
     }
 }
 
+/**
+    Prints out all user information
+
+    @param os the stream
+    @param u the user
+*/
 std::ostream &operator<<(std::ostream &os, const User &u)
 {
     os << "Name: " << u.name_ << ", Balance: " << u.balance_ << ", Phone: " << u.phone_ << ", Address: " << u.address_;
     return os;
 }
 
+/**
+    Adds the specified amount to the sellers balance
+
+    @param amount the amount to add
+*/
 void Seller::ChangeBalance(double amount)
 {
     balance_ += amount;
     std::cout << "New Balance: " << balance_ << std::endl;
 }
 
+/**
+    Subtracts the specified amount from the buyers balance
+
+    @param amount 
+*/
 void Buyer::ChangeBalance(double amount)
 {
     balance_ -= amount;
