@@ -6,10 +6,11 @@
 #include <iostream>
 #include "Product.h"
 
-class User{
+class User
+{
 public:
-  User(unsigned int id, std::string name, std::string phone, std::string address, float balance);
-  
+  User(unsigned int id, std::string name, std::string phone, std::string address, double balance);
+
   float get_balance() { return balance_; };
 
   unsigned int get_userid() { return userid_; };
@@ -28,36 +29,37 @@ public:
 
   void UpdateInformation();
 
-  friend std::ostream& operator<<(std::ostream& os, const User &u);
+  virtual void ChangeBalance(float amount);
+
+  friend std::ostream &operator<<(std::ostream &os, const User &u);
 
 private:
-
-  float balance_;
   unsigned int userid_;
+
+protected:
+  double balance_;
   std::string name_;
   std::string phone_;
   std::string address_;
-
 };
 
-class Seller: public User{
+class Seller : public User
+{
 public:
-  void AddBalanace(float amount);
-  
-private:
-  
+  Seller(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
+  void ChangeBalance(double amount);
 
-  
+private:
 };
 
-class Buyer: public User{
+class Buyer : public User
+{
 public:
+  Buyer(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
+  void ChangeBalance(double amount);
 
-  void DeductBalanace(float amount);
-  
-  void addBidToProduct(Product* product); //could check if balace is enough
+  void addBidToProduct(Product *product); // could check if balace is enough
 private:
-  
 };
 
 #endif // USERS_H ehader guard

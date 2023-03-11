@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "Users.h"
 
-User::User(unsigned int id, std::string name, std::string phone, std::string address, float balance) {
+User::User(unsigned int id, std::string name, std::string phone, std::string address, double balance) {
     this->userid_ = id;
     this->name_ = name;
     this->phone_ = phone;
@@ -164,4 +164,13 @@ void User::UpdateInformation()
 std::ostream& operator<<(std::ostream& os, const User &u) {
     os << "Name: " << u.name_ << ", Balance: " << u.balance_ << ", Phone: " << u.phone_ << ", Address: " << u.address_;
     return os;
+}
+
+void Seller::ChangeBalance(double amount){
+    balance_ += amount;
+
+}
+
+void Buyer::ChangeBalance(double amount){
+    balance_ -= amount;
 }
