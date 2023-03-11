@@ -29,7 +29,7 @@ public:
 
   void UpdateInformation();
 
-  virtual void ChangeBalance(float amount);
+  virtual void ChangeBalance(double amount) { std::cout << balance_ << std::endl; };
 
   friend std::ostream &operator<<(std::ostream &os, const User &u);
 
@@ -47,19 +47,18 @@ class Seller : public User
 {
 public:
   Seller(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
-  void ChangeBalance(double amount);
+  void ChangeBalance(double amount) override;
 
-private:
 };
 
 class Buyer : public User
 {
 public:
   Buyer(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
-  void ChangeBalance(double amount);
+  virtual void ChangeBalance(double amount);
 
   void addBidToProduct(Product *product); // could check if balace is enough
-private:
+
 };
 
 #endif // USERS_H ehader guard
