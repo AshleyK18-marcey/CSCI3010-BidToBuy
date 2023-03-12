@@ -108,7 +108,7 @@ void Product::SetFinalBid(double bid)
 */
 std::ostream &operator<<(std::ostream &os, const Product &p)
 {
-    os << "ID: " << p.product_id_ << ", seller -> buyer: " << p.seller_id_ << " -> " << p.buyer_id_ << ", final price: " << p.final_bid_;
+    os << "ID: " << p.product_id_ << ", seller -> buyer: " << p.seller_ptr_->get_name() << " -> " << p.buyer_ptr_->get_name() << ", final price: " << p.final_bid_;
     return os;
 }
 
@@ -170,8 +170,12 @@ void Furniture::SetMaterial(std::string newMaterial)
 
     @param newLength the length to set to
 */
-void Furniture::SetLength(unsigned int newLength)
+void Furniture::SetLength(float newLength)
 {
+    if (newLength < 0)
+    {
+        newLength = 0;
+    }
     length_ = newLength;
 }
 
@@ -180,8 +184,13 @@ void Furniture::SetLength(unsigned int newLength)
 
     @param newWidth the width to set to 
 */
-void Furniture::SetWidth(unsigned int newWidth)
+void Furniture::SetWidth(float newWidth)
 {
+    if (newWidth < 0)
+    {
+        newWidth = 0;
+    }
+    
     width_ = newWidth;
 }
 
@@ -190,7 +199,11 @@ void Furniture::SetWidth(unsigned int newWidth)
 
     @param newHeight the height to set to 
 */
-void Furniture::SetHeight(unsigned int newHeight)
+void Furniture::SetHeight(float newHeight)
 {
+    if (newHeight < 0)
+    {
+        newHeight = 0;
+    }
     height_ = newHeight;
 }

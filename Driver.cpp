@@ -13,7 +13,7 @@ std::string promptValidString(std::string prompt) {
     return userInput;
 }
 
-int promptValidFloat(std::string prompt) {
+int promptValidInt(std::string prompt) {
     bool validInput = false;
     std::string userInput = "";
     int val = -1;
@@ -21,6 +21,21 @@ int promptValidFloat(std::string prompt) {
         std::cout << std::endl << prompt;
         std::getline(std::cin >> std::ws, userInput);
         val = atoi(userInput.c_str());
+        if(val > 0) {
+            validInput = true;
+        }
+    }
+    return val;
+}
+
+float promptValidFloat(std::string prompt) {
+    bool validInput = false;
+    std::string userInput = "";
+    float val = -1;
+    while(!validInput) {
+        std::cout << std::endl << prompt;
+        std::getline(std::cin >> std::ws, userInput);
+        val = atof(userInput.c_str());
         if(val > 0) {
             validInput = true;
         }
@@ -342,10 +357,11 @@ void Driver::HandleProductCreation() {
     {
     case 1: // car
         {
-        Car * newProduct = newProduct;
-        newProduct->SetMake(promptValidString("Enter make of car: "));
-        newProduct->SetModel(promptValidString("Enter model of car: "));
-
+        // Car * newProduct = newProduct;
+        Car * newCar = new Car;
+        newCar->SetMake(promptValidString("Enter make of car: "));
+        newCar->SetModel(promptValidString("Enter model of car: "));
+        newCar->SetYear(promptValidInt("Enter year of car: "));
         }
         break;
     case 2: // Furntiure
@@ -363,6 +379,7 @@ void Driver::HandleProductCreation() {
     default:
         break;
     }
+    // this->unsold_products_.push_back(newProduct);
 }
 
 void Driver::MainLoop()
@@ -395,7 +412,7 @@ void Driver::MainLoop()
             switch (selection)
             {
             case 1: // post product
-                /* code */
+                this->HandleProductCreation();
                 break;
             case 2: // messaging
                 this->handleConversing(active_user_);
