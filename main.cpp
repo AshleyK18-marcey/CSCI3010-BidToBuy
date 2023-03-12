@@ -12,9 +12,6 @@ int main() {
     // Driver &mainDriver = Driver::GetInstance();
     //Driver * mainDriver = Driver::GetInstance();
 
-    User *test =  new Buyer(1, "Ashley", "5864589632", "123 Test Dr", 600.76);
-    test->ChangeBalance(100);
-
-    test->UpdateInformation();
+    
    
 }

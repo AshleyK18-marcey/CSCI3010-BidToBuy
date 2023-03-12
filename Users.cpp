@@ -215,3 +215,11 @@ void Buyer::ChangeBalance(double amount)
     balance_ -= amount;
     std::cout << "New Balance: " << balance_ << std::endl;
 }
+
+bool Seller::CheckUser(){
+    return true;
+}
+
+bool Buyer::CheckUser(){
+    return false;
+}
