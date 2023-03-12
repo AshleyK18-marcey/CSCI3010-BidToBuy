@@ -53,6 +53,8 @@ public:
 
 	void DisplayActiveProducts(User* seller);
 
+	void HandleProductCreation();
+
 	void DisplayInactiveProducts(User* seller);
 
 	void DisplayBoughtProducts(User* buyer);
@@ -73,6 +75,8 @@ public:
 
 	void OverviewBuyer(User* Buyer);
 	
+	bool IsRunning() { return running_; };
+
 private:
 	static Driver *DriverPtr;
 	Driver(); // private constructor
@@ -82,7 +86,7 @@ private:
 	std::vector<User> users_;
 	User *active_user_;
 
-	bool running_;
+	bool running_ = true;
 }; // class Driver
 
 #endif // Driver_H

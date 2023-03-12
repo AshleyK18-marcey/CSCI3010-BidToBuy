@@ -12,8 +12,8 @@ int main() {
     // Driver &mainDriver = Driver::GetInstance();
     Driver * mainDriver = Driver::GetInstance();
 
-    
-
-    
+    while(mainDriver->IsRunning()) {
+        mainDriver->MainLoop();
+    }
    
 }

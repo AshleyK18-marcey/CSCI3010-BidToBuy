@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "Users.h"
 
 enum class ProductCategory
 {
@@ -17,15 +18,16 @@ class Product
 {
 public:
     Product(){};
-    void MakeBid(double bid, unsigned int user_id);
+    void MakeBid(double bid, Buyer * buyer);
     unsigned int get_id() { return product_id_; };
     void OpenBid();
     void CloseBid();
-    void SetSellerId(unsigned int newId);
-    User* get_seller(){return seller_id_;};
+    User* get_seller(){return seller_ptr;};
     void SetBuyerId(unsigned int newId);
-    User* get_buyer(){return buyer_id_;};
+    User* get_buyer(){return buyer_ptr;};
     std::vector<User*> get_bidders(){ return bidders_;};
+    void SetSeller(User * seller);
+    // void SetBuyer(Buyer * buyer);
     void SetUUID(unsigned int newUUID);
     void SetFinalBid(double bid);
     unsigned int get_UUID() { return uuid_; };
@@ -38,8 +40,8 @@ private:
     std::vector<User*> bidders_; // id of current highest bidder
     std::vector<float> bid_vals_;
     float final_bid_ = 0;
-    User* buyer_id_;
-    User* seller_id_;
+    User* buyer_ptr;
+    User* seller_ptr;
     bool active;
 };
 class Car : public Product
@@ -125,6 +127,6 @@ private:
     const unsigned int product_id_ = 5;
 };
 
-Product *productFactory(ProductCategory pc, unsigned int sellerId);
+Product *productFactory(ProductCategory pc, User * seller);
 
 #endif // header gaurd
