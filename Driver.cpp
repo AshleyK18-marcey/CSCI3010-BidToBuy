@@ -121,7 +121,7 @@ void Driver::handleConversing(User *userPtr)
         {
             return;
         }
-        if (is_number(userInput) && stoi(userInput) >= 0 && stoi(userInput) < validConversations.size())
+        if (is_number(userInput) && stoi(userInput) >= 0 && (unsigned int)stoi(userInput) < validConversations.size())
         {
             validInput = true;
             selectedConversation = validConversations.at(stoi(userInput));
@@ -229,28 +229,6 @@ void Driver::signIn()
     }
 }
 
-void Driver::PrintBuyerOptions() {
-    std::cout << "==================================================================================================" << std::endl;
-    std::cout << "1) Post product for sale" << std::endl;
-    std::cout << "2) Messaging" << std::endl;
-    std::cout << "3) Check account balance" << std::endl;
-    std::cout << "4) Update your informaiton" << std::endl;
-    std::cout << "5) Overview of products" << std::endl;
-    std::cout << "6) Manage bids" << std::endl;
-    std::cout <<  "==================================================================================================";
-}
-
-void Driver::PrintSellerOptions() {
-    std::cout << "==================================================================================================" << std::endl;
-    std::cout << "1) View products for sale" << std::endl;
-    std::cout << "2) Place bid" << std::endl;
-    std::cout << "3) Messaging" << std::endl;
-    std::cout << "4) Check account balance" << std::endl;
-    std::cout << "5) Update your informaiton" << std::endl;
-    std::cout << "6) Overview of placed bids" << std::endl;
-    std::cout << "7) Manage bids" << std::endl;
-    std::cout <<  "==================================================================================================";
-}
 
 void Driver::MainLoop()
 {
@@ -262,6 +240,8 @@ void Driver::MainLoop()
         if(!signedIn) {
             this->signIn();
         }
+        active_user_->PrintOptions();
+        goodInput = false;
         if(active_user_->CheckUser()) { //seller
             while (!goodInput)  //get user input for main options
             {
@@ -281,7 +261,7 @@ void Driver::MainLoop()
                 this->handleConversing(active_user_);
                 break;
             case 3: // balance
-                std::cout << "Your balance is: " << active_user_->get_balance() << "dollar" << std::endl;
+                std::cout << "Your balance is: " << active_user_->get_balance() << "dollars" << std::endl;
                 break;
             case 4: // update info
                 break;

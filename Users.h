@@ -36,6 +36,8 @@ public:
 
   virtual bool CheckUser() { return false; };
 
+  virtual void PrintOptions();
+
   friend std::ostream &operator<<(std::ostream &os, const User &u);
 
 private:
@@ -57,18 +59,20 @@ public:
 
   bool CheckUser() override;
 
+  void PrintOptions() override;
 };
 
 class Buyer : public User
 {
 public:
   Buyer(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
-  virtual void ChangeBalance(double amount);
+  void ChangeBalance(double amount);
 
   void addBidToProduct(Product *product); // could check if balace is enough
 
   bool CheckUser() override;
 
+  void PrintOptions() override;
 };
 
 #endif // USERS_H ehader guard

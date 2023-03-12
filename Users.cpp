@@ -228,3 +228,27 @@ bool Seller::CheckUser(){
 bool Buyer::CheckUser(){
     return false;
 }
+
+
+void Buyer::PrintOptions() {
+    std::cout << "==================================================================================================" << std::endl;
+    std::cout << "1) Post product for sale" << std::endl;
+    std::cout << "2) Messaging" << std::endl;
+    std::cout << "3) Check account balance" << std::endl;
+    std::cout << "4) Update your informaiton" << std::endl;
+    std::cout << "5) Overview of products" << std::endl;
+    std::cout << "6) Manage bids" << std::endl;
+    std::cout <<  "==================================================================================================";
+}
+
+void Seller::PrintOptions() {
+    std::cout << "==================================================================================================" << std::endl;
+    std::cout << "1) View products for sale" << std::endl;
+    std::cout << "2) Place bid" << std::endl;
+    std::cout << "3) Messaging" << std::endl;
+    std::cout << "4) Check account balance" << std::endl;
+    std::cout << "5) Update your informaiton" << std::endl;
+    std::cout << "6) Overview of placed bids" << std::endl;
+    std::cout << "7) Manage bids" << std::endl;
+    std::cout <<  "==================================================================================================";
+}
