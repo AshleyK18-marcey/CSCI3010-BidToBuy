@@ -1,7 +1,7 @@
 // Name: Tyler Scripps, Ashley Kastler
 
 #include "Driver.h"
-#include "Users.h"
+// #include "Users.h"
 // #include "Users.cpp"
 
 
@@ -10,7 +10,7 @@
 
 int main() {
     // Driver &mainDriver = Driver::GetInstance();
-    //Driver * mainDriver = Driver::GetInstance();
+    Driver * mainDriver = Driver::GetInstance();
 
     
    

@@ -36,7 +36,7 @@ public:
 
   virtual bool CheckUser() { return false; };
 
-  virtual void PrintOptions();
+  virtual void PrintOptions() {};
 
   friend std::ostream &operator<<(std::ostream &os, const User &u);
 
