@@ -36,6 +36,8 @@ public:
 	// Delete the methods we don't want
 	Driver(Driver const &) = delete;		 // copy constructor
 	void operator=(Driver const &) = delete; // assignment operator
+	
+	~Driver();
 
 	void PostProductForSale(Product *newProduct);
 
@@ -77,9 +79,6 @@ private:
 	User *active_user_;
 
 	bool running_;
-
-	void PrintBuyerOptions();
-	void PrintSellerOptions();
 }; // class Driver
 
 #endif // Driver_H
