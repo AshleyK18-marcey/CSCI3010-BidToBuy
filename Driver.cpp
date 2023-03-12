@@ -124,6 +124,9 @@ void Driver::handleConversing(User *userPtr)
             validInput = true;
             selectedConversation = validConversations.at(stoi(userInput));
         }
+        else{
+            std::cout << "Invalid Entry. Please enter the selection number of the conversation or (q) to go back" << std::endl;
+        }
     }
 
     bool conversing = true;
