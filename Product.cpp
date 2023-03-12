@@ -108,7 +108,7 @@ void Product::SetFinalBid(double bid)
 */
 std::ostream &operator<<(std::ostream &os, const Product &p)
 {
-    os << "ID: " << p.product_id_ << ", seller -> buyer: " << p.seller_id_ << " -> " << p.buyer_id_ << ", final price: " << p.final_bid_;
+    os << "ID: " << p.product_id_ << ", seller -> buyer: " << p.seller_ptr_->get_name() << " -> " << p.buyer_ptr_->get_name() << ", final price: " << p.final_bid_;
     return os;
 }
 
