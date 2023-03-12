@@ -51,17 +51,17 @@ public:
 
 	void handleConversing(User *userPtr);
 
-	void DisplayActiveProducts(unsigned int userid);
+	void DisplayActiveProducts(User* seller);
 
-	void DisplayInactiveProducts(unsigned int userid);
+	void DisplayInactiveProducts(User* seller);
 
-	void DisplayBoughtProducts(unsigned int userid);
+	void DisplayBoughtProducts(User* buyer);
 
-	void DisplayCurrentBids(unsigned int userid);
+	void DisplayCurrentBids(User* Buyer);
 
 	void DisplayUsers();
 
-	void DisplaySoldProducts();
+	void DisplaySoldProducts(bool specific_to_user, User* Seller);
 
 	bool UserExists(std::string name);
 
@@ -69,6 +69,10 @@ public:
 
 	void signIn();
 
+	void OverviewSeller(User* Seller);
+
+	void OverviewBuyer(User* Buyer);
+	
 private:
 	static Driver *DriverPtr;
 	Driver(); // private constructor

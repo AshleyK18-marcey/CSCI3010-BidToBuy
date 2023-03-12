@@ -252,3 +252,7 @@ void Seller::PrintOptions() {
     std::cout << "7) Manage bids" << std::endl;
     std::cout <<  "==================================================================================================";
 }
+
+bool User::operator==(const User &other){
+    return this->name_ == other.name_ && this->phone_ == other.phone_ && this->address_ == other.address_ && this->userid_ == other.userid_ && this->balance_ == other.balance_;
+}

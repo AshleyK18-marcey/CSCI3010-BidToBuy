@@ -22,7 +22,10 @@ public:
     void OpenBid();
     void CloseBid();
     void SetSellerId(unsigned int newId);
+    User* get_seller(){return seller_id_;};
     void SetBuyerId(unsigned int newId);
+    User* get_buyer(){return buyer_id_;};
+    std::vector<User*> get_bidders(){ return bidders_;};
     void SetUUID(unsigned int newUUID);
     void SetFinalBid(double bid);
     unsigned int get_UUID() { return uuid_; };
@@ -32,11 +35,11 @@ private:
     const unsigned int product_id_ = 0;
     unsigned int uuid_ = 0;
     float current_bid_ = 0;             // dollar value of current highest bid
-    std::vector<unsigned int> bidders_; // id of current highest bidder
+    std::vector<User*> bidders_; // id of current highest bidder
     std::vector<float> bid_vals_;
     float final_bid_ = 0;
-    unsigned int buyer_id_ = 0;
-    unsigned int seller_id_ = 0;
+    User* buyer_id_;
+    User* seller_id_;
     bool active;
 };
 class Car : public Product

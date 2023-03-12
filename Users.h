@@ -38,6 +38,8 @@ public:
 
   virtual void PrintOptions() {};
 
+  bool operator==(const User &other);
+
   friend std::ostream &operator<<(std::ostream &os, const User &u);
 
 private:
