@@ -109,12 +109,63 @@ void Driver::DisplayUsers()
     }
 }
 
-void Driver::DisplaySoldProducts()
+void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
 {
-    std::cout << "Number of sold products: " << this->sold_products_.size() << std::endl;
-    for (unsigned int i = 0; i < this->sold_products_.size(); i++)
+    if (specific_to_user)
     {
-        std::cout << i << ") " << *this->sold_products_.at(i) << std::endl;
+        std::vector<Product *> sellers_products;
+        for (unsigned int i = 0; i < this->sold_products_.size(); i++)
+        {
+            if (this->sold_products_[i]->get_seller() == Seller)
+            {
+                sellers_products.push_back(this->sold_products_[i]);
+            }
+        }
+        std::cout << "Number of sold products: " << sellers_products.size() << std::endl;
+        for (unsigned int i = 0; i < sellers_products.size(); i++)
+        {
+            std::cout << i << ") " << *sellers_products.at(i) << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "Number of sold products: " << this->sold_products_.size() << std::endl;
+        for (unsigned int i = 0; i < this->sold_products_.size(); i++)
+        {
+            std::cout << i << ") " << *this->sold_products_.at(i) << std::endl;
+        }
+    }
+}
+
+void Driver::DisplayActiveProducts(User *seller)
+{
+    std::vector<Product *> sellers_products;
+    for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
+    {
+        if (this->unsold_products_[i]->get_seller() == seller)
+        {
+            sellers_products.push_back(this->sold_products_[i]);
+        }
+    }
+
+    for (unsigned int i = 0; i < sellers_products.size(); i++)
+    {
+        std::cout << i << ") " << *sellers_products.at(i) << std::endl;
+    }
+}
+
+void Driver::DisplayCurrentBids(User* Buyer){
+    std::vector<Product*> current_bids;
+    for(unsigned int i = 0; i < this->unsold_products_.size(); i++){
+        std::vector<User*> bids = this->unsold_products_[i]->get_bidders();
+        for(int k = 0; k < bids.size(); k++){
+            if(bids[i] == Buyer){
+                current_bids.push_back(this->unsold_products_[i]);
+            }
+        }
+    }
+    for(unsigned int i = 0; i < current_bids.size(); i++){
+         std::cout << i << ") " << *current_bids.at(i) << std::endl;
     }
 }
 
@@ -149,7 +200,7 @@ void Driver::handleConversing(User *userPtr)
 
     // select desired conversation
     while (!validInput)
-    {   
+    {
         std::cout << "===========================================================================" << std::endl;
         std::cout << "Enter the selection number of the conversation you'd like to view or (q)uit" << std::endl;
         std::cout << "===========================================================================" << std::endl;
@@ -163,7 +214,8 @@ void Driver::handleConversing(User *userPtr)
             validInput = true;
             selectedConversation = validConversations.at(stoi(userInput));
         }
-        else{
+        else
+        {
             std::cout << "======================================================================================" << std::endl;
             std::cout << "Invalid Entry. Please enter the selection number of the conversation or (q) to go back" << std::endl;
             std::cout << "======================================================================================" << std::endl;
@@ -258,7 +310,9 @@ void Driver::signIn()
             if (selection == "b")
             {
                 active_user_ = new Buyer(users_.at(i).get_userid(), users_.at(i).get_name(), users_.at(i).get_phone(), users_.at(i).get_address(), users_.at(i).get_balance());
-            } else {    // seller
+            }
+            else
+            { // seller
                 active_user_ = new Seller(users_.at(i).get_userid(), users_.at(i).get_name(), users_.at(i).get_phone(), users_.at(i).get_address(), users_.at(i).get_balance());
             }
         }
@@ -317,17 +371,21 @@ void Driver::MainLoop()
     int selection = 0;
     bool signedIn = false;
     bool goodInput = false;
-    while (running_) {
-        if(!signedIn) {
+    while (running_)
+    {
+        if (!signedIn)
+        {
             this->signIn();
             signedIn = true;
         }
         active_user_->PrintOptions();
         goodInput = false;
-        if(active_user_->CheckUser()) { //seller
-            while (!goodInput)  //get user input for main options
+        if (active_user_->CheckUser())
+        {                      // seller
+            while (!goodInput) // get user input for main options
             {
-                std::cout << std::endl << "Enter number of desired action: ";
+                std::cout << std::endl
+                          << "Enter number of desired action: ";
                 std::cin >> userInput;
                 selection = std::stoi(userInput);
                 if(selection > 0 && selection < 8) {
@@ -359,8 +417,23 @@ void Driver::MainLoop()
             default:
                 break;
             }
-        } else {    //buyer
-            
+        }
+        else
+        { // buyer
         }
     }
+}
+
+void Driver::OverviewSeller(User *Seller)
+{
+    std::cout << "Sold Products: " << std::endl;
+    DisplaySoldProducts(true, Seller);
+
+    std::cout << "Products that are open for bidding: " << std::endl;
+    DisplayActiveProducts(Seller);
+}
+
+void Driver::OverviewBuyer(User* Buyer){
+    std::cout << "Products that you have placed a bid on: " << std::endl;
+    DisplayCurrentBids(Buyer);
 }

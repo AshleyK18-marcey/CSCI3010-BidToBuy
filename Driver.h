@@ -51,19 +51,19 @@ public:
 
 	void handleConversing(User *userPtr);
 
+	void DisplayActiveProducts(User* seller);
+
 	void HandleProductCreation();
 
-	void DisplayActiveProducts(unsigned int userid);
+	void DisplayInactiveProducts(User* seller);
 
-	void DisplayInactiveProducts(unsigned int userid);
+	void DisplayBoughtProducts(User* buyer);
 
-	void DisplayBoughtProducts(unsigned int userid);
-
-	void DisplayCurrentBids(unsigned int userid);
+	void DisplayCurrentBids(User* Buyer);
 
 	void DisplayUsers();
 
-	void DisplaySoldProducts();
+	void DisplaySoldProducts(bool specific_to_user, User* Seller);
 
 	bool UserExists(std::string name);
 
@@ -71,6 +71,10 @@ public:
 
 	void signIn();
 
+	void OverviewSeller(User* Seller);
+
+	void OverviewBuyer(User* Buyer);
+	
 	bool IsRunning() { return running_; };
 
 private:
