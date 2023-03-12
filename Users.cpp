@@ -16,6 +16,11 @@ User::User(unsigned int id, std::string name, std::string phone, std::string add
 }
 
 /**
+    Destructor for user
+*/
+
+
+/**
     Sets the name of the user
 */
 void User::SetName(std::string newName)

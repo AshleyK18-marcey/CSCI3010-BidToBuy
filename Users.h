@@ -11,6 +11,8 @@ class User
 public:
   User(unsigned int id, std::string name, std::string phone, std::string address, double balance);
 
+  ~User();
+
   float get_balance() { return balance_; };
 
   unsigned int get_userid() { return userid_; };
@@ -31,7 +33,7 @@ public:
 
   virtual void ChangeBalance(double amount) { std::cout << balance_ << std::endl; };
 
-  virtual bool CheckUser();
+  virtual bool CheckUser() { return false; };
 
   friend std::ostream &operator<<(std::ostream &os, const User &u);
 
