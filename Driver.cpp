@@ -112,8 +112,10 @@ void Driver::handleConversing(User *userPtr)
 
     // select desired conversation
     while (!validInput)
-    {
+    {   
+        std::cout << "===========================================================================" << std::endl;
         std::cout << "Enter the selection number of the conversation you'd like to view or (q)uit" << std::endl;
+        std::cout << "===========================================================================" << std::endl;
         std::getline(std::cin, userInput);
         if (userInput == "q")
         {
@@ -124,17 +126,24 @@ void Driver::handleConversing(User *userPtr)
             validInput = true;
             selectedConversation = validConversations.at(stoi(userInput));
         }
+        else{
+            std::cout << "======================================================================================" << std::endl;
+            std::cout << "Invalid Entry. Please enter the selection number of the conversation or (q) to go back" << std::endl;
+            std::cout << "======================================================================================" << std::endl;
+        }
     }
 
     bool conversing = true;
     while (conversing)
     {
+        std::cout << "===============================" << std::endl;
         selectedConversation->DisplayMessages();
         validInput = false;
         while (!validInput)
         {
             std::cout << std::endl
-                      << "(s)end message or (q)uit?: ";
+                      << "(s)end message or (q)uit?: " << std::endl;
+            std::cout << "=============================" << std::endl;
             std::getline(std::cin, userInput);
             if (userInput == "q" || userInput == "s")
             {

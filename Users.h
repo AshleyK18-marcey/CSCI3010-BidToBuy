@@ -11,7 +11,7 @@ class User
 public:
   User(unsigned int id, std::string name, std::string phone, std::string address, double balance);
 
-  ~User();
+ // ~User();
 
   float get_balance() { return balance_; };
 
