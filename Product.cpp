@@ -4,42 +4,42 @@
     @param pc the category of the product 
     @param sellerId the seller associated with the product 
 */
-Product *productFactory(ProductCategory pc, unsigned int sellerId)
+Product *productFactory(ProductCategory pc, User * seller)
 {
     switch (pc)
     {
     case ProductCategory::Car:
     {
         Car *carObj = new Car;
-        carObj->SetSellerId(sellerId);
+        carObj->SetSeller(seller);
         return carObj;
         break;
     }
     case ProductCategory::Furniture:
     {
         Furniture *furnitureObj = new Furniture;
-        furnitureObj->SetSellerId(sellerId);
+        furnitureObj->SetSeller(seller);
         return furnitureObj;
         break;
     }
     case ProductCategory::Book:
     {
         Book *bookObj = new Book;
-        bookObj->SetSellerId(sellerId);
+        bookObj->SetSeller(seller);
         return bookObj;
         break;
     }
     case ProductCategory::Computer:
     {
         Computer *computerObj = new Computer;
-        computerObj->SetSellerId(sellerId);
+        computerObj->SetSeller(seller);
         return computerObj;
         break;
     }
     case ProductCategory::Jewelry:
     {
         Jewelry *JewelryObj = new Jewelry;
-        JewelryObj->SetSellerId(sellerId);
+        JewelryObj->SetSeller(seller);
         return JewelryObj;
         break;
     }
@@ -60,11 +60,11 @@ Product *productFactory(ProductCategory pc, unsigned int sellerId)
 
     @param newId the new id 
 */
-void Product::SetSellerId(unsigned int newId)
+void Product::SetSeller(User * seller)
 {
-    if (newId > 0)
+    if (seller != nullptr)
     {
-        this->seller_id_ = newId;
+        this->seller_ptr_ = seller;
     }
 }
 
@@ -73,13 +73,13 @@ void Product::SetSellerId(unsigned int newId)
 
     @param newId the new id 
 */
-void Product::SetBuyerId(unsigned int newId)
-{
-    if (newId > 0)
-    {
-        this->buyer_id_ = newId;
-    }
-}
+// void Product::SetBuyerId(unsigned int newId)
+// {
+//     if (newId > 0)
+//     {
+//         this->buyer_id_ = newId;
+//     }
+// }
 
 /**
     When a seller closes a sale this sets the greatest value bid to the final bid that won 

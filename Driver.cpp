@@ -1,5 +1,33 @@
 #include "Driver.h"
 
+std::string promptValidString(std::string prompt) {
+    bool validInput = false;
+    std::string userInput = "";
+    while(!validInput) {
+        std::cout << std::endl << prompt;
+        std::getline(std::cin >> std::ws, userInput);
+        if(userInput.length() > 0) {
+            validInput = true;
+        }
+    }
+    return userInput;
+}
+
+int promptValidFloat(std::string prompt) {
+    bool validInput = false;
+    std::string userInput = "";
+    int val = -1;
+    while(!validInput) {
+        std::cout << std::endl << prompt;
+        std::getline(std::cin >> std::ws, userInput);
+        val = atoi(userInput.c_str());
+        if(val > 0) {
+            validInput = true;
+        }
+    }
+    return val;
+}
+
 // retrieved from: https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
 bool is_number(const std::string &s)
 {
@@ -41,20 +69,29 @@ Driver::Driver()
     fs.open("./runtime_data/products.csv");
     std::getline(fs, line); // get the header out of the way
 
-    std::string s_id;
-    std::string b_id;
+    std::string s_name;
+    std::string b_name;
     std::string finalBid;
     while (std::getline(fs, line))
     { // read each line
         // std::cout << line << std::endl;     // debugging
         std::stringstream rowStream(line);
         std::getline(rowStream, id, ',');
-        std::getline(rowStream, s_id, ',');
-        std::getline(rowStream, b_id, ',');
+        std::getline(rowStream, s_name, ',');
+        std::getline(rowStream, b_name, ',');
         std::getline(rowStream, finalBid, ',');
 
-        Product *tempProduct = productFactory(static_cast<ProductCategory>(stoi(id)), stoi(s_id));
-        tempProduct->SetBuyerId(stoi(b_id));
+        User * tempSellerPtr = nullptr;
+        for(unsigned int i = 0; i < this->users_.size(); i++) {
+            if (this->users_.at(i).get_name() == s_name)
+            {
+                tempSellerPtr = &this->users_.at(i);
+                break;
+            }
+        }
+
+        Product *tempProduct = productFactory(static_cast<ProductCategory>(stoi(id)), tempSellerPtr);
+        // tempProduct->SetBuyerId(stoi(b_id));
         tempProduct->SetFinalBid(stof(finalBid));
         this->sold_products_.push_back(tempProduct);
     }
@@ -116,7 +153,7 @@ void Driver::handleConversing(User *userPtr)
         std::cout << "===========================================================================" << std::endl;
         std::cout << "Enter the selection number of the conversation you'd like to view or (q)uit" << std::endl;
         std::cout << "===========================================================================" << std::endl;
-        std::getline(std::cin, userInput);
+        std::getline(std::cin >> std::ws, userInput);
         if (userInput == "q")
         {
             return;
@@ -192,9 +229,8 @@ void Driver::signIn()
     while (!validInput)
     {
         std::cout << "=================" << std::endl;
-        std::cout << std::endl
-                  << "Enter your name: ";
-        std::getline(std::cin, userName);
+        std::cout << "Enter your name: ";
+        std::getline(std::cin >> std::ws, userName);
         std::cout << "=================" << std::endl;
         if (userName.length() > 0 && UserExists(userName))
         {
@@ -229,6 +265,51 @@ void Driver::signIn()
     }
 }
 
+void Driver::HandleProductCreation() {
+    bool validInput = false;
+    std::string userInput = "";
+    int selection = 0;
+    std::cout << "What kind of product do you wish to sell?"
+        << std::endl << "1) Car"
+        << std::endl << "2) Furniture"
+        << std::endl << "3) Book"
+        << std::endl << "4) Computer"
+        << std::endl << "5) Jewelry";
+    while(!validInput) {
+        std::cout << std::endl << "Enter number of desired type of product: ";
+        std::getline(std::cin >> std::ws, userInput);
+        selection = std::stoi(userInput);
+        if(selection > 0 && selection < 6) {
+            validInput = true;
+        }
+    }
+    Product * newProduct = productFactory(static_cast<ProductCategory>(selection - 1), this->active_user_);
+    switch (selection)
+    {
+    case 1: // car
+        {
+        Car * newProduct = newProduct;
+        newProduct->SetMake(promptValidString("Enter make of car: "));
+        newProduct->SetModel(promptValidString("Enter model of car: "));
+
+        }
+        break;
+    case 2: // Furntiure
+        // Furniture * newProduct = newProduct;
+        break;
+    case 3: // Book
+        // Book * newProduct = newProduct;
+        break;
+    case 4: // Computer
+        // Computer * newProduct = newProduct;
+        break;
+    case 5: // Jewelry
+        // Jewelry * newProduct = newProduct;
+        break;
+    default:
+        break;
+    }
+}
 
 void Driver::MainLoop()
 {
@@ -239,6 +320,7 @@ void Driver::MainLoop()
     while (running_) {
         if(!signedIn) {
             this->signIn();
+            signedIn = true;
         }
         active_user_->PrintOptions();
         goodInput = false;
@@ -248,7 +330,7 @@ void Driver::MainLoop()
                 std::cout << std::endl << "Enter number of desired action: ";
                 std::cin >> userInput;
                 selection = std::stoi(userInput);
-                if(selection > 0 && selection < 7) {
+                if(selection > 0 && selection < 8) {
                     goodInput = true;
                 }
             }
@@ -261,13 +343,18 @@ void Driver::MainLoop()
                 this->handleConversing(active_user_);
                 break;
             case 3: // balance
-                std::cout << "Your balance is: " << active_user_->get_balance() << "dollars" << std::endl;
+                std::cout << "Your balance is: $" << active_user_->get_balance() << std::endl;
                 break;
             case 4: // update info
+                this->active_user_->UpdateInformation();
                 break;
             case 5: // overview of products
                 break;
             case 6: // manage bids
+                break;
+            case 7:
+                this->active_user_ = nullptr;
+                signedIn = false;
                 break;
             default:
                 break;

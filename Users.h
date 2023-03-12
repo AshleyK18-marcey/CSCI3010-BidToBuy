@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "Product.h"
+// #include "Product.h"
 
 class User
 {
@@ -57,7 +57,7 @@ public:
 
   void ChangeBalance(double amount) override;
 
-  bool CheckUser() override;
+  bool CheckUser() override { return true; };
 
   void PrintOptions() override;
 };
@@ -68,11 +68,11 @@ public:
   Buyer(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
   void ChangeBalance(double amount);
 
-  void addBidToProduct(Product *product); // could check if balace is enough
+  // void addBidToProduct(Product *product); // could check if balace is enough
 
-  bool CheckUser() override;
+  bool CheckUser() override { return false; };
 
   void PrintOptions() override;
 };
 
-#endif // USERS_H ehader guard
+#endif // USERS_H header guard

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "Users.h"
 
 enum class ProductCategory
 {
@@ -17,12 +18,12 @@ class Product
 {
 public:
     Product(){};
-    void MakeBid(double bid, unsigned int user_id);
+    void MakeBid(double bid, Buyer * buyer);
     unsigned int get_id() { return product_id_; };
     void OpenBid();
     void CloseBid();
-    void SetSellerId(unsigned int newId);
-    void SetBuyerId(unsigned int newId);
+    void SetSeller(User * seller);
+    // void SetBuyer(Buyer * buyer);
     void SetUUID(unsigned int newUUID);
     void SetFinalBid(double bid);
     unsigned int get_UUID() { return uuid_; };
@@ -37,6 +38,7 @@ private:
     float final_bid_ = 0;
     unsigned int buyer_id_ = 0;
     unsigned int seller_id_ = 0;
+    User * seller_ptr_;
     bool active;
 };
 class Car : public Product
@@ -122,6 +124,6 @@ private:
     const unsigned int product_id_ = 5;
 };
 
-Product *productFactory(ProductCategory pc, unsigned int sellerId);
+Product *productFactory(ProductCategory pc, User * seller);
 
 #endif // header gaurd

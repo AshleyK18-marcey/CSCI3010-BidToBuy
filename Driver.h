@@ -51,6 +51,8 @@ public:
 
 	void handleConversing(User *userPtr);
 
+	void HandleProductCreation();
+
 	void DisplayActiveProducts(unsigned int userid);
 
 	void DisplayInactiveProducts(unsigned int userid);
@@ -69,6 +71,8 @@ public:
 
 	void signIn();
 
+	bool IsRunning() { return running_; };
+
 private:
 	static Driver *DriverPtr;
 	Driver(); // private constructor
@@ -78,7 +82,7 @@ private:
 	std::vector<User> users_;
 	User *active_user_;
 
-	bool running_;
+	bool running_ = true;
 }; // class Driver
 
 #endif // Driver_H
