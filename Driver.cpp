@@ -89,7 +89,7 @@ void Driver::CreateConversation(User *buyer, User *seller)
 
 void Driver::handleConversing(User *userPtr)
 {
-    std::vector<Conversation *> validConversations; // stores conversation that thuis user is a part of
+    std::vector<Conversation *> validConversations; // stores conversation that this user is a part of
     for (unsigned int i = 0; i < this->conversations_.size(); i++)
     {
         if (this->conversations_.at(i)->UserPresent(userPtr))
@@ -220,6 +220,71 @@ void Driver::signIn()
     }
 }
 
+void Driver::PrintBuyerOptions() {
+    std::cout << "==================================================================================================" << std::endl;
+    std::cout << "1) Post product for sale" << std::endl;
+    std::cout << "2) Messaging" << std::endl;
+    std::cout << "3) Check account balance" << std::endl;
+    std::cout << "4) Update your informaiton" << std::endl;
+    std::cout << "5) Overview of products" << std::endl;
+    std::cout << "6) Manage bids" << std::endl;
+    std::cout <<  "==================================================================================================";
+}
+
+void Driver::PrintSellerOptions() {
+    std::cout << "==================================================================================================" << std::endl;
+    std::cout << "1) View products for sale" << std::endl;
+    std::cout << "2) Place bid" << std::endl;
+    std::cout << "3) Messaging" << std::endl;
+    std::cout << "4) Check account balance" << std::endl;
+    std::cout << "5) Update your informaiton" << std::endl;
+    std::cout << "6) Overview of placed bids" << std::endl;
+    std::cout << "7) Manage bids" << std::endl;
+    std::cout <<  "==================================================================================================";
+}
+
 void Driver::MainLoop()
 {
+    std::string userInput = "";
+    int selection = 0;
+    bool signedIn = false;
+    bool goodInput = false;
+    while (running_) {
+        if(!signedIn) {
+            this->signIn();
+        }
+        if(active_user_->CheckUser()) { //seller
+            while (!goodInput)  //get user input for main options
+            {
+                std::cout << std::endl << "Enter number of desired action: ";
+                std::cin >> userInput;
+                selection = std::stoi(userInput);
+                if(selection > 0 && selection < 7) {
+                    goodInput = true;
+                }
+            }
+            switch (selection)
+            {
+            case 1: // post product
+                /* code */
+                break;
+            case 2: // messaging
+                this->handleConversing(active_user_);
+                break;
+            case 3: // balance
+                std::cout << "Your balance is: " << active_user_->get_balance() << "dollar" << std::endl;
+                break;
+            case 4: // update info
+                break;
+            case 5: // overview of products
+                break;
+            case 6: // manage bids
+                break;
+            default:
+                break;
+            }
+        } else {    //buyer
+            
+        }
+    }
 }

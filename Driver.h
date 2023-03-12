@@ -77,6 +77,9 @@ private:
 	User *active_user_;
 
 	bool running_;
+
+	void PrintBuyerOptions();
+	void PrintSellerOptions();
 }; // class Driver
 
 #endif // Driver_H
