@@ -1,66 +1,83 @@
 #include "Product.h"
-/**
-    Using factory design pattern to create a new product based on what the seller wants to sell
-    @param pc the category of the product 
-    @param sellerId the seller associated with the product 
-*/
-Product *productFactory(ProductCategory pc, User * seller)
+std::string promptValidString(std::string prompt)
 {
-    switch (pc)
+    bool validInput = false;
+    std::string userInput = "";
+    while (!validInput)
     {
-    case ProductCategory::Car:
+        std::cout << std::endl
+                  << prompt;
+        std::getline(std::cin >> std::ws, userInput);
+        if (userInput.length() > 0)
+        {
+            validInput = true;
+        }
+    }
+    return userInput;
+}
+
+int promptValidInt(std::string prompt)
+{
+    bool validInput = false;
+    std::string userInput = "";
+    int val = -1;
+    while (!validInput)
     {
-        Car *carObj = new Car;
-        carObj->SetSeller(seller);
-        return carObj;
-        break;
+        std::cout << std::endl
+                  << prompt;
+        std::getline(std::cin >> std::ws, userInput);
+        val = atoi(userInput.c_str());
+        if (val > 0)
+        {
+            validInput = true;
+        }
     }
-    case ProductCategory::Furniture:
+    return val;
+}
+
+float promptValidFloat(std::string prompt)
+{
+    bool validInput = false;
+    std::string userInput = "";
+    float val = -1;
+    while (!validInput)
     {
-        Furniture *furnitureObj = new Furniture;
-        furnitureObj->SetSeller(seller);
-        return furnitureObj;
-        break;
+        std::cout << std::endl
+                  << prompt;
+        std::getline(std::cin >> std::ws, userInput);
+        val = atof(userInput.c_str());
+        if (val > 0)
+        {
+            validInput = true;
+        }
     }
-    case ProductCategory::Book:
-    {
-        Book *bookObj = new Book;
-        bookObj->SetSeller(seller);
-        return bookObj;
-        break;
-    }
-    case ProductCategory::Computer:
-    {
-        Computer *computerObj = new Computer;
-        computerObj->SetSeller(seller);
-        return computerObj;
-        break;
-    }
-    case ProductCategory::Jewelry:
-    {
-        Jewelry *JewelryObj = new Jewelry;
-        JewelryObj->SetSeller(seller);
-        return JewelryObj;
-        break;
-    }
-    default:
-    {
-        Product *Productobj = new Product;
-        return Productobj;
-        break;
-    }
-    }
+    return val;
 }
 
 // -----Product-----
+std::string Product::Stringify()
+{
+    // type, buyer, seller, final price
+    std::string returnVal;
 
+    if (this->get_buyer() == NULL)
+    {
+        returnVal = "Product type: " + this->get_type_string() + ", Seller: " + this->get_seller()->get_name();
+    }
+    else
+    {
+        returnVal = "Product type: " + this->get_type_string() + ", Buyer: " + this->get_buyer()->get_name() + ", Seller: " + this->get_seller()->get_name() + ", Final bid: " + std::to_string(this->get_final_bid());
+    }
+
+    return returnVal;
+}
 
 /**
-    Sets the sellers id to the id specified 
+    Sets the sellers id to the id specified
 
-    @param newId the new id 
+    @param newId the new id
 */
-void Product::SetSeller(User * seller)
+void Product::SetSeller(User *seller)
 {
     if (seller != nullptr)
     {
@@ -71,18 +88,18 @@ void Product::SetSeller(User * seller)
 /**
     Sets the buyer id to the specified one
 
-    @param newId the new id 
+    @param newId the new id
 */
-// void Product::SetBuyerId(unsigned int newId)
-// {
-//     if (newId > 0)
-//     {
-//         this->buyer_id_ = newId;
-//     }
-// }
+ void Product::SetBuyer(User* buyer)
+ {
+     if (buyer != nullptr)
+     {
+         this->buyer_ptr_ = buyer;
+     }
+ }
 
 /**
-    When a seller closes a sale this sets the greatest value bid to the final bid that won 
+    When a seller closes a sale this sets the greatest value bid to the final bid that won
 
     @param radius The radius of the circle.
     @return The volume of the sphere.
@@ -105,14 +122,29 @@ void Product::SetFinalBid(double bid)
     @param os the stream
     @param p the product to display the information of
     @return the stream to display the information to the user
-*/
+
 std::ostream &operator<<(std::ostream &os, const Product &p)
 {
-    os << "ID: " << p.product_id_ << ", seller -> buyer: " << p.seller_ptr_->get_name() << " -> " << p.buyer_ptr_->get_name() << ", final price: " << p.final_bid_;
+    os << "ID: " << p.Stringify(p.get_type()) << ", seller -> buyer: " << p.seller_ptr_->get_name() << " -> " << p.buyer_ptr_->get_name() << ", final price: " << p.get_final_bid();
     return os;
 }
+*/
 
 // -----Car-----
+void Car::AssembleProduct()
+{
+    this->SetMake(promptValidString("Enter make of car: "));
+    this->SetModel(promptValidString("Enter model of car: "));
+    this->SetYear(promptValidInt("Enter year of car: "));
+}
+
+void Car::AssignMetaData(std::string make, std::string model, std::string year, std::string blank)
+{
+
+    this->SetMake(make);
+    this->SetModel(model);
+    this->SetYear(std::stoi(year));
+}
 
 /**
     Sets the make of the car product
@@ -151,6 +183,18 @@ void Car::SetYear(unsigned int newYear)
 }
 
 // -----Furniture-----
+void Furniture::AssembleProduct()
+{
+    std::cout << "Furniture made" << std::endl;
+}
+
+void Furniture::AssignMetaData(std::string material, std::string length, std::string width, std::string height)
+{
+    this->SetMaterial(material);
+    this->SetLength(std::stof(length));
+    this->SetWidth(std::stof(width));
+    this->SetHeight(std::stof(height));
+};
 
 /**
     Sets the material of the furniture product
@@ -182,7 +226,7 @@ void Furniture::SetLength(float newLength)
 /**
     Sets the width dimension of the furniture product
 
-    @param newWidth the width to set to 
+    @param newWidth the width to set to
 */
 void Furniture::SetWidth(float newWidth)
 {
@@ -190,14 +234,14 @@ void Furniture::SetWidth(float newWidth)
     {
         newWidth = 0;
     }
-    
+
     width_ = newWidth;
 }
 
 /**
     Sets the height dimension of the furniture product
 
-    @param newHeight the height to set to 
+    @param newHeight the height to set to
 */
 void Furniture::SetHeight(float newHeight)
 {
@@ -206,4 +250,69 @@ void Furniture::SetHeight(float newHeight)
         newHeight = 0;
     }
     height_ = newHeight;
+}
+
+// ------ Book -------
+void Book::AssembleProduct()
+{
+    std::cout << "Book made" << std::endl;
+}
+
+void Book::AssignMetaData(std::string title, std::string author, std::string blank1, std::string blank2)
+{
+    this->SetTitle(title);
+    this->SetAuthor(author);
+}
+void Book::SetTitle(std::string newTitle)
+{
+    title_ = newTitle;
+}
+
+void Book::SetAuthor(std::string newAuthor)
+{
+    author_ = newAuthor;
+}
+
+// --------- Computer -----------
+void Computer::AssembleProduct()
+{
+    std::cout << "Computer made" << std::endl;
+}
+
+void Computer::AssignMetaData(std::string screenSize, std::string processorSpeed, std::string memory, std::string blank)
+{
+    this->SetScreenSize(std::stof(screenSize));
+    this->SetProcessorSpeed(std::stof(processorSpeed));
+    this->SetMemory(std::stoi(memory));
+}
+void Computer::SetScreenSize(float newScreenSize){
+    screenSize_ = newScreenSize;
+}
+void Computer::SetProcessorSpeed(float newSpeed){
+    processorSpeed_ = newSpeed;
+}
+void Computer::SetMemory(unsigned int newMemory){
+    memory_ = newMemory;
+}
+
+
+//------------- Jewelry ---------
+void Jewelry::AssembleProduct()
+{
+    std::cout << "Jewelry made" << std::endl;
+}
+
+void Jewelry::AssignMetaData(std::string material, std::string numDiamonds, std::string blank1, std::string blank2)
+{
+    this->SetMaterial(material);
+    this->SetNumDiamonds(std::stoi(numDiamonds));
+}
+
+void Jewelry::SetMaterial(std::string newMaterial){
+    material_ = newMaterial;
+}
+
+void Jewelry::SetNumDiamonds(unsigned int newNumDiamonds){
+    numDiamonds_ = newNumDiamonds;
+
 }

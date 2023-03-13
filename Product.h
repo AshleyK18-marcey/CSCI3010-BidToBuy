@@ -4,7 +4,9 @@
 #include <vector>
 #include <iostream>
 #include "Users.h"
-
+//#include "helpers.cpp"
+//#include "ProductFactory.h"
+//#include "ProductFactory.h"
 enum class ProductCategory
 {
     Car,
@@ -13,40 +15,50 @@ enum class ProductCategory
     Computer,
     Jewelry
 };
-
 class Product
 {
 public:
     Product(){};
-    void MakeBid(double bid, Buyer * buyer);
-    unsigned int get_id() { return product_id_; };
+    void MakeBid(double bid, Buyer *buyer);
+    ProductCategory get_type() const { return product_type_; };
+    std::string Stringify();
     void OpenBid();
     void CloseBid();
-    User* get_seller(){return seller_ptr_;};
-    void SetBuyerId(unsigned int newId);
-    User* get_buyer(){return buyer_ptr_;};
-    std::vector<User*> get_bidders(){ return bidders_;};
-    void SetSeller(User * seller);
-    // void SetBuyer(Buyer * buyer);
+    User *get_seller() { return seller_ptr_; };
+    User *get_buyer() { return buyer_ptr_; };
+    std::vector<User *> get_bidders() { return bidders_; };
+    void SetSeller(User *seller);
+    void SetBuyer(User *buyer);
     void SetUUID(unsigned int newUUID);
     void SetFinalBid(double bid);
+    double get_final_bid () const{
+        return final_bid_;
+    }
     unsigned int get_UUID() { return uuid_; };
-    friend std::ostream &operator<<(std::ostream &os, const Product &p);
+    //friend std::ostream &operator<<(std::ostream &os, const Product &p);
 
-private:
-    const unsigned int product_id_ = 0;
+    virtual void AssembleProduct() = 0;
+
+    virtual void AssignMetaData(std::string meta1, std::string meta2, std::string meta3, std::string meta4) = 0;
+
+    virtual std::string get_type_string() = 0;
+
+protected:
+    ProductCategory product_type_;
     unsigned int uuid_ = 0;
-    float current_bid_ = 0;             // dollar value of current highest bid
-    std::vector<User*> bidders_; // id of current highest bidder
+    float current_bid_ = 0;       // dollar value of current highest bid
+    std::vector<User *> bidders_; // id of current highest bidder
     std::vector<float> bid_vals_;
     float final_bid_ = 0;
-    User* buyer_ptr_;
-    User* seller_ptr_;
+    User *buyer_ptr_ = NULL;
+    User *seller_ptr_ = NULL;
     bool active;
 };
 class Car : public Product
 {
 public:
+    void AssembleProduct();
+    void AssignMetaData(std::string make, std::string model, std::string year, std::string blank);
     Car(){};
     std::string GetMake() { return make_; };
     std::string GetModel() { return model_; };
@@ -54,6 +66,7 @@ public:
     void SetMake(std::string newMake);
     void SetModel(std::string newModel);
     void SetYear(unsigned int newYear);
+    std::string get_type_string() override { return "Car"; };
 
 private:
     std::string make_;
@@ -64,6 +77,8 @@ private:
 class Furniture : public Product
 {
 public:
+    void AssembleProduct();
+    void AssignMetaData(std::string material, std::string length, std::string width, std::string height);
     Furniture(){};
     std::string GetMaterial() { return material_; };
     float GetLength() { return length_; };
@@ -73,6 +88,7 @@ public:
     void SetLength(float newLength);
     void SetWidth(float newWidth);
     void SetHeight(float newHeight);
+    std::string get_type_string() override { return "Furniture"; };
 
 private:
     std::string material_;
@@ -84,11 +100,14 @@ private:
 class Book : public Product
 {
 public:
+    void AssembleProduct();
+    void AssignMetaData(std::string title, std::string author, std::string blank1, std::string blank2);
     Book(){};
     std::string GetTitle() { return title_; };
     std::string GetAuthor() { return author_; };
     void SetTitle(std::string newTitle);
     void SetAuthor(std::string newAuthor);
+    std::string get_type_string() override { return "Book"; };
 
 private:
     std::string title_;
@@ -98,6 +117,8 @@ private:
 class Computer : public Product
 {
 public:
+    void AssembleProduct();
+    void AssignMetaData(std::string screenSize, std::string processorSpeed, std::string memory, std::string blank);
     Computer(){};
     float GetScreenSize() { return screenSize_; };
     float GetProcessorSpeed() { return processorSpeed_; };
@@ -105,6 +126,7 @@ public:
     void SetScreenSize(float newScreenSize);
     void SetProcessorSpeed(float newSpeed);
     void SetMemory(unsigned int newMemory);
+    std::string get_type_string() override { return "Computer"; };
 
 private:
     float screenSize_;
@@ -115,11 +137,14 @@ private:
 class Jewelry : public Product
 {
 public:
+    void AssembleProduct();
+    void AssignMetaData(std::string material, std::string numDiamonds, std::string blank1, std::string blank2);
     Jewelry(){};
     std::string GetMaterial() { return material_; };
     int GetNumDiamonds() { return numDiamonds_; };
     void SetMaterial(std::string newMaterial);
     void SetNumDiamonds(unsigned int newNumDiamonds);
+    std::string get_type_string() override { return "Jewelry"; };
 
 private:
     std::string material_;
@@ -127,6 +152,6 @@ private:
     const unsigned int product_id_ = 5;
 };
 
-Product *productFactory(ProductCategory pc, User * seller);
+
 
 #endif // header gaurd

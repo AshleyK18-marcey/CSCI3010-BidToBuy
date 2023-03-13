@@ -1,2 +1,3 @@
-product_id,seller,buyer,final_bid
-0,Ashley,Tyler,20
+product_type,seller,buyer,final_bid,meta_data1,meta_data2,meta_data3,meta_data4
+car,Ashley,Tyler,20,Nissan,Rogue,2015,
+book,Tyler,Ashley,90,title,author,

@@ -1,48 +1,30 @@
 #include "Driver.h"
+//#include "Product.h"
+//#include "helpers.cpp"
 
-std::string promptValidString(std::string prompt) {
-    bool validInput = false;
-    std::string userInput = "";
-    while(!validInput) {
-        std::cout << std::endl << prompt;
-        std::getline(std::cin >> std::ws, userInput);
-        if(userInput.length() > 0) {
-            validInput = true;
-        }
+
+
+ProductCategory StringToProductCategory(std::string type){
+    if(type == "car"){
+        return ProductCategory::Car;
     }
-    return userInput;
-}
+    else if(type == "furniture"){
+        return ProductCategory::Furniture;
 
-int promptValidInt(std::string prompt) {
-    bool validInput = false;
-    std::string userInput = "";
-    int val = -1;
-    while(!validInput) {
-        std::cout << std::endl << prompt;
-        std::getline(std::cin >> std::ws, userInput);
-        val = atoi(userInput.c_str());
-        if(val > 0) {
-            validInput = true;
-        }
     }
-    return val;
-}
+    else if(type == "book"){
+        return ProductCategory::Book;
 
-float promptValidFloat(std::string prompt) {
-    bool validInput = false;
-    std::string userInput = "";
-    float val = -1;
-    while(!validInput) {
-        std::cout << std::endl << prompt;
-        std::getline(std::cin >> std::ws, userInput);
-        val = atof(userInput.c_str());
-        if(val > 0) {
-            validInput = true;
-        }
     }
-    return val;
-}
+    else if(type == "computer"){
+        return ProductCategory::Computer;
 
+    }
+    else if(type == "jewelry"){
+        return ProductCategory::Jewelry;
+
+    }
+}
 // retrieved from: https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
 bool is_number(const std::string &s)
 {
@@ -84,17 +66,26 @@ Driver::Driver()
     fs.open("./runtime_data/products.csv");
     std::getline(fs, line); // get the header out of the way
 
+    std::string type;
     std::string s_name;
     std::string b_name;
     std::string finalBid;
+    std::string meta_data1;
+    std::string meta_data2;
+    std::string meta_data3;
+    std::string meta_data4;
     while (std::getline(fs, line))
     { // read each line
         // std::cout << line << std::endl;     // debugging
         std::stringstream rowStream(line);
-        std::getline(rowStream, id, ',');
+        std::getline(rowStream, type, ',');
         std::getline(rowStream, s_name, ',');
         std::getline(rowStream, b_name, ',');
         std::getline(rowStream, finalBid, ',');
+        std::getline(rowStream, meta_data1, ',');
+        std::getline(rowStream, meta_data2, ',');
+        std::getline(rowStream, meta_data3, ',');
+        std::getline(rowStream, meta_data4, ',');
 
         User * tempSellerPtr = nullptr;
         for(unsigned int i = 0; i < this->users_.size(); i++) {
@@ -105,9 +96,27 @@ Driver::Driver()
             }
         }
 
-        Product *tempProduct = productFactory(static_cast<ProductCategory>(stoi(id)), tempSellerPtr);
-        // tempProduct->SetBuyerId(stoi(b_id));
+        User * tempBuyerPtr = nullptr;
+        for(unsigned int i = 0; i < this->users_.size(); i++) {
+            if (this->users_.at(i).get_name() == b_name)
+            {
+                tempBuyerPtr = &this->users_.at(i);
+                break;
+            }
+        }
+        
+        Product *tempProduct = ProductFactory::productFactory(StringToProductCategory(type), tempSellerPtr, false);
+        tempProduct->SetBuyer(tempBuyerPtr);
         tempProduct->SetFinalBid(stof(finalBid));
+        switch (StringToProductCategory(type))
+        {
+        case ProductCategory::Car:
+            tempProduct->AssignMetaData(meta_data1, meta_data2, meta_data3, meta_data4);
+            break;
+        
+        default:
+            break;
+        }
         this->sold_products_.push_back(tempProduct);
     }
 
@@ -139,7 +148,7 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
         std::cout << "Number of sold products: " << sellers_products.size() << std::endl;
         for (unsigned int i = 0; i < sellers_products.size(); i++)
         {
-            std::cout << i << ") " << *sellers_products.at(i) << std::endl;
+            std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
         }
     }
     else
@@ -147,7 +156,7 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
         std::cout << "Number of sold products: " << this->sold_products_.size() << std::endl;
         for (unsigned int i = 0; i < this->sold_products_.size(); i++)
         {
-            std::cout << i << ") " << *this->sold_products_.at(i) << std::endl;
+            std::cout << i << ") " << this->sold_products_[i]->Stringify() << std::endl;
         }
     }
 }
@@ -165,7 +174,7 @@ void Driver::DisplayActiveProducts(User *seller)
 
     for (unsigned int i = 0; i < sellers_products.size(); i++)
     {
-        std::cout << i << ") " << *sellers_products.at(i) << std::endl;
+        std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
     }
 }
 
@@ -180,7 +189,7 @@ void Driver::DisplayCurrentBids(User* Buyer){
         }
     }
     for(unsigned int i = 0; i < current_bids.size(); i++){
-         std::cout << i << ") " << *current_bids.at(i) << std::endl;
+         std::cout << i << ") " << current_bids[i]->Stringify() << std::endl;
     }
 }
 
@@ -352,34 +361,38 @@ void Driver::HandleProductCreation() {
             validInput = true;
         }
     }
-    Product * newProduct = productFactory(static_cast<ProductCategory>(selection - 1), this->active_user_);
+    Product *new_product;
     switch (selection)
     {
     case 1: // car
         {
-        // Car * newProduct = newProduct;
-        Car * newCar = new Car;
-        newCar->SetMake(promptValidString("Enter make of car: "));
-        newCar->SetModel(promptValidString("Enter model of car: "));
-        newCar->SetYear(promptValidInt("Enter year of car: "));
+            new_product = ProductFactory::productFactory(ProductCategory::Car, active_user_, true);
         }
         break;
     case 2: // Furntiure
-        // Furniture * newProduct = newProduct;
+        {
+            new_product = ProductFactory::productFactory(ProductCategory::Furniture, active_user_, true);
+        }
         break;
     case 3: // Book
-        // Book * newProduct = newProduct;
+        {
+            new_product = ProductFactory::productFactory(ProductCategory::Book, active_user_, true);
+        }
         break;
     case 4: // Computer
-        // Computer * newProduct = newProduct;
+        {
+            new_product = ProductFactory::productFactory(ProductCategory::Computer, active_user_, true);
+        }
         break;
     case 5: // Jewelry
-        // Jewelry * newProduct = newProduct;
+        {
+            new_product = ProductFactory::productFactory(ProductCategory::Jewelry, active_user_, true);
+        }
         break;
     default:
         break;
     }
-    // this->unsold_products_.push_back(newProduct);
+    this->unsold_products_.push_back(new_product);
 }
 
 void Driver::MainLoop()

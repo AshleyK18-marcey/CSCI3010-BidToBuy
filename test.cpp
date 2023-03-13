@@ -1,7 +1,9 @@
 #include "Driver.h"
+//#include "ProductFactory.h"
 #include <iostream>
 
 int main() {
+    /*
     std::cout << "BidToBuy Test" << std::endl;
     Driver * mainDriver = Driver::GetInstance();
     mainDriver->DisplayUsers();
@@ -12,4 +14,18 @@ int main() {
     mainDriver->CreateConversation(userPtr1, userPtr2);
     mainDriver->handleConversing(userPtr1);
     mainDriver->handleConversing(userPtr2);
+    */
+   /*
+   User* userPtr1 = new User(20, "name1", "111", "adr1", 0.0);
+   ProductCategory type = ProductCategory::Car; 
+   Product *p = ProductFactory::productFactory(type, userPtr1);
+   std::cout << p->Stringify() << std::endl;
+   */
+
+  Driver * mainDriver = Driver::GetInstance();
+  User* userPtr1 = new User(20, "name1", "111", "adr1", 0.0);
+  mainDriver->DisplaySoldProducts(false, userPtr1);
+  
+
+
 }
