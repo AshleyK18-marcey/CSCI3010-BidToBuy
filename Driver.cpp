@@ -1,28 +1,28 @@
 #include "Driver.h"
-//#include "Product.h"
-//#include "helpers.cpp"
+// #include "Product.h"
+// #include "helpers.cpp"
 
-
-
-ProductCategory StringToProductCategory(std::string type){
-    if(type == "car"){
+ProductCategory StringToProductCategory(std::string type)
+{
+    if (type == "car")
+    {
         return ProductCategory::Car;
     }
-    else if(type == "furniture"){
+    else if (type == "furniture")
+    {
         return ProductCategory::Furniture;
-
     }
-    else if(type == "book"){
+    else if (type == "book")
+    {
         return ProductCategory::Book;
-
     }
-    else if(type == "computer"){
+    else if (type == "computer")
+    {
         return ProductCategory::Computer;
-
     }
-    else if(type == "jewelry"){
+    else if (type == "jewelry")
+    {
         return ProductCategory::Jewelry;
-
     }
 }
 // retrieved from: https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
@@ -87,8 +87,9 @@ Driver::Driver()
         std::getline(rowStream, meta_data3, ',');
         std::getline(rowStream, meta_data4, ',');
 
-        User * tempSellerPtr = nullptr;
-        for(unsigned int i = 0; i < this->users_.size(); i++) {
+        User *tempSellerPtr = nullptr;
+        for (unsigned int i = 0; i < this->users_.size(); i++)
+        {
             if (this->users_.at(i).get_name() == s_name)
             {
                 tempSellerPtr = &this->users_.at(i);
@@ -96,15 +97,16 @@ Driver::Driver()
             }
         }
 
-        User * tempBuyerPtr = nullptr;
-        for(unsigned int i = 0; i < this->users_.size(); i++) {
+        User *tempBuyerPtr = nullptr;
+        for (unsigned int i = 0; i < this->users_.size(); i++)
+        {
             if (this->users_.at(i).get_name() == b_name)
             {
                 tempBuyerPtr = &this->users_.at(i);
                 break;
             }
         }
-        
+
         Product *tempProduct = ProductFactory::productFactory(StringToProductCategory(type), tempSellerPtr, false);
         tempProduct->SetBuyer(tempBuyerPtr);
         tempProduct->SetFinalBid(stof(finalBid));
@@ -113,7 +115,7 @@ Driver::Driver()
         case ProductCategory::Car:
             tempProduct->AssignMetaData(meta_data1, meta_data2, meta_data3, meta_data4);
             break;
-        
+
         default:
             break;
         }
@@ -161,36 +163,50 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
     }
 }
 
-void Driver::DisplayActiveProducts(User *seller)
+void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
 {
-    std::vector<Product *> sellers_products;
-    for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
+    if (specific_to_user)
     {
-        if (this->unsold_products_[i]->get_seller() == seller)
+        std::vector<Product *> sellers_products;
+        for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
         {
-            sellers_products.push_back(this->sold_products_[i]);
+            if (this->unsold_products_[i]->get_seller() == seller)
+            {
+                sellers_products.push_back(this->sold_products_[i]);
+            }
+        }
+        for (unsigned int i = 0; i < sellers_products.size(); i++)
+        {
+            std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
         }
     }
+    else{
+        for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
+        {
+            std::cout << i << ") " << this->unsold_products_[i]->Stringify() << std::endl;
+        }
 
-    for (unsigned int i = 0; i < sellers_products.size(); i++)
-    {
-        std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
     }
 }
 
-void Driver::DisplayCurrentBids(User* Buyer){
+void Driver::DisplayCurrentBids(User *Buyer)
+{
     std::cout << "Your bids:" << std::endl;
-    std::vector<Product*> current_bids;
-    for(unsigned int i = 0; i < this->unsold_products_.size(); i++){
-        std::vector<User*> bids = this->unsold_products_[i]->get_bidders();
-        for(unsigned int k = 0; k < bids.size(); k++){
-            if(bids[i] == Buyer){
+    std::vector<Product *> current_bids;
+    for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
+    {
+        std::vector<User *> bids = this->unsold_products_[i]->get_bidders();
+        for (unsigned int k = 0; k < bids.size(); k++)
+        {
+            if (bids[i] == Buyer)
+            {
                 current_bids.push_back(this->unsold_products_[i]);
             }
         }
     }
-    for(unsigned int i = 0; i < current_bids.size(); i++){
-         std::cout << i << ") " << current_bids[i]->Stringify() << std::endl;
+    for (unsigned int i = 0; i < current_bids.size(); i++)
+    {
+        std::cout << i << ") " << current_bids[i]->Stringify() << std::endl;
     }
 }
 
@@ -344,21 +360,30 @@ void Driver::signIn()
     }
 }
 
-void Driver::HandleProductCreation() {
+void Driver::HandleProductCreation()
+{
     bool validInput = false;
     std::string userInput = "";
     int selection = 0;
     std::cout << "What kind of product do you wish to sell?"
-        << std::endl << "1) Car"
-        << std::endl << "2) Furniture"
-        << std::endl << "3) Book"
-        << std::endl << "4) Computer"
-        << std::endl << "5) Jewelry";
-    while(!validInput) {
-        std::cout << std::endl << "Enter number of desired type of product: ";
+              << std::endl
+              << "1) Car"
+              << std::endl
+              << "2) Furniture"
+              << std::endl
+              << "3) Book"
+              << std::endl
+              << "4) Computer"
+              << std::endl
+              << "5) Jewelry";
+    while (!validInput)
+    {
+        std::cout << std::endl
+                  << "Enter number of desired type of product: ";
         std::getline(std::cin >> std::ws, userInput);
         selection = std::stoi(userInput);
-        if(selection > 0 && selection < 6) {
+        if (selection > 0 && selection < 6)
+        {
             validInput = true;
         }
     }
@@ -366,30 +391,30 @@ void Driver::HandleProductCreation() {
     switch (selection)
     {
     case 1: // car
-        {
-            new_product = ProductFactory::productFactory(ProductCategory::Car, active_user_, true);
-        }
-        break;
+    {
+        new_product = ProductFactory::productFactory(ProductCategory::Car, active_user_, true);
+    }
+    break;
     case 2: // Furntiure
-        {
-            new_product = ProductFactory::productFactory(ProductCategory::Furniture, active_user_, true);
-        }
-        break;
+    {
+        new_product = ProductFactory::productFactory(ProductCategory::Furniture, active_user_, true);
+    }
+    break;
     case 3: // Book
-        {
-            new_product = ProductFactory::productFactory(ProductCategory::Book, active_user_, true);
-        }
-        break;
+    {
+        new_product = ProductFactory::productFactory(ProductCategory::Book, active_user_, true);
+    }
+    break;
     case 4: // Computer
-        {
-            new_product = ProductFactory::productFactory(ProductCategory::Computer, active_user_, true);
-        }
-        break;
+    {
+        new_product = ProductFactory::productFactory(ProductCategory::Computer, active_user_, true);
+    }
+    break;
     case 5: // Jewelry
-        {
-            new_product = ProductFactory::productFactory(ProductCategory::Jewelry, active_user_, true);
-        }
-        break;
+    {
+        new_product = ProductFactory::productFactory(ProductCategory::Jewelry, active_user_, true);
+    }
+    break;
     default:
         break;
     }
@@ -419,7 +444,8 @@ void Driver::MainLoop()
                           << "Enter number of desired action: ";
                 std::cin >> userInput;
                 selection = std::stoi(userInput);
-                if(selection > 0 && selection < 8) {
+                if (selection > 0 && selection < 8)
+                {
                     goodInput = true;
                 }
             }
@@ -438,7 +464,7 @@ void Driver::MainLoop()
                 this->active_user_->UpdateInformation();
                 break;
             case 5: // overview of products
-                this->DisplaySoldProducts(this->active_user_);
+                this->DisplaySoldProducts(true, this->active_user_);
                 break;
             case 6: // manage bids
                 break;
@@ -451,21 +477,22 @@ void Driver::MainLoop()
             }
         }
         else
-        { // buyer
+        {                      // buyer
             while (!goodInput) // get user input for main options
             {
                 std::cout << std::endl
                           << "Enter number of desired action: ";
                 std::cin >> userInput;
                 selection = std::stoi(userInput);
-                if(selection > 0 && selection < 9) {
+                if (selection > 0 && selection < 9)
+                {
                     goodInput = true;
                 }
             }
             switch (selection)
             {
             case 1: // view products for sale
-                this->DisplayActiveProducts();
+                this->DisplayActiveProducts(false, active_user_);
                 break;
             case 2: // place bid
 
@@ -498,13 +525,14 @@ void Driver::MainLoop()
 void Driver::OverviewSeller(User *Seller)
 {
     std::cout << "Sold Products: " << std::endl;
-    DisplaySoldProducts(Seller);
+    DisplaySoldProducts(true, Seller);
 
     std::cout << "Products that are open for bidding: " << std::endl;
-    DisplayActiveProducts(Seller);
+    DisplayActiveProducts(true, Seller);
 }
 
-void Driver::OverviewBuyer(User* Buyer){
+void Driver::OverviewBuyer(User *Buyer)
+{
     std::cout << "Products that you have placed a bid on: " << std::endl;
     DisplayCurrentBids(Buyer);
 }

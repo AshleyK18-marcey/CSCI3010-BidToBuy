@@ -53,9 +53,7 @@ public:
 
 	void handleConversing(User *userPtr);
 
-	void DisplayActiveProducts();
-
-	void DisplayActiveProducts(User* seller);
+	void DisplayActiveProducts(bool specific_to_user, User* seller);
 
 	void HandleProductCreation();
 
@@ -67,9 +65,7 @@ public:
 
 	void DisplayUsers();
 
-	void DisplaySoldProducts();
-
-	void DisplaySoldProducts(User* Seller);
+	void DisplaySoldProducts(bool specific_to_user, User *Seller);
 
 	bool UserExists(std::string name);
 
