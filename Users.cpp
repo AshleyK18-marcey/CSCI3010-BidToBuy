@@ -229,7 +229,7 @@ void Seller::PrintOptions() {
     std::cout << "2) Messaging" << std::endl;
     std::cout << "3) Check account balance" << std::endl;
     std::cout << "4) Update your informaiton" << std::endl;
-    std::cout << "5) Overview of products" << std::endl;
+    std::cout << "5) Overview of sold products" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
     std::cout << "7) Sign out" << std::endl;
     std::cout <<  "==================================================================================================";

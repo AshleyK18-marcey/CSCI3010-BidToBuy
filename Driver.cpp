@@ -179,10 +179,11 @@ void Driver::DisplayActiveProducts(User *seller)
 }
 
 void Driver::DisplayCurrentBids(User* Buyer){
+    std::cout << "Your bids:" << std::endl;
     std::vector<Product*> current_bids;
     for(unsigned int i = 0; i < this->unsold_products_.size(); i++){
         std::vector<User*> bids = this->unsold_products_[i]->get_bidders();
-        for(int k = 0; k < bids.size(); k++){
+        for(unsigned int k = 0; k < bids.size(); k++){
             if(bids[i] == Buyer){
                 current_bids.push_back(this->unsold_products_[i]);
             }
@@ -437,6 +438,7 @@ void Driver::MainLoop()
                 this->active_user_->UpdateInformation();
                 break;
             case 5: // overview of products
+                this->DisplaySoldProducts(this->active_user_);
                 break;
             case 6: // manage bids
                 break;
@@ -450,6 +452,45 @@ void Driver::MainLoop()
         }
         else
         { // buyer
+            while (!goodInput) // get user input for main options
+            {
+                std::cout << std::endl
+                          << "Enter number of desired action: ";
+                std::cin >> userInput;
+                selection = std::stoi(userInput);
+                if(selection > 0 && selection < 9) {
+                    goodInput = true;
+                }
+            }
+            switch (selection)
+            {
+            case 1: // view products for sale
+                this->DisplayActiveProducts();
+                break;
+            case 2: // place bid
+
+                break;
+            case 3: // messaging
+                this->handleConversing(active_user_);
+                break;
+            case 4: // balance
+                std::cout << "Your balance is: $" << active_user_->get_balance() << std::endl;
+                break;
+            case 5: // update info
+                this->active_user_->UpdateInformation();
+                break;
+            case 6: // overview of placed bids
+                this->DisplayCurrentBids(active_user_);
+                break;
+            case 7: // manage bids
+                break;
+            case 8:
+                this->active_user_ = nullptr;
+                signedIn = false;
+                break;
+            default:
+                break;
+            }
         }
     }
 }
@@ -457,7 +498,7 @@ void Driver::MainLoop()
 void Driver::OverviewSeller(User *Seller)
 {
     std::cout << "Sold Products: " << std::endl;
-    DisplaySoldProducts(true, Seller);
+    DisplaySoldProducts(Seller);
 
     std::cout << "Products that are open for bidding: " << std::endl;
     DisplayActiveProducts(Seller);
