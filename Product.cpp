@@ -17,6 +17,12 @@ std::string promptValidString(std::string prompt)
     return userInput;
 }
 
+/**
+ * @brief only accepts an int or q, if q returns -1
+ * 
+ * @param prompt string to be displayed prompting user for input
+ * @return int integer >= 0 or -1 for quit
+ */
 int promptValidInt(std::string prompt)
 {
     bool validInput = false;
@@ -27,8 +33,11 @@ int promptValidInt(std::string prompt)
         std::cout << std::endl
                   << prompt;
         std::getline(std::cin >> std::ws, userInput);
+        if (userInput == "q") {
+            return -1;
+        }
         val = atoi(userInput.c_str());
-        if (val > 0)
+        if (val >= 0)
         {
             validInput = true;
         }
@@ -97,6 +106,10 @@ bool isFloat(std::string myString)
 
 // -----Product-----
 
+void Product::SetActive(bool active) {
+    this->active_ = active;
+}
+
 /**
  Converts the product to a string
 */
@@ -108,7 +121,7 @@ std::string Product::Stringify()
 
     if (this->get_buyer() == NULL)
     {
-        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name();
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Current highest bid: " << this->get_last_bid();
         returnVal = stream.str();
     }
     else
@@ -324,7 +337,7 @@ std::string Car::Stringify()
 
     if (this->get_buyer() == NULL)
     {
-        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
                << "Product description: " << this->get_title() << std::endl
                << "Make: " << this->GetMake() << std::endl
                << "Model: " << this->GetModel() << std::endl
@@ -418,7 +431,7 @@ std::string Furniture::Stringify()
 
     if (this->get_buyer() == NULL)
     {
-        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
                << "Product description: " << this->get_title() << std::endl
                << "Material: " << this->GetMaterial() << std::endl
                << "Length: " << this->GetLength() << "in" << std::endl
@@ -529,7 +542,7 @@ std::string Book::Stringify()
 
     if (this->get_buyer() == NULL)
     {
-        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
                << "Product description: " << this->get_title() << std::endl
                << "Book Title: " << this->GetBookTitle() << std::endl
                << "Author: " << this->GetAuthor() << std::endl
@@ -592,7 +605,7 @@ std::string Computer::Stringify()
 
     if (this->get_buyer() == NULL)
     {
-        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
                << "Product description: " << this->get_title() << std::endl
                << "Screen Size: " << this->GetScreenSize() << "in" << std::endl
                << "Processor Speed: " << this->GetProcessorSpeed() << "GHz" << std::endl
@@ -658,7 +671,7 @@ std::string Jewelry::Stringify()
 
     if (this->get_buyer() == NULL)
     {
-        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
                << "Product description: " << this->get_title() << std::endl
                << "Material: " << this->GetMaterial() << std::endl
                << "Number of jewels or diamonds: " << this->GetNumDiamonds() << std::endl

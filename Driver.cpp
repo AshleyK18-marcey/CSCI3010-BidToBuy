@@ -134,6 +134,7 @@ Driver::Driver()
         default:
             break;
         }
+        tempProduct->SetActive(false);
         this->sold_products_.push_back(tempProduct);
     }
 
@@ -197,7 +198,7 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
         {
             if (this->unsold_products_[i]->get_seller()->get_name() == seller->get_name() && this->unsold_products_[i]->get_active())
             {
-                sellers_products.push_back(this->sold_products_[i]);
+                sellers_products.push_back(this->unsold_products_[i]);
             }
         }
         for (unsigned int i = 0; i < sellers_products.size(); i++)
@@ -462,6 +463,7 @@ void Driver::HandleProductCreation()
     default:
         break;
     }
+    new_product->SetActive(true);
     this->unsold_products_.push_back(new_product);
 }
 
@@ -531,17 +533,19 @@ void Driver::HandleOpenCloseBid() {
             {
                 if (this->unsold_products_[i]->get_seller()->get_name() == this->active_user_->get_name() && this->unsold_products_[i]->get_active())
                 {
-                    activeProducts.push_back(this->sold_products_[i]);
+                    activeProducts.push_back(this->unsold_products_[i]);
                 }
             }
 
             while (!validInput) {
-                selection = promptValidInt("Enter number of item to finalize sale of: ");
-                if(selection > 0 && selection < activeProducts.size()) {
+                selection = promptValidInt("Enter number of item to finalize sale of or (q)uit: ");
+                if(selection >= 0 && (unsigned int)selection < activeProducts.size()) {
+                    validInput = true;
+                } else if (selection == -1) {
                     validInput = true;
                 }
             }
-            if(activeProducts.at(selection)->CloseBid()) {
+            if(selection >= 0 && activeProducts.at(selection)->CloseBid()) {
                 this->sold_products_.push_back(activeProducts.at(selection));
                 for (unsigned int i = 0; i < this->unsold_products_.size(); i++) {
                     if (this->unsold_products_.at(i) == activeProducts.at(selection))
@@ -559,23 +563,23 @@ void Driver::HandleOpenCloseBid() {
             {
                 if (this->unsold_products_[i]->get_seller()->get_name() == this->active_user_->get_name() && !this->unsold_products_[i]->get_active())
                 {
-                    inactiveProducts.push_back(this->sold_products_[i]);
+                    inactiveProducts.push_back(this->unsold_products_[i]);
                 }
             }
 
             while (!validInput) {
-                selection = promptValidInt("Enter number of item to put back up for sale: ");
-                if(selection > 0 && selection < inactiveProducts.size()) {
+                selection = promptValidInt("Enter number of item to put back up for sale or (q)uit: ");
+                if(selection >= 0 && selection < inactiveProducts.size()) {
+                    validInput = true;
+                } else if (selection == -1) {
                     validInput = true;
                 }
             }
-
-            inactiveProducts.at(selection)->OpenBid();
+            if (selection >= 0) {
+                inactiveProducts.at(selection)->OpenBid();
+            }
         }
-        
     }
-    
-
 }
 
 void Driver::MainLoop()

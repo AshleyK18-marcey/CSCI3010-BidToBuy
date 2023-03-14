@@ -62,7 +62,7 @@ public:
 
     void SetBuyer(User *buyer);
 
-    void SetUUID(unsigned int newUUID);
+    void SetActive(bool active);
 
     void SetFinalBid(double bid);
     float get_last_bid();
