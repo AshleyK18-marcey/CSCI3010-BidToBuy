@@ -170,10 +170,11 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
 {
     if (specific_to_user)
     {
+        std::cout << "Products for sale by " << seller->get_name() << ":" << std::endl;
         std::vector<Product *> sellers_products;
         for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
         {
-            if (this->unsold_products_[i]->get_seller() == seller)
+            if (this->unsold_products_[i]->get_seller()->get_name() == seller->get_name())
             {
                 sellers_products.push_back(this->sold_products_[i]);
             }
@@ -184,6 +185,7 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
         }
     }
     else{
+        std::cout << "All products for sale: " << std::endl;
         for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
         {
             std::cout << i << ") " << this->unsold_products_[i]->Stringify() << std::endl;
