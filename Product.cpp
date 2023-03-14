@@ -1,4 +1,5 @@
 #include "Product.h"
+#include <sstream>
 std::string promptValidString(std::string prompt)
 {
     bool validInput = false;
@@ -73,7 +74,50 @@ double promptValidDouble(std::string prompt)
     return val;
 }
 
+double promptValidDouble(std::string prompt)
+{
+    bool validInput = false;
+    std::string userInput = "";
+    double val = -1;
+    while (!validInput)
+    {
+        std::cout << std::endl
+                  << prompt;
+        std::getline(std::cin >> std::ws, userInput);
+        val = std::stoi(userInput.c_str());
+        if (val >= 0.00)
+        {
+            validInput = true;
+        }
+    }
+    return val;
+}
+
+// retrieved from: https://www.techiedelight.com/determine-if-a-string-is-numeric-in-cpp/
+bool isNumeric(std::string const &str)
+{
+    auto it = str.begin();
+    while (it != str.end() && std::isdigit(*it)) {
+        it++;
+    }
+    return !str.empty() && it == str.end();
+}
+
+//retrieved from: https://stackoverflow.com/questions/447206/c-isfloat-function
+bool isFloat( std::string myString ) {
+    std::istringstream iss(myString);
+    float f;
+    iss >> std::noskipws >> f; // noskipws considers leading whitespace invalid
+    // Check the entire string was consumed and if either failbit or badbit is set
+    return iss.eof() && !iss.fail(); 
+}
+ 
+
 // -----Product-----
+
+/**
+ Converts the product to a string
+*/
 std::string Product::Stringify()
 {
     std::stringstream stream;
@@ -92,6 +136,38 @@ std::string Product::Stringify()
     }
 
     return returnVal;
+}
+
+void Product::MakeBid(double bid, User * user) {
+    this->bid_vals_.push_back(bid);
+    this->bidders_.push_back(user);
+}
+
+bool Product::CloseBid() {
+    this->active = false;
+    // go to index 1 because 0 is seller
+    for (unsigned int i = this->bidders_.size(); i > 1; i--)
+    {
+        //check if bidder has sufficient balance
+        if (this->bidders_.at(i)->get_balance() >= this->bid_vals_.at(i))
+        {
+            this->bidders_.at(i)->ChangeBalance(this->bid_vals_.at(i));
+            this->seller_ptr_->ChangeBalance(this->bid_vals_.at(i));
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ reopens bidding at starting value
+*/
+void Product::OpenBid() {
+    float startingBid = this->bid_vals_.at(0);
+    this->bid_vals_.clear();
+    this->bidders_.clear();
+    this->bid_vals_.push_back(startingBid);
+    this->bidders_.push_back(this->seller_ptr_);
 }
 
 /**
@@ -119,6 +195,20 @@ void Product::SetBuyer(User *buyer)
         this->buyer_ptr_ = buyer;
     }
 }
+
+/**
+ Gets that most recent bid made on the product
+
+ @return a float of the value of the most recent bid
+*/
+ float Product::get_last_bid() {
+    if (this->bid_vals_.size() > 0)
+    {
+        return this->bid_vals_.back();
+    } else {
+        return 0;
+    }
+ }
 
 /**
     When a seller closes a sale this sets the greatest value bid to the final bid that won

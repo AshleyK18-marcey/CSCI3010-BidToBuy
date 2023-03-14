@@ -4,9 +4,16 @@
 #include <vector>
 #include <iostream>
 #include "Users.h"
-// #include "helpers.cpp"
-// #include "ProductFactory.h"
-// #include "ProductFactory.h"
+//#include "helpers.cpp"
+//#include "ProductFactory.h"
+//#include "ProductFactory.h"
+
+std::string promptValidString(std::string prompt);
+int promptValidInt(std::string prompt);
+float promptValidFloat(std::string prompt);
+bool isNumeric(std::string const &str);
+bool isFloat( std::string myString );
+
 enum class ProductCategory
 {
     Car,
@@ -28,7 +35,7 @@ class Product
 public:
     Product(){};
 
-    void MakeBid(double bid, Buyer *buyer);
+    void MakeBid(double bid, User *buyer);
 
     void StartBid(double bid);
 
@@ -37,12 +44,11 @@ public:
     virtual std::string Stringify();
 
     void OpenBid();
-
-    void CloseBid();
-
+    bool CloseBid();
     User *get_seller() { return seller_ptr_; };
 
     User *get_buyer() { return buyer_ptr_; };
+    bool get_active() { return active; };
 
     std::string get_title() { return title_; };
 
@@ -59,6 +65,7 @@ public:
     void SetUUID(unsigned int newUUID);
 
     void SetFinalBid(double bid);
+    float get_last_bid();
 
     bool SetCondition(int current_condition);
 

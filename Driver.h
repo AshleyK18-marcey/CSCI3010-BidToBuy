@@ -55,9 +55,13 @@ public:
 
 	void DisplayActiveProducts(bool specific_to_user, User* seller);
 
+	void DisplayInactiveProducts(User* seller);
+
 	void HandleProductCreation();
 
-	void DisplayInactiveProducts(User* seller);
+	void HandlePlaceBid();
+
+	void HandleOpenCloseBid();
 
 	void DisplayBoughtProducts(User* buyer);
 
