@@ -7,6 +7,13 @@
 //#include "helpers.cpp"
 //#include "ProductFactory.h"
 //#include "ProductFactory.h"
+
+std::string promptValidString(std::string prompt);
+int promptValidInt(std::string prompt);
+float promptValidFloat(std::string prompt);
+bool isNumeric(std::string const &str);
+bool isFloat( std::string myString );
+
 enum class ProductCategory
 {
     Car,
@@ -19,18 +26,20 @@ class Product
 {
 public:
     Product(){};
-    void MakeBid(double bid, Buyer *buyer);
+    void MakeBid(double bid, User *buyer);
     ProductCategory get_type() const { return product_type_; };
     std::string Stringify();
     void OpenBid();
-    void CloseBid();
+    bool CloseBid();
     User *get_seller() { return seller_ptr_; };
     User *get_buyer() { return buyer_ptr_; };
+    bool get_active() { return active; };
     std::vector<User *> get_bidders() { return bidders_; };
     void SetSeller(User *seller);
     void SetBuyer(User *buyer);
     void SetUUID(unsigned int newUUID);
     void SetFinalBid(double bid);
+    float get_last_bid();
     double get_final_bid () const{
         return final_bid_;
     }
