@@ -140,10 +140,13 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
     if (specific_to_user)
     {
         std::vector<Product *> sellers_products;
+        // iterate through sold products
         for (unsigned int i = 0; i < this->sold_products_.size(); i++)
         {
-            if (this->sold_products_[i]->get_seller() == Seller)
+            // if seller of product is the same as the seller passed to this function
+            if (this->sold_products_[i]->get_seller()->get_name() == Seller->get_name())
             {
+                // add this product to the vector of found products
                 sellers_products.push_back(this->sold_products_[i]);
             }
         }
