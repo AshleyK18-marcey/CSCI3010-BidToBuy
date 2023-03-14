@@ -165,17 +165,23 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
                 sellers_products.push_back(this->sold_products_[i]);
             }
         }
+        std::cout << "============================" << std::endl;
         std::cout << "Number of sold products: " << sellers_products.size() << std::endl;
+        
         for (unsigned int i = 0; i < sellers_products.size(); i++)
         {
+            std::cout << "=========================================================================" << std::endl;
             std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
         }
     }
     else
     {
+        std::cout << "============================" << std::endl;
         std::cout << "Number of sold products: " << this->sold_products_.size() << std::endl;
+        
         for (unsigned int i = 0; i < this->sold_products_.size(); i++)
         {
+            std::cout << "=========================================================================" << std::endl;
             std::cout << i << ") " << this->sold_products_[i]->Stringify() << std::endl;
         }
     }
@@ -401,6 +407,7 @@ void Driver::HandleProductCreation()
     bool validInput = false;
     std::string userInput = "";
     int selection = 0;
+    std::cout << "=========================================" << std::endl;
     std::cout << "What kind of product do you wish to sell?"
               << std::endl
               << "1) Car"
@@ -412,6 +419,7 @@ void Driver::HandleProductCreation()
               << "4) Computer"
               << std::endl
               << "5) Jewelry";
+    std::cout << "=========================================" << std::endl;
     while (!validInput)
     {
         std::cout << std::endl

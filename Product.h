@@ -48,7 +48,7 @@ public:
     User *get_seller() { return seller_ptr_; };
 
     User *get_buyer() { return buyer_ptr_; };
-    bool get_active() { return active; };
+    bool get_active() { return active_; };
 
     std::string get_title() { return title_; };
 
@@ -93,7 +93,7 @@ protected:
     float final_bid_ = 0;
     User *buyer_ptr_ = NULL;
     User *seller_ptr_ = NULL;
-    bool active;
+    bool active_;
 };
 class Car : public Product
 {

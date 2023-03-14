@@ -1,3 +1,6 @@
 product_type,seller,buyer,final_bid,title,meta_data1,meta_data2,meta_data3,meta_data4,condition
 car,Ashley,Tyler,200,Good Car,Nissan,Rogue,2015,,2
-book,Tyler,Ashley,90,title of product,book title,author,,,1
+book,Tyler,Ashley,90,New copy of divergent,divergent,Veronica Roth,,,1
+furniture,Chai,Ashley,50.55,Vintage sofa,cloth,150,150,250,3
+computer,spicy,Tyler,560.24,Used laptop,11,2.6,8,,2
+jewelry,Ashley,Chai,25.12,Vintage gold necklace,gold,2,,,2

@@ -128,7 +128,7 @@ void Product::MakeBid(double bid, User *user)
 
 bool Product::CloseBid()
 {
-    this->active = false;
+    this->active_ = false;
     // go to index 1 because 0 is seller
     for (unsigned int i = this->bidders_.size(); i > 1; i--)
     {
@@ -260,12 +260,15 @@ std::string Product::get_condition()
         return "Used Very Good";
         break;
     case Condition::Used_Good:
-        return "User Good";
+        return "Used Good";
         break;
     case Condition::Used_okay:
         return "Used Okay";
         break;
+    default:
+        break;
     }
+    
 }
 
 void Product::StartBid(double bid)
@@ -301,7 +304,7 @@ void Car::AssembleProduct()
     {
         valid = this->SetCondition(promptValidInt("Enter the condition of your Car (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
-    this->StartBid(promptValidDouble("Starting Bid?"));
+    this->StartBid(promptValidDouble("Starting Bid? "));
 }
 
 void Car::AssignMetaData(std::string title, std::string make, std::string model, std::string year, std::string blank, std::string condition)
@@ -384,17 +387,17 @@ void Car::SetYear(unsigned int newYear)
 void Furniture::AssembleProduct()
 {
     this->SetTitle(promptValidString("Enter the listing title: "));
-    this->SetMaterial(promptValidString("What is the material?"));
-    this->SetLength(promptValidFloat("What is the length of the product?"));
-    this->SetWidth(promptValidFloat("Whst is the width of the product?"));
-    this->SetHeight(promptValidFloat("What is the height of the product?"));
+    this->SetMaterial(promptValidString("What is the material? "));
+    this->SetLength(promptValidFloat("What is the length of the product in inches? "));
+    this->SetWidth(promptValidFloat("What is the width of the product in inches? "));
+    this->SetHeight(promptValidFloat("What is the height of the product in inches? "));
 
     bool valid = false;
     while (!valid)
     {
         valid = this->SetCondition(promptValidInt("Enter the condition of your Furniture (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
-    this->StartBid(promptValidDouble("Starting Bid?"));
+    this->StartBid(promptValidDouble("Starting Bid? "));
 }
 
 void Furniture::AssignMetaData(std::string title, std::string material, std::string length, std::string width, std::string height, std::string condition)
@@ -418,9 +421,9 @@ std::string Furniture::Stringify()
         stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
                << "Product description: " << this->get_title() << std::endl
                << "Material: " << this->GetMaterial() << std::endl
-               << "Length: " << this->GetLength() << std::endl
-               << "Width: " << this->GetWidth() << std::endl
-               << "Height: " << this->GetHeight() << std::endl
+               << "Length: " << this->GetLength() << "in" << std::endl
+               << "Width: " << this->GetWidth() << "in" << std::endl
+               << "Height: " << this->GetHeight() << "in" << std::endl
                << "Condition: " << this->get_condition();
         returnVal = stream.str();
     }
@@ -430,9 +433,9 @@ std::string Furniture::Stringify()
         stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Buyer: " << this->get_buyer()->get_name() << ", Final bid: " << std::fixed << std::setprecision(2) << this->get_final_bid() << std::endl
                << "Product description: " << this->get_title() << std::endl
                << "Material: " << this->GetMaterial() << std::endl
-               << "Length: " << this->GetLength() << std::endl
-               << "Width: " << this->GetWidth() << std::endl
-               << "Height: " << this->GetHeight() << std::endl
+               << "Length: " << this->GetLength() << "in" << std::endl
+               << "Width: " << this->GetWidth() << "in" << std::endl
+               << "Height: " << this->GetHeight() << "in" << std::endl
                << "Condition: " << this->get_condition();
         returnVal = stream.str();
     }
@@ -500,14 +503,14 @@ void Furniture::SetHeight(float newHeight)
 void Book::AssembleProduct()
 {
     this->SetTitle(promptValidString("Enter the listing title: "));
-    this->SetBookTitle(promptValidString("What is the title of the book?"));
-    this->SetAuthor(promptValidString("Who is the author?"));
+    this->SetBookTitle(promptValidString("What is the title of the book? "));
+    this->SetAuthor(promptValidString("Who is the author? "));
     bool valid = false;
     while (!valid)
     {
         valid = this->SetCondition(promptValidInt("Enter the condition of your Book (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
-    this->StartBid(promptValidDouble("Starting Bid?"));
+    this->StartBid(promptValidDouble("Starting Bid? "));
 }
 
 void Book::AssignMetaData(std::string title, std::string book_title, std::string author, std::string blank, std::string blank2, std::string condition)
@@ -561,15 +564,15 @@ void Book::SetAuthor(std::string newAuthor)
 void Computer::AssembleProduct()
 {
     this->SetTitle(promptValidString("Enter the listing title: "));
-    this->SetScreenSize(promptValidFloat("What is the screen size?"));
-    this->SetProcessorSpeed(promptValidFloat("What is the processor speed of the computer?"));
-    this->SetMemory(promptValidFloat("What is the memory size?"));
+    this->SetScreenSize(promptValidFloat("What is the screen size? "));
+    this->SetProcessorSpeed(promptValidFloat("What is the processor speed of the computer? "));
+    this->SetMemory(promptValidFloat("What is the memory size? "));
     bool valid = false;
     while (!valid)
     {
         valid = this->SetCondition(promptValidInt("Enter the condition of your Computer (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
-    this->StartBid(promptValidDouble("Starting Bid?"));
+    this->StartBid(promptValidDouble("Starting Bid? "));
 }
 
 void Computer::AssignMetaData(std::string title, std::string screensize, std::string processorSpeed, std::string memory, std::string blank, std::string condition)
@@ -591,8 +594,8 @@ std::string Computer::Stringify()
     {
         stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
                << "Product description: " << this->get_title() << std::endl
-               << "Screen Size: " << this->GetScreenSize() << std::endl
-               << "Processor Speed: " << this->GetProcessorSpeed() << std::endl
+               << "Screen Size: " << this->GetScreenSize() << "in" << std::endl
+               << "Processor Speed: " << this->GetProcessorSpeed() << "GHz" << std::endl
                << "Memory: " << this->GetMemory() << "GB" << std::endl
                << "Condition: " << this->get_condition();
         returnVal = stream.str();
@@ -602,8 +605,8 @@ std::string Computer::Stringify()
 
         stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Buyer: " + this->get_buyer()->get_name() << ", Final bid: " << std::fixed << std::setprecision(2) << this->get_final_bid() << std::endl
                << "Product description: " << this->get_title() << std::endl
-               << "Screen Size: " << this->GetScreenSize() << std::endl
-               << "Processor Speed: " << this->GetProcessorSpeed() << std::endl
+               << "Screen Size: " << this->GetScreenSize() << "in" << std::endl
+               << "Processor Speed: " << this->GetProcessorSpeed() << "GHz" << std::endl
                << "Memory: " << this->GetMemory() << "GB" << std::endl
                << "Condition: " << this->get_condition();
         returnVal = stream.str();
@@ -629,14 +632,14 @@ void Computer::SetMemory(unsigned int newMemory)
 void Jewelry::AssembleProduct()
 {
     this->SetTitle(promptValidString("Enter the listing title: "));
-    this->SetMaterial(promptValidString("What is the material (ex. silver or gold)?"));
-    this->SetNumDiamonds(promptValidInt("How many jewels or diamonds?"));
+    this->SetMaterial(promptValidString("What is the material (ex. silver or gold)? "));
+    this->SetNumDiamonds(promptValidInt("How many jewels or diamonds? "));
     bool valid = false;
     while (!valid)
     {
         valid = this->SetCondition(promptValidInt("Enter the condition of your Jewelry (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
-    this->StartBid(promptValidDouble("Starting Bid?"));
+    this->StartBid(promptValidDouble("Starting Bid? "));
 }
 
 void Jewelry::AssignMetaData(std::string title, std::string material, std::string numDiamonds, std::string blank, std::string blank2, std::string condition)
