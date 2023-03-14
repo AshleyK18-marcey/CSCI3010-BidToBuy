@@ -217,7 +217,7 @@ std::ostream &operator<<(std::ostream &os, const User &u)
 void Seller::ChangeBalance(double amount)
 {
     balance_ += amount;
-    std::cout << "New Balance: " << balance_ << std::endl;
+    std::cout << "New Balance of " << this->get_name() << ": " << balance_ << std::endl;
 }
 
 /**
@@ -228,7 +228,7 @@ void Seller::ChangeBalance(double amount)
 void Buyer::ChangeBalance(double amount)
 {
     balance_ -= amount;
-    std::cout << "New Balance: " << balance_ << std::endl;
+    std::cout << "New Balance of " << this->get_name() << ": " << balance_ << std::endl;
 }
 
 void Seller::PrintOptions()
@@ -241,6 +241,7 @@ void Seller::PrintOptions()
     std::cout << "5) Overview of sold products" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
     std::cout << "7) Sign out" << std::endl;
+    std::cout << "8) Exit program" << std::endl;
     std::cout << "==================================================================================================";
 }
 
@@ -254,6 +255,7 @@ void Buyer::PrintOptions()
     std::cout << "5) Overview of placed bids" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
     std::cout << "7) Sign out" << std::endl;
+    std::cout << "8) Exit program" << std::endl;
     std::cout <<  "==================================================================================================";
 }
 

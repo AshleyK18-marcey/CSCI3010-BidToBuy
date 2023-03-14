@@ -223,7 +223,7 @@ void Driver::DisplayInactiveProducts(User * seller) {
     {
         if (this->unsold_products_[i]->get_seller()->get_name() == seller->get_name() && !this->unsold_products_[i]->get_active())
         {
-            sellers_products.push_back(this->sold_products_[i]);
+            sellers_products.push_back(this->unsold_products_[i]);
         }
     }
     for (unsigned int i = 0; i < sellers_products.size(); i++)
@@ -234,15 +234,19 @@ void Driver::DisplayInactiveProducts(User * seller) {
 
 void Driver::DisplayCurrentBids(User *Buyer)
 {
-    std::cout << "Your bids:" << std::endl;
+    std::cout << "Bids from " << Buyer->get_name() << ":" << std::endl;
     std::vector<Product *> current_bids;
+    // std::cout << "unsold_products.size(): " << this->unsold_products_.size() << std::endl; //debugging
     for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
     {
+        // std::cout << "i: " << i << std::endl;   //debugging
         std::vector<User *> bids = this->unsold_products_[i]->get_bidders();
         for (unsigned int k = 0; k < bids.size(); k++)
         {
-            if (bids[i] == Buyer)
+            // std::cout << "k: " << k << std::endl;   //debugging
+            if (bids[k]->get_name() == Buyer->get_name())
             {
+                // std::cout << "found bid" << std::endl;  //debugging
                 current_bids.push_back(this->unsold_products_[i]);
             }
         }
@@ -419,7 +423,8 @@ void Driver::HandleProductCreation()
               << std::endl
               << "4) Computer"
               << std::endl
-              << "5) Jewelry";
+              << "5) Jewelry"
+              << std::endl;
     std::cout << "=========================================" << std::endl;
     while (!validInput)
     {
@@ -487,15 +492,18 @@ void Driver::HandlePlaceBid() {
                 float bidAmount;
                 while (!validInput2)
                 {
-                    std::cout << "Enter bid amount: ";
-                    getline(std::cin >> std::ws, input);
-                    if (isFloat(input))
+                    // std::cout << "Enter bid amount or (q)uit: ";
+                    // getline(std::cin >> std::ws, input);
+                    bidAmount = promptValidFloat("Enter bid amount or (q)uit: ");
+                    if (bidAmount >= 0)
                     {
-                        bidAmount = stof(input);
+                        // bidAmount = stof(input);
                         if (bidAmount > this->unsold_products_.at(selection)->get_last_bid()) {
                             validInput2 = true;
                             this->unsold_products_.at(selection)->MakeBid(bidAmount, this->active_user_);
                         }
+                    } else { // user entered q
+                        validInput2 = true;
                     }
                 }
             }
@@ -601,11 +609,12 @@ void Driver::MainLoop()
         {                      // seller
             while (!goodInput) // get user input for main options
             {
-                std::cout << std::endl
-                          << "Enter number of desired action: ";
-                std::cin >> userInput;
-                selection = std::stoi(userInput);
-                if (selection > 0 && selection < 8)
+                // std::cout << std::endl
+                //           << "Enter number of desired action: ";
+                // std::cin >> userInput;
+                // selection = std::stoi(userInput);
+                selection = promptValidInt("Enter number of desired action: ");
+                if (selection > 0 && selection < 9)
                 {
                     goodInput = true;
                 }
@@ -634,6 +643,9 @@ void Driver::MainLoop()
                 this->active_user_ = nullptr;
                 signedIn = false;
                 break;
+            case 8:
+                this->running_ = false;
+                break;
             default:
                 break;
             }
@@ -642,11 +654,12 @@ void Driver::MainLoop()
         {                      // buyer
             while (!goodInput) // get user input for main options
             {
-                std::cout << std::endl
-                          << "Enter number of desired action: ";
-                std::cin >> userInput;
-                selection = std::stoi(userInput);
-                if (selection > 0 && selection < 8)
+                // std::cout << std::endl
+                //           << "Enter number of desired action: ";
+                // std::cin >> userInput;
+                // selection = std::stoi(userInput);
+                selection = promptValidInt("Enter number of desired action: ");
+                if (selection > 0 && selection < 9)
                 {
                     goodInput = true;
                 }
@@ -669,10 +682,14 @@ void Driver::MainLoop()
                 this->DisplayCurrentBids(active_user_);
                 break;
             case 6: // manage bids
+                this->DisplayCurrentBids(this->active_user_);
                 break;
             case 7:
                 this->active_user_ = nullptr;
                 signedIn = false;
+                break;
+            case 8:
+                this->running_ = false;
                 break;
             default:
                 break;
