@@ -54,19 +54,41 @@ float promptValidFloat(std::string prompt)
     return val;
 }
 
+double promptValidDouble(std::string prompt)
+{
+    bool validInput = false;
+    std::string userInput = "";
+    double val = -1;
+    while (!validInput)
+    {
+        std::cout << std::endl
+                  << prompt;
+        std::getline(std::cin >> std::ws, userInput);
+        val = std::stoi(userInput.c_str());
+        if (val >= 0.00)
+        {
+            validInput = true;
+        }
+    }
+    return val;
+}
+
 // -----Product-----
 std::string Product::Stringify()
 {
+    std::stringstream stream;
     // type, buyer, seller, final price
     std::string returnVal;
 
     if (this->get_buyer() == NULL)
     {
-        returnVal = "Product type: " + this->get_type_string() + ", Seller: " + this->get_seller()->get_name();
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name();
+        returnVal = stream.str();
     }
     else
     {
-        returnVal = "Product type: " + this->get_type_string() + ", Buyer: " + this->get_buyer()->get_name() + ", Seller: " + this->get_seller()->get_name() + ", Final bid: " + std::to_string(this->get_final_bid());
+        stream << "Product type: " << this->get_type_string() << ", Buyer: " + this->get_buyer()->get_name() << ", Seller: " << this->get_seller()->get_name() << ", Final bid: " << std::fixed << std::setprecision(2) << this->get_final_bid();
+        returnVal = stream.str();
     }
 
     return returnVal;
@@ -90,13 +112,13 @@ void Product::SetSeller(User *seller)
 
     @param newId the new id
 */
- void Product::SetBuyer(User* buyer)
- {
-     if (buyer != nullptr)
-     {
-         this->buyer_ptr_ = buyer;
-     }
- }
+void Product::SetBuyer(User *buyer)
+{
+    if (buyer != nullptr)
+    {
+        this->buyer_ptr_ = buyer;
+    }
+}
 
 /**
     When a seller closes a sale this sets the greatest value bid to the final bid that won
@@ -116,6 +138,68 @@ void Product::SetFinalBid(double bid)
     }
 }
 
+void Product::SetTitle(std::string newTitle)
+{
+    title_ = newTitle;
+}
+
+bool Product::SetCondition(int current_condition)
+{
+    switch (current_condition)
+    {
+    case 1:
+        current_condition_ = Condition::New;
+        return true;
+        break;
+    case 2:
+        current_condition_ = Condition::Used_VeryGood;
+        return true;
+        break;
+    case 3:
+        current_condition_ = Condition::Used_Good;
+        return true;
+        break;
+    case 4:
+        current_condition_ = Condition::Used_okay;
+        return true;
+        break;
+
+    default:
+        std::cout << "Invalid Entry. Please try again" << std::endl;
+        return false;
+        break;
+    }
+}
+
+std::string Product::get_condition()
+{
+    switch (current_condition_)
+    {
+    case Condition::New:
+        return "New";
+        break;
+    case Condition::Used_VeryGood:
+        return "Used Very Good";
+        break;
+    case Condition::Used_Good:
+        return "User Good";
+        break;
+    case Condition::Used_okay:
+        return "Used Okay";
+        break;
+
+    default:
+        "";
+        break;
+    }
+}
+
+void Product::StartBid(double bid)
+{
+    bid_vals_.push_back(bid);
+    bidders_.push_back(get_seller());
+}
+
 /**
     Displays the product id, the seller and buyer and the final price
 
@@ -133,17 +217,57 @@ std::ostream &operator<<(std::ostream &os, const Product &p)
 // -----Car-----
 void Car::AssembleProduct()
 {
+
+    this->SetTitle(promptValidString("Enter the listing title: "));
     this->SetMake(promptValidString("Enter make of car: "));
     this->SetModel(promptValidString("Enter model of car: "));
     this->SetYear(promptValidInt("Enter year of car: "));
+    bool valid = false;
+    while (!valid)
+    {
+        valid = this->SetCondition(promptValidInt("Enter the condition of your Car (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
+    }
+    this->StartBid(promptValidDouble("Starting Bid?"));
 }
 
-void Car::AssignMetaData(std::string make, std::string model, std::string year, std::string blank)
+void Car::AssignMetaData(std::string title, std::string make, std::string model, std::string year, std::string blank, std::string condition)
 {
-
+    this->SetTitle(title);
     this->SetMake(make);
     this->SetModel(model);
     this->SetYear(std::stoi(year));
+    this->SetCondition(std::stoi(condition));
+}
+
+std::string Car::Stringify()
+{
+    std::stringstream stream;
+    // type, buyer, seller, final price
+    std::string returnVal;
+
+    if (this->get_buyer() == NULL)
+    {
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Make: " << this->GetMake() << std::endl
+               << "Model: " << this->GetModel() << std::endl
+               << "Year: " << this->GetYear() << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+    else
+    {
+
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Buyer: " << this->get_buyer()->get_name() << ", Final bid: " << std::fixed << std::setprecision(2) << this->get_final_bid() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Make: " << this->GetMake() << std::endl
+               << "Model: " << this->GetModel() << std::endl
+               << "Year: " << this->GetYear() << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+
+    return returnVal;
 }
 
 /**
@@ -185,16 +309,62 @@ void Car::SetYear(unsigned int newYear)
 // -----Furniture-----
 void Furniture::AssembleProduct()
 {
-    std::cout << "Furniture made" << std::endl;
+    this->SetTitle(promptValidString("Enter the listing title: "));
+    this->SetMaterial(promptValidString("What is the material?"));
+    this->SetLength(promptValidFloat("What is the length of the product?"));
+    this->SetWidth(promptValidFloat("Whst is the width of the product?"));
+    this->SetHeight(promptValidFloat("What is the height of the product?"));
+
+    bool valid = false;
+    while (!valid)
+    {
+        valid = this->SetCondition(promptValidInt("Enter the condition of your Furniture (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
+    }
+    this->StartBid(promptValidDouble("Starting Bid?"));
 }
 
-void Furniture::AssignMetaData(std::string material, std::string length, std::string width, std::string height)
+void Furniture::AssignMetaData(std::string title, std::string material, std::string length, std::string width, std::string height, std::string condition)
 {
+    this->SetTitle(title);
     this->SetMaterial(material);
     this->SetLength(std::stof(length));
     this->SetWidth(std::stof(width));
     this->SetHeight(std::stof(height));
+    this->SetCondition(std::stoi(condition));
 };
+
+std::string Furniture::Stringify()
+{
+    std::stringstream stream;
+    // type, buyer, seller, final price
+    std::string returnVal;
+
+    if (this->get_buyer() == NULL)
+    {
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Material: " << this->GetMaterial() << std::endl
+               << "Length: " << this->GetLength() << std::endl
+               << "Width: " << this->GetWidth() << std::endl
+               << "Height: " << this->GetHeight() << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+    else
+    {
+
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Buyer: " << this->get_buyer()->get_name() << ", Final bid: " << std::fixed << std::setprecision(2) << this->get_final_bid() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Material: " << this->GetMaterial() << std::endl
+               << "Length: " << this->GetLength() << std::endl
+               << "Width: " << this->GetWidth() << std::endl
+               << "Height: " << this->GetHeight() << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+
+    return returnVal;
+}
 
 /**
     Sets the material of the furniture product
@@ -255,17 +425,57 @@ void Furniture::SetHeight(float newHeight)
 // ------ Book -------
 void Book::AssembleProduct()
 {
-    std::cout << "Book made" << std::endl;
+    this->SetTitle(promptValidString("Enter the listing title: "));
+    this->SetBookTitle(promptValidString("What is the title of the book?"));
+    this->SetAuthor(promptValidString("Who is the author?"));
+    bool valid = false;
+    while (!valid)
+    {
+        valid = this->SetCondition(promptValidInt("Enter the condition of your Book (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
+    }
+    this->StartBid(promptValidDouble("Starting Bid?"));
 }
 
-void Book::AssignMetaData(std::string title, std::string author, std::string blank1, std::string blank2)
+void Book::AssignMetaData(std::string title, std::string book_title, std::string author, std::string blank, std::string blank2, std::string condition)
 {
     this->SetTitle(title);
+    this->SetBookTitle(book_title);
     this->SetAuthor(author);
+    this->SetCondition(std::stoi(condition));
 }
-void Book::SetTitle(std::string newTitle)
+
+std::string Book::Stringify()
 {
-    title_ = newTitle;
+    std::stringstream stream;
+    // type, buyer, seller, final price
+    std::string returnVal;
+
+    if (this->get_buyer() == NULL)
+    {
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Book Title: " << this->GetBookTitle() << std::endl
+               << "Author: " << this->GetAuthor() << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+    else
+    {
+
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Buyer: " + this->get_buyer()->get_name() << ", Final bid: " << std::fixed << std::setprecision(2) << this->get_final_bid() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Book Title: " << this->GetBookTitle() << std::endl
+               << "Author: " << this->GetAuthor() << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+
+    return returnVal;
+}
+
+void Book::SetBookTitle(std::string newTitle)
+{
+    book_title_ = newTitle;
 }
 
 void Book::SetAuthor(std::string newAuthor)
@@ -276,43 +486,128 @@ void Book::SetAuthor(std::string newAuthor)
 // --------- Computer -----------
 void Computer::AssembleProduct()
 {
-    std::cout << "Computer made" << std::endl;
+    this->SetTitle(promptValidString("Enter the listing title: "));
+    this->SetScreenSize(promptValidFloat("What is the screen size?"));
+    this->SetProcessorSpeed(promptValidFloat("What is the processor speed of the computer?"));
+    this->SetMemory(promptValidFloat("What is the memory size?"));
+    bool valid = false;
+    while (!valid)
+    {
+        valid = this->SetCondition(promptValidInt("Enter the condition of your Computer (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
+    }
+    this->StartBid(promptValidDouble("Starting Bid?"));
 }
 
-void Computer::AssignMetaData(std::string screenSize, std::string processorSpeed, std::string memory, std::string blank)
+void Computer::AssignMetaData(std::string title, std::string screensize, std::string processorSpeed, std::string memory, std::string blank, std::string condition)
 {
-    this->SetScreenSize(std::stof(screenSize));
+    this->SetTitle(title);
+    this->SetScreenSize(std::stof(screensize));
     this->SetProcessorSpeed(std::stof(processorSpeed));
     this->SetMemory(std::stoi(memory));
-}
-void Computer::SetScreenSize(float newScreenSize){
-    screenSize_ = newScreenSize;
-}
-void Computer::SetProcessorSpeed(float newSpeed){
-    processorSpeed_ = newSpeed;
-}
-void Computer::SetMemory(unsigned int newMemory){
-    memory_ = newMemory;
+    this->SetCondition(std::stoi(condition));
 }
 
+std::string Computer::Stringify()
+{
+    std::stringstream stream;
+    // type, buyer, seller, final price
+    std::string returnVal;
+
+    if (this->get_buyer() == NULL)
+    {
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Screen Size: " << this->GetScreenSize() << std::endl
+               << "Processor Speed: " << this->GetProcessorSpeed() << std::endl
+               << "Memory: " << this->GetMemory() << "GB" << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+    else
+    {
+
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Buyer: " + this->get_buyer()->get_name() << ", Final bid: " << std::fixed << std::setprecision(2) << this->get_final_bid() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Screen Size: " << this->GetScreenSize() << std::endl
+               << "Processor Speed: " << this->GetProcessorSpeed() << std::endl
+               << "Memory: " << this->GetMemory() << "GB" << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+
+    return returnVal;
+}
+
+void Computer::SetScreenSize(float newScreenSize)
+{
+    screenSize_ = newScreenSize;
+}
+void Computer::SetProcessorSpeed(float newSpeed)
+{
+    processorSpeed_ = newSpeed;
+}
+void Computer::SetMemory(unsigned int newMemory)
+{
+    memory_ = newMemory;
+}
 
 //------------- Jewelry ---------
 void Jewelry::AssembleProduct()
 {
-    std::cout << "Jewelry made" << std::endl;
+    this->SetTitle(promptValidString("Enter the listing title: "));
+    this->SetMaterial(promptValidString("What is the material (ex. silver or gold)?"));
+    this->SetNumDiamonds(promptValidInt("How many jewels or diamonds?"));
+    bool valid = false;
+    while (!valid)
+    {
+        valid = this->SetCondition(promptValidInt("Enter the condition of your Jewelry (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
+    }
+    this->StartBid(promptValidDouble("Starting Bid?"));
 }
 
-void Jewelry::AssignMetaData(std::string material, std::string numDiamonds, std::string blank1, std::string blank2)
+void Jewelry::AssignMetaData(std::string title, std::string material, std::string numDiamonds, std::string blank, std::string blank2, std::string condition)
 {
+    this->SetTitle(title);
     this->SetMaterial(material);
     this->SetNumDiamonds(std::stoi(numDiamonds));
+    this->SetCondition(std::stoi(condition));
 }
 
-void Jewelry::SetMaterial(std::string newMaterial){
+std::string Jewelry::Stringify()
+{
+    std::stringstream stream;
+    // type, buyer, seller, final price
+    std::string returnVal;
+
+    if (this->get_buyer() == NULL)
+    {
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << "Current highest bid: " << std::fixed << std::setprecision(2) << bid_vals_.back() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Material: " << this->GetMaterial() << std::endl
+               << "Number of jewels or diamonds: " << this->GetNumDiamonds() << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+    else
+    {
+
+        stream << "Product type: " << this->get_type_string() << ", Seller: " << this->get_seller()->get_name() << ", Buyer: " + this->get_buyer()->get_name() << ", Final bid: " << std::fixed << std::setprecision(2) << this->get_final_bid() << std::endl
+               << "Product description: " << this->get_title() << std::endl
+               << "Material: " << this->GetMaterial() << std::endl
+               << "Number of jewels or diamonds: " << this->GetNumDiamonds() << std::endl
+               << "Condition: " << this->get_condition();
+        returnVal = stream.str();
+    }
+
+    return returnVal;
+}
+
+void Jewelry::SetMaterial(std::string newMaterial)
+{
     material_ = newMaterial;
 }
 
-void Jewelry::SetNumDiamonds(unsigned int newNumDiamonds){
+void Jewelry::SetNumDiamonds(unsigned int newNumDiamonds)
+{
     numDiamonds_ = newNumDiamonds;
-
 }

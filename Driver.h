@@ -65,6 +65,8 @@ public:
 
 	void DisplayUsers();
 
+	std::vector<User> get_users(){ return users_;};
+
 	void DisplaySoldProducts(bool specific_to_user, User *Seller);
 
 	bool UserExists(std::string name);

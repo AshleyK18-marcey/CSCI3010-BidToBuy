@@ -2,7 +2,6 @@
 #include <algorithm>
 #include "Users.h"
 
-
 /**
     Constructor for a user
 */
@@ -18,7 +17,6 @@ User::User(unsigned int id, std::string name, std::string phone, std::string add
 /**
     Destructor for user
 */
-
 
 /**
     Sets the name of the user
@@ -56,10 +54,10 @@ void User::SetAddress(std::string newAddress)
 /**
     Asks the user what information they want to change, checks for valid input and changes the user information
 */
-void User::UpdateInformation()
+void User::UpdateInformation(std::vector<User> list_of_current_users)
 {
     bool active = true;
-    while (active) //menu of options
+    while (active) // menu of options
     {
         std::cout << "===========================================" << std::endl;
         std::cout << "What information would you like to change?" << std::endl
@@ -90,10 +88,22 @@ void User::UpdateInformation()
                 }
                 else
                 {
-                    SetName(custom_case);
-                    std::cout << "=================================================" << std::endl;
-                    std::cout << "Your name has been changed to: " << get_name() << std::endl;
-                    change_name = false;
+                    bool taken = false;
+                    for (unsigned int i = 0; i < list_of_current_users.size(); i++)
+                    {
+                        if (list_of_current_users[i].get_name() == custom_case)
+                        {
+                            std::cout << "Sorry that name is taken. Please try again" << std::endl;
+                            taken = true;
+                        }
+                    }
+                    if (!taken)
+                    {
+                        SetName(custom_case);
+                        std::cout << "=================================================" << std::endl;
+                        std::cout << "Your name has been changed to: " << get_name() << std::endl;
+                        change_name = false;
+                    }
                 }
             }
         }
@@ -213,7 +223,7 @@ void Seller::ChangeBalance(double amount)
 /**
     Subtracts the specified amount from the buyers balance
 
-    @param amount 
+    @param amount
 */
 void Buyer::ChangeBalance(double amount)
 {
@@ -221,9 +231,8 @@ void Buyer::ChangeBalance(double amount)
     std::cout << "New Balance: " << balance_ << std::endl;
 }
 
-
-
-void Seller::PrintOptions() {
+void Seller::PrintOptions()
+{
     std::cout << "==================================================================================================" << std::endl;
     std::cout << "1) Post product for sale" << std::endl;
     std::cout << "2) Messaging" << std::endl;
@@ -232,10 +241,11 @@ void Seller::PrintOptions() {
     std::cout << "5) Overview of sold products" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
     std::cout << "7) Sign out" << std::endl;
-    std::cout <<  "==================================================================================================";
+    std::cout << "==================================================================================================";
 }
 
-void Buyer::PrintOptions() {
+void Buyer::PrintOptions()
+{
     std::cout << "==================================================================================================" << std::endl;
     std::cout << "1) View products for sale" << std::endl;
     std::cout << "2) Place bid" << std::endl;
@@ -245,9 +255,10 @@ void Buyer::PrintOptions() {
     std::cout << "6) Overview of placed bids" << std::endl;
     std::cout << "7) Manage bids" << std::endl;
     std::cout << "8) Sign out" << std::endl;
-    std::cout <<  "==================================================================================================";
+    std::cout << "==================================================================================================";
 }
 
-bool User::operator==(const User &other){
+bool User::operator==(const User &other)
+{
     return this->name_ == other.name_ && this->phone_ == other.phone_ && this->address_ == other.address_ && this->userid_ == other.userid_ && this->balance_ == other.balance_;
 }

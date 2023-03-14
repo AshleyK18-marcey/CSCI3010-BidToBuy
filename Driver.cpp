@@ -70,10 +70,12 @@ Driver::Driver()
     std::string s_name;
     std::string b_name;
     std::string finalBid;
+    std::string title;
     std::string meta_data1;
     std::string meta_data2;
     std::string meta_data3;
     std::string meta_data4;
+    std::string condition;
     while (std::getline(fs, line))
     { // read each line
         // std::cout << line << std::endl;     // debugging
@@ -82,10 +84,12 @@ Driver::Driver()
         std::getline(rowStream, s_name, ',');
         std::getline(rowStream, b_name, ',');
         std::getline(rowStream, finalBid, ',');
+        std::getline(rowStream, title, ',');
         std::getline(rowStream, meta_data1, ',');
         std::getline(rowStream, meta_data2, ',');
         std::getline(rowStream, meta_data3, ',');
         std::getline(rowStream, meta_data4, ',');
+        std::getline(rowStream, condition, ',');
 
         User *tempSellerPtr = nullptr;
         for (unsigned int i = 0; i < this->users_.size(); i++)
@@ -113,9 +117,20 @@ Driver::Driver()
         switch (StringToProductCategory(type))
         {
         case ProductCategory::Car:
-            tempProduct->AssignMetaData(meta_data1, meta_data2, meta_data3, meta_data4);
+            tempProduct->AssignMetaData(title, meta_data1, meta_data2, meta_data3, meta_data4, condition);
             break;
-
+        case ProductCategory::Furniture:
+            tempProduct->AssignMetaData(title, meta_data1, meta_data2, meta_data3, meta_data4, condition);
+            break;
+        case ProductCategory::Book:
+            tempProduct->AssignMetaData(title, meta_data1, meta_data2, meta_data3, meta_data4, condition);
+            break;
+        case ProductCategory::Computer:
+            tempProduct->AssignMetaData(title, meta_data1, meta_data2, meta_data3, meta_data4, condition);
+            break;
+        case ProductCategory::Jewelry:
+            tempProduct->AssignMetaData(title, meta_data1, meta_data2, meta_data3, meta_data4, condition);
+            break;
         default:
             break;
         }
@@ -466,7 +481,7 @@ void Driver::MainLoop()
                 std::cout << "Your balance is: $" << active_user_->get_balance() << std::endl;
                 break;
             case 4: // update info
-                this->active_user_->UpdateInformation();
+                this->active_user_->UpdateInformation(this->get_users());
                 break;
             case 5: // overview of products
                 this->DisplaySoldProducts(true, this->active_user_);
@@ -509,7 +524,7 @@ void Driver::MainLoop()
                 std::cout << "Your balance is: $" << active_user_->get_balance() << std::endl;
                 break;
             case 5: // update info
-                this->active_user_->UpdateInformation();
+                this->active_user_->UpdateInformation(this->get_users());
                 break;
             case 6: // overview of placed bids
                 this->DisplayCurrentBids(active_user_);

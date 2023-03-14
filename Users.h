@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 // #include "Product.h"
 
@@ -31,7 +33,7 @@ public:
 
   void SetAddress(std::string newAddress);
 
-  void UpdateInformation();
+  void UpdateInformation(std::vector<User> list_of_current_users);
 
   virtual void ChangeBalance(double amount) { std::cout << balance_ << std::endl; };
 
@@ -47,6 +49,7 @@ private:
   unsigned int userid_;
 
 protected:
+  std::string title_;
   double balance_;
   std::string name_;
   std::string phone_;
