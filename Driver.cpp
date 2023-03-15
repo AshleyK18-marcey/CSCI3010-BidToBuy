@@ -8,23 +8,23 @@
  */
 ProductCategory StringToProductCategory(std::string type)
 {
-    if (type == "car")
+    if (type == "Car")
     {
         return ProductCategory::Car;
     }
-    else if (type == "furniture")
+    else if (type == "Furniture")
     {
         return ProductCategory::Furniture;
     }
-    else if (type == "book")
+    else if (type == "Book")
     {
         return ProductCategory::Book;
     }
-    else if (type == "computer")
+    else if (type == "Computer")
     {
         return ProductCategory::Computer;
     }
-    else if (type == "jewelry")
+    else if (type == "Jewelry")
     {
         return ProductCategory::Jewelry;
     }
@@ -769,7 +769,8 @@ void Driver::MainLoop()
                 break;
             case 8:
                 this->running_ = false;
-                UpdateCsv();
+                UpdateUserCsv();
+                UpdateProductsCsv();
                 break;
             default:
                 break;
@@ -845,7 +846,7 @@ void Driver::OverviewBuyer(User *Buyer)
     DisplayCurrentBids(Buyer);
 }
 
-void Driver::UpdateCsv()
+void Driver::UpdateUserCsv()
 {
     std::ofstream outfs("./runtime_data/user.csv", std::ios::trunc);
     std::string name;
@@ -877,3 +878,55 @@ void Driver::UpdateCsv()
         }
     }
 }
+
+void Driver::UpdateProductsCsv()
+{
+    std::ofstream outfs("./runtime_data/products.csv", std::ios::trunc);
+    std::string product_type;
+    std::string seller;
+    std::string buyer;
+    std::string final_bid;
+    std::string title;
+    std::string meta_data1;
+    std::string meta_data2;
+    std::string meta_data3;
+    std::string meta_data4;
+    std::string condition;
+
+    for (unsigned int k = 0; k < 2; k++)
+    {
+        if (k == 1)
+        {
+            for (unsigned int i = 0; i < sold_products_.size(); i++)
+            {
+                product_type = sold_products_[i]->get_type_string();
+                seller = sold_products_[i]->get_seller()->get_name();
+                buyer = sold_products_[i]->get_buyer()->get_name();
+                final_bid = std::to_string(sold_products_[i]->get_final_bid());
+                title = sold_products_[i]->get_title();
+                meta_data1 = sold_products_[i]->get_metadata(1);
+                meta_data2 = sold_products_[i]->get_metadata(2);
+                meta_data3 = sold_products_[i]->get_metadata(3);
+                meta_data4 = sold_products_[i]->get_metadata(4);
+                condition = sold_products_[i]->get_condition(false);
+
+                outfs << product_type << "," << seller << "," << buyer << "," << final_bid << "," << title << "," << meta_data1 << "," << meta_data2 << "," << meta_data3 << "," << meta_data4 << "," << condition << "\n";
+            }
+        }
+        else
+        {
+            product_type = "product_type,";
+            seller = "seller,";
+            buyer = "buyer,";
+            final_bid = "final_bid,";
+            title = "title,";
+            meta_data1 = "meta_data1,";
+            meta_data2 = "meta_data2,";
+            meta_data3 = "meta_data3,";
+            meta_data4 = "meta_data4,";
+            condition = "condition";
+            outfs << product_type << seller << buyer << final_bid << title << meta_data1 << meta_data2 << meta_data3 << meta_data4 << condition << "\n";
+        }
+    }
+}
+

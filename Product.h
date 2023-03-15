@@ -49,7 +49,7 @@ public:
 
     std::string get_title() { return title_; };
 
-    std::string get_condition();
+    std::string get_condition(bool asString);
 
     std::vector<User *> get_bidders() { return bidders_; };
 
@@ -76,6 +76,8 @@ public:
     virtual void AssembleProduct() = 0;
 
     virtual void AssignMetaData(std::string title, std::string meta1, std::string meta2, std::string meta3, std::string meta4, std::string condition) = 0;
+
+    virtual std::string get_metadata(int option) = 0;
 
     virtual std::string get_type_string() = 0;
 
@@ -106,6 +108,7 @@ public:
     void SetYear(unsigned int newYear);
     std::string get_type_string() override { return "Car"; };
     std::string Stringify() override;
+    std::string get_metadata(int option);
 
 private:
     std::string make_;
@@ -129,6 +132,7 @@ public:
     void SetHeight(float newHeight);
     std::string get_type_string() override { return "Furniture"; };
     std::string Stringify() override;
+    std::string get_metadata(int option);
 
 private:
     std::string material_;
@@ -149,6 +153,7 @@ public:
     void SetAuthor(std::string newAuthor);
     std::string get_type_string() override { return "Book"; };
     std::string Stringify() override;
+    std::string get_metadata(int option);
 
 private:
     std::string book_title_;
@@ -169,6 +174,7 @@ public:
     void SetMemory(unsigned int newMemory);
     std::string get_type_string() override { return "Computer"; };
     std::string Stringify() override;
+    std::string get_metadata(int option);
 
 private:
     float screenSize_;
@@ -188,6 +194,7 @@ public:
     void SetNumDiamonds(unsigned int newNumDiamonds);
     std::string get_type_string() override { return "Jewelry"; };
     std::string Stringify() override;
+    std::string get_metadata(int option);
 
 private:
     std::string material_;

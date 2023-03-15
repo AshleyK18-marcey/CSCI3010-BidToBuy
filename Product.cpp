@@ -19,7 +19,7 @@ std::string promptValidString(std::string prompt)
 
 /**
  * @brief only accepts an int or q, if q returns -1
- * 
+ *
  * @param prompt string to be displayed prompting user for input
  * @return int integer >= 0 or -1 for quit
  */
@@ -33,7 +33,8 @@ int promptValidInt(std::string prompt)
         std::cout << std::endl
                   << prompt;
         std::getline(std::cin >> std::ws, userInput);
-        if (userInput == "q") {
+        if (userInput == "q")
+        {
             return -1;
         }
         val = atoi(userInput.c_str());
@@ -47,7 +48,7 @@ int promptValidInt(std::string prompt)
 
 /**
  * @brief prompt for a valid float, meaning greater than zero or "q", if q returns -1
- * 
+ *
  * @param prompt string used to prompt user
  * @return float value >= 0 or -1 if user entered q
  */
@@ -61,7 +62,8 @@ float promptValidFloat(std::string prompt)
         std::cout << std::endl
                   << prompt;
         std::getline(std::cin >> std::ws, userInput);
-        if (userInput == "q") {
+        if (userInput == "q")
+        {
             return -1;
         }
         val = atof(userInput.c_str());
@@ -117,10 +119,11 @@ bool isFloat(std::string myString)
 
 /**
  * @brief basic setter function to set the active status of a product
- * 
+ *
  * @param active desired active state
  */
-void Product::SetActive(bool active) {
+void Product::SetActive(bool active)
+{
     this->active_ = active;
 }
 
@@ -165,6 +168,7 @@ bool Product::CloseBid()
             this->bidders_.at(i)->ChangeBalance(this->bid_vals_.at(i));
             this->seller_ptr_->ChangeBalance(this->bid_vals_.at(i));
             this->SetBuyer(bidders_.at(i));
+            this->SetFinalBid(this->bid_vals_.at(i));
             return true;
         }
     }
@@ -278,26 +282,48 @@ bool Product::SetCondition(int current_condition)
     }
 }
 
-std::string Product::get_condition()
+std::string Product::get_condition(bool asString)
 {
-    switch (current_condition_)
+    if (asString)
     {
-    case Condition::New:
-        return "New";
-        break;
-    case Condition::Used_VeryGood:
-        return "Used Very Good";
-        break;
-    case Condition::Used_Good:
-        return "Used Good";
-        break;
-    case Condition::Used_okay:
-        return "Used Okay";
-        break;
-    default:
-        break;
+        switch (current_condition_)
+        {
+        case Condition::New:
+            return "New";
+            break;
+        case Condition::Used_VeryGood:
+            return "Used Very Good";
+            break;
+        case Condition::Used_Good:
+            return "Used Good";
+            break;
+        case Condition::Used_okay:
+            return "Used Okay";
+            break;
+        default:
+            break;
+        }
     }
-    
+    else
+    {
+        switch (current_condition_)
+        {
+        case Condition::New:
+            return "1";
+            break;
+        case Condition::Used_VeryGood:
+            return "2";
+            break;
+        case Condition::Used_Good:
+            return "3";
+            break;
+        case Condition::Used_okay:
+            return "4";
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 void Product::StartBid(double bid)
@@ -358,7 +384,7 @@ std::string Car::Stringify()
                << "Make: " << this->GetMake() << std::endl
                << "Model: " << this->GetModel() << std::endl
                << "Year: " << this->GetYear() << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
     else
@@ -369,7 +395,7 @@ std::string Car::Stringify()
                << "Make: " << this->GetMake() << std::endl
                << "Model: " << this->GetModel() << std::endl
                << "Year: " << this->GetYear() << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
 
@@ -410,6 +436,23 @@ void Car::SetModel(std::string newModel)
 void Car::SetYear(unsigned int newYear)
 {
     this->year_ = newYear;
+}
+
+std::string Car::get_metadata(int option)
+{
+    if (option == 1)
+    {
+        return GetMake();
+    }
+    else if (option == 2)
+    {
+        return GetModel();
+    }
+    else if (option == 3)
+    {
+        return std::to_string(GetYear());
+    }
+    return "";
 }
 
 // -----Furniture-----
@@ -453,7 +496,7 @@ std::string Furniture::Stringify()
                << "Length: " << this->GetLength() << "in" << std::endl
                << "Width: " << this->GetWidth() << "in" << std::endl
                << "Height: " << this->GetHeight() << "in" << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
     else
@@ -465,7 +508,7 @@ std::string Furniture::Stringify()
                << "Length: " << this->GetLength() << "in" << std::endl
                << "Width: " << this->GetWidth() << "in" << std::endl
                << "Height: " << this->GetHeight() << "in" << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
 
@@ -528,6 +571,34 @@ void Furniture::SetHeight(float newHeight)
     height_ = newHeight;
 }
 
+std::string Furniture::get_metadata(int option)
+{
+    std::stringstream stream;
+    if (option == 1)
+    {
+        return GetMaterial();
+    }
+    else if (option == 2)
+    {
+        stream << std::fixed << std::setprecision(2) << GetLength();
+        
+        return stream.str();
+        
+    }
+    else if (option == 3)
+    {
+        stream << std::fixed << std::setprecision(2) << GetWidth();
+        
+        return stream.str();
+    }
+    else if (option == 4){
+        stream << std::fixed << std::setprecision(2) << GetHeight();
+        
+        return stream.str();
+    }
+    return "";
+}
+
 // ------ Book -------
 void Book::AssembleProduct()
 {
@@ -562,7 +633,7 @@ std::string Book::Stringify()
                << "Product description: " << this->get_title() << std::endl
                << "Book Title: " << this->GetBookTitle() << std::endl
                << "Author: " << this->GetAuthor() << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
     else
@@ -572,7 +643,7 @@ std::string Book::Stringify()
                << "Product description: " << this->get_title() << std::endl
                << "Book Title: " << this->GetBookTitle() << std::endl
                << "Author: " << this->GetAuthor() << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
 
@@ -587,6 +658,20 @@ void Book::SetBookTitle(std::string newTitle)
 void Book::SetAuthor(std::string newAuthor)
 {
     author_ = newAuthor;
+}
+
+std::string Book::get_metadata(int option)
+{
+    if (option == 1)
+    {
+        return GetBookTitle();
+    }
+    else if (option == 2)
+    {
+        return GetAuthor();
+        
+    }
+    return "";
 }
 
 // --------- Computer -----------
@@ -626,7 +711,7 @@ std::string Computer::Stringify()
                << "Screen Size: " << this->GetScreenSize() << "in" << std::endl
                << "Processor Speed: " << this->GetProcessorSpeed() << "GHz" << std::endl
                << "Memory: " << this->GetMemory() << "GB" << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
     else
@@ -637,7 +722,7 @@ std::string Computer::Stringify()
                << "Screen Size: " << this->GetScreenSize() << "in" << std::endl
                << "Processor Speed: " << this->GetProcessorSpeed() << "GHz" << std::endl
                << "Memory: " << this->GetMemory() << "GB" << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
 
@@ -655,6 +740,30 @@ void Computer::SetProcessorSpeed(float newSpeed)
 void Computer::SetMemory(unsigned int newMemory)
 {
     memory_ = newMemory;
+}
+
+std::string Computer::get_metadata(int option)
+{   std::stringstream stream;
+    if (option == 1)
+    {
+        stream << std::fixed << std::setprecision(2) << GetScreenSize();
+        
+        return stream.str();
+    }
+    else if (option == 2)
+    {
+        stream << std::fixed << std::setprecision(2) << GetProcessorSpeed();
+        
+        return stream.str();
+        
+    }
+    else if (option == 3)
+    {
+        stream << std::fixed << std::setprecision(2) << GetMemory();
+        
+        return stream.str();
+    }
+    return "";
 }
 
 //------------- Jewelry ---------
@@ -691,7 +800,7 @@ std::string Jewelry::Stringify()
                << "Product description: " << this->get_title() << std::endl
                << "Material: " << this->GetMaterial() << std::endl
                << "Number of jewels or diamonds: " << this->GetNumDiamonds() << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
     else
@@ -701,7 +810,7 @@ std::string Jewelry::Stringify()
                << "Product description: " << this->get_title() << std::endl
                << "Material: " << this->GetMaterial() << std::endl
                << "Number of jewels or diamonds: " << this->GetNumDiamonds() << std::endl
-               << "Condition: " << this->get_condition();
+               << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
     }
 
@@ -716,4 +825,21 @@ void Jewelry::SetMaterial(std::string newMaterial)
 void Jewelry::SetNumDiamonds(unsigned int newNumDiamonds)
 {
     numDiamonds_ = newNumDiamonds;
+}
+
+std::string Jewelry::get_metadata(int option)
+{
+    std::stringstream stream;
+    if (option == 1)
+    {
+        return GetMaterial();
+    }
+    else if (option == 2)
+    {
+        stream << std::fixed << std::setprecision(2) << GetNumDiamonds();
+        
+        return stream.str();
+        
+    }
+    return "";
 }
