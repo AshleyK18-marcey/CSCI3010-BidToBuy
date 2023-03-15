@@ -115,6 +115,11 @@ bool isFloat(std::string myString)
 
 // -----Product-----
 
+/**
+ * @brief basic setter function to set the active status of a product
+ * 
+ * @param active desired active state
+ */
 void Product::SetActive(bool active) {
     this->active_ = active;
 }

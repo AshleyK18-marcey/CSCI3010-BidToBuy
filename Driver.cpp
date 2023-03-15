@@ -1,7 +1,11 @@
 #include "Driver.h"
-// #include "Product.h"
-// #include "helpers.cpp"
 
+/**
+ * @brief Converts a string to a ProductCategory to aid in reading from CSVs
+ * 
+ * @param type string that should be the same as one of the ProductCategory enums
+ * @return ProductCategory Matched product category
+ */
 ProductCategory StringToProductCategory(std::string type)
 {
     if (type == "car")
@@ -25,6 +29,7 @@ ProductCategory StringToProductCategory(std::string type)
         return ProductCategory::Jewelry;
     }
 }
+
 // retrieved from: https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
 bool is_number(const std::string &s)
 {
@@ -36,6 +41,10 @@ bool is_number(const std::string &s)
 
 Driver *Driver::DriverPtr = NULL;
 
+/**
+ * @brief Construct a new Driver:: Driver object and read in form the CSV files
+ * 
+ */
 Driver::Driver()
 {
     std::string line; // string to store each line
@@ -141,6 +150,10 @@ Driver::Driver()
     fs.close();
 }
 
+/**
+ * @brief displays all users
+ * 
+ */
 void Driver::DisplayUsers()
 {
     std::cout << "Number of users: " << this->users_.size() << std::endl;
@@ -151,6 +164,12 @@ void Driver::DisplayUsers()
     }
 }
 
+/**
+ * @brief Displays sold products
+ * 
+ * @param specific_to_user flag to set whether or not only products sold by a specified user are shown
+ * @param Seller a pointer to a User object that is used if specific to user is true
+ */
 void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
 {
     if (specific_to_user)
@@ -188,6 +207,12 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
     }
 }
 
+/**
+ * @brief Displays active products
+ * 
+ * @param specific_to_user flag to set whether or not only products from a specified user are shown
+ * @param seller Pointer to a User object to check check sold products for
+ */
 void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
 {
     if (specific_to_user)
@@ -216,6 +241,11 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
     }
 }
 
+/**
+ * @brief Displays inactive products from a seller meaning products that didn't succesfully sell
+ * 
+ * @param seller pointer to User object to match products to
+ */
 void Driver::DisplayInactiveProducts(User * seller) {
     std::cout << "Inactive products from " << seller->get_name() << ":" << std::endl;
     std::vector<Product *> sellers_products;
@@ -619,6 +649,10 @@ void Driver::HandleOpenCloseBid() {
     }
 }
 
+/**
+ * @brief handles the main looping function and menu functionality
+ * 
+ */
 void Driver::MainLoop()
 {
     std::string userInput = "";
@@ -727,6 +761,11 @@ void Driver::MainLoop()
     }
 }
 
+/**
+ * @brief prints out the sold products and products that are open for bidding for a given suer
+ * 
+ * @param Seller 
+ */
 void Driver::OverviewSeller(User *Seller)
 {
     std::cout << "Sold Products: " << std::endl;
@@ -736,6 +775,11 @@ void Driver::OverviewSeller(User *Seller)
     DisplayActiveProducts(true, Seller);
 }
 
+/**
+ * @brief prints out an overview of a user's bids
+ * 
+ * @param Buyer 
+ */
 void Driver::OverviewBuyer(User *Buyer)
 {
     std::cout << "Products that you have placed a bid on: " << std::endl;

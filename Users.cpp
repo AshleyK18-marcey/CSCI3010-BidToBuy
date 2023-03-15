@@ -231,6 +231,10 @@ void Buyer::ChangeBalance(double amount)
     std::cout << "New Balance of " << this->get_name() << ": " << balance_ << std::endl;
 }
 
+/**
+ * @brief prints the main menu options for sellers
+ * 
+ */
 void Seller::PrintOptions()
 {
     std::cout << "==================================================================================================" << std::endl;
@@ -245,6 +249,10 @@ void Seller::PrintOptions()
     std::cout << "==================================================================================================";
 }
 
+/**
+ * @brief prints the main menu options for buyers
+ * 
+ */
 void Buyer::PrintOptions()
 {
     std::cout << "==================================================================================================" << std::endl;
@@ -259,6 +267,13 @@ void Buyer::PrintOptions()
     std::cout <<  "==================================================================================================";
 }
 
+/**
+ * @brief equality operator overload
+ * 
+ * @param other other user object to compare against
+ * @return true 
+ * @return false 
+ */
 bool User::operator==(const User &other)
 {
     return this->name_ == other.name_ && this->phone_ == other.phone_ && this->address_ == other.address_ && this->userid_ == other.userid_ && this->balance_ == other.balance_;
