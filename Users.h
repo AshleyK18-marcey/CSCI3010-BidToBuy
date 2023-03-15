@@ -5,7 +5,10 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <iomanip>
+#include <algorithm>
+
 
 // #include "Product.h"
 
@@ -33,7 +36,7 @@ public:
 
   void SetAddress(std::string newAddress);
 
-  void UpdateInformation(std::vector<User> list_of_current_users);
+  void UpdateInformation(std::vector<User*> list_of_current_users);
 
   virtual void ChangeBalance(double amount) { std::cout << balance_ << std::endl; };
 
@@ -44,6 +47,8 @@ public:
   bool operator==(const User &other);
 
   friend std::ostream &operator<<(std::ostream &os, const User &u);
+
+  
 
 private:
   unsigned int userid_;

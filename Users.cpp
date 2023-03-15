@@ -1,5 +1,4 @@
-#include <iostream>
-#include <algorithm>
+
 #include "Users.h"
 
 /**
@@ -54,7 +53,7 @@ void User::SetAddress(std::string newAddress)
 /**
     Asks the user what information they want to change, checks for valid input and changes the user information
 */
-void User::UpdateInformation(std::vector<User> list_of_current_users)
+void User::UpdateInformation(std::vector<User *> list_of_current_users)
 {
     bool active = true;
     while (active) // menu of options
@@ -74,8 +73,9 @@ void User::UpdateInformation(std::vector<User> list_of_current_users)
             bool change_name = true;
             while (change_name)
             {
+                std::string current_name = get_name();
                 std::cout << "==================================================================================================" << std::endl;
-                std::cout << "Current Name: " << get_name() << std::endl;
+                std::cout << "Current Name: " << current_name << std::endl;
                 std::cout << "What would you like to change it to? Enter (q) if you no longer want to change your information" << std::endl;
                 std::cout << "==================================================================================================" << std::endl;
                 std::string change_to;
@@ -91,7 +91,7 @@ void User::UpdateInformation(std::vector<User> list_of_current_users)
                     bool taken = false;
                     for (unsigned int i = 0; i < list_of_current_users.size(); i++)
                     {
-                        if (list_of_current_users[i].get_name() == custom_case)
+                        if (list_of_current_users[i]->get_name() == custom_case)
                         {
                             std::cout << "Sorry that name is taken. Please try again" << std::endl;
                             taken = true;
@@ -99,8 +99,17 @@ void User::UpdateInformation(std::vector<User> list_of_current_users)
                     }
                     if (!taken)
                     {
+                        for (unsigned int i = 0; i < list_of_current_users.size(); i++)
+                        {
+                            if (list_of_current_users[i]->get_name() == current_name)
+                            {
+                                list_of_current_users[i]->SetName(custom_case);
+                            }
+                        }
                         SetName(custom_case);
-                        std::cout << "=================================================" << std::endl;
+
+                        std::cout
+                            << "=================================================" << std::endl;
                         std::cout << "Your name has been changed to: " << get_name() << std::endl;
                         change_name = false;
                     }
@@ -152,6 +161,14 @@ void User::UpdateInformation(std::vector<User> list_of_current_users)
                 }
                 if (success)
                 {
+                    for (unsigned int i = 0; i < list_of_current_users.size(); i++)
+                    {
+                        if (list_of_current_users[i]->get_name() == get_name())
+                        {
+                            list_of_current_users[i]->SetPhone(change_to);
+                        }
+                    }
+
                     SetPhone(change_to);
                     std::cout << "=======================================================" << std::endl;
                     std::cout << "Your Phone Number has been changed to: " << get_phone() << std::endl;
@@ -179,6 +196,13 @@ void User::UpdateInformation(std::vector<User> list_of_current_users)
                 }
                 else
                 {
+                    for (unsigned int i = 0; i < list_of_current_users.size(); i++)
+                    {
+                        if (list_of_current_users[i]->get_name() == get_name())
+                        {
+                            list_of_current_users[i]->SetAddress(custom_case);
+                        }
+                    }
                     SetAddress(custom_case);
                     std::cout << "=========================================================================================" << std::endl;
                     std::cout << "Your address has been changed to: " << get_address() << std::endl;
@@ -233,7 +257,7 @@ void Buyer::ChangeBalance(double amount)
 
 void Seller::PrintOptions()
 {
-    std::cout << "==================================================================================================" << std::endl;
+    std::cout << "===============================================================" << std::endl;
     std::cout << "1) Post product for sale" << std::endl;
     std::cout << "2) Messaging" << std::endl;
     std::cout << "3) Check account balance" << std::endl;
@@ -241,12 +265,12 @@ void Seller::PrintOptions()
     std::cout << "5) Overview of sold products" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
     std::cout << "7) Sign out" << std::endl;
-    std::cout << "==================================================================================================";
+    std::cout << "===============================================================";
 }
 
 void Buyer::PrintOptions()
 {
-    std::cout << "==================================================================================================" << std::endl;
+    std::cout << "===============================================================" << std::endl;
     std::cout << "1) View products for sale" << std::endl;
     std::cout << "2) Messaging" << std::endl;
     std::cout << "3) Check account balance" << std::endl;
@@ -254,7 +278,7 @@ void Buyer::PrintOptions()
     std::cout << "5) Overview of placed bids" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
     std::cout << "7) Sign out" << std::endl;
-    std::cout <<  "==================================================================================================";
+    std::cout << "===============================================================";
 }
 
 bool User::operator==(const User &other)

@@ -1,11 +1,5 @@
 #ifndef DRIVER_H
 #define DRIVER_H
-
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <sstream>
 #include "Product.h"
 #include "Conversation.h"
 //#include "Users.h"
@@ -69,7 +63,7 @@ public:
 
 	void DisplayUsers();
 
-	std::vector<User> get_users(){ return users_;};
+	std::vector<User*> get_users(){ return users_;};
 
 	void DisplaySoldProducts(bool specific_to_user, User *Seller);
 
@@ -85,13 +79,15 @@ public:
 	
 	bool IsRunning() { return running_; };
 
+	void UpdateCsv();
+
 private:
 	static Driver *DriverPtr;
 	Driver(); // private constructor
 	std::vector<Conversation *> conversations_;
 	std::vector<Product *> unsold_products_;
 	std::vector<Product *> sold_products_;
-	std::vector<User> users_;
+	std::vector<User*> users_;
 	User *active_user_;
 
 	bool running_ = true;

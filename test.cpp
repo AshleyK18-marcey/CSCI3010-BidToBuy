@@ -23,9 +23,11 @@ int main() {
    */
 
   Driver * mainDriver = Driver::GetInstance();
-  User* userPtr1 = new User(20, "name1", "111", "adr1", 0.0);
-  mainDriver->DisplaySoldProducts(false, userPtr1);
-  userPtr1->UpdateInformation(mainDriver->get_users());
+  User* user = mainDriver->GetFirst();
+  mainDriver->DisplaySoldProducts(false, user);
+  user.UpdateInformation(mainDriver->get_users());
+  mainDriver->UpdateCsv();
+  mainDriver->DisplayUsers();
 
 
 }

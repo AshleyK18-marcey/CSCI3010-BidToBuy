@@ -1,8 +1,5 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
-#include <string>
-#include <vector>
-#include <iostream>
 #include "Users.h"
 //#include "helpers.cpp"
 //#include "ProductFactory.h"

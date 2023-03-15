@@ -40,7 +40,7 @@ Driver::Driver()
 {
     std::string line; // string to store each line
 
-    std::ifstream fs("./runtime_data/users.csv"); // open file
+    std::ifstream fs("./runtime_data/user.csv"); // open file
     std::getline(fs, line);                       // get the header out of the way
 
     std::string id;
@@ -50,7 +50,7 @@ Driver::Driver()
     std::string bal;
 
     while (std::getline(fs, line))
-    {                                      // read each line
+    {                                     // read each line
         std::stringstream rowStream(line); // create a stringstream from the line
         std::getline(rowStream, id, ',');
         std::getline(rowStream, name, ',');
@@ -58,7 +58,7 @@ Driver::Driver()
         std::getline(rowStream, address, ',');
         std::getline(rowStream, bal, ',');
 
-        User tempUser(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
+        User* tempUser = new User(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
         // User tempUser((std::string)id, (std::string)name, (std::string)phone, (std::string)address, stof(bal));
         this->users_.push_back(tempUser);
     }
@@ -94,9 +94,9 @@ Driver::Driver()
         User *tempSellerPtr = nullptr;
         for (unsigned int i = 0; i < this->users_.size(); i++)
         {
-            if (this->users_.at(i).get_name() == s_name)
+            if (this->users_[i]->get_name() == s_name)
             {
-                tempSellerPtr = &this->users_.at(i);
+                tempSellerPtr = this->users_[i];
                 break;
             }
         }
@@ -104,9 +104,9 @@ Driver::Driver()
         User *tempBuyerPtr = nullptr;
         for (unsigned int i = 0; i < this->users_.size(); i++)
         {
-            if (this->users_.at(i).get_name() == b_name)
+            if (this->users_[i]->get_name() == b_name)
             {
-                tempBuyerPtr = &this->users_.at(i);
+                tempBuyerPtr = this->users_[i];
                 break;
             }
         }
@@ -146,7 +146,7 @@ void Driver::DisplayUsers()
     std::cout << "Number of users: " << this->users_.size() << std::endl;
     for (unsigned int i = 0; i < this->users_.size(); i++)
     {
-        std::cout << i << ") " << this->users_.at(i) << std::endl;
+        std::cout << i << ") " << *this->users_[i] << std::endl;
         // std::cout << i << std::endl;
     }
 }
@@ -168,7 +168,7 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
         }
         std::cout << "============================" << std::endl;
         std::cout << "Number of sold products: " << sellers_products.size() << std::endl;
-        
+
         for (unsigned int i = 0; i < sellers_products.size(); i++)
         {
             std::cout << "=========================================================================" << std::endl;
@@ -179,7 +179,7 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
     {
         std::cout << "============================" << std::endl;
         std::cout << "Number of sold products: " << this->sold_products_.size() << std::endl;
-        
+
         for (unsigned int i = 0; i < this->sold_products_.size(); i++)
         {
             std::cout << "=========================================================================" << std::endl;
@@ -206,17 +206,18 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
             std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
         }
     }
-    else{
+    else
+    {
         std::cout << "All products for sale: " << std::endl;
         for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
         {
             std::cout << i << ") " << this->unsold_products_[i]->Stringify() << std::endl;
         }
-
     }
 }
 
-void Driver::DisplayInactiveProducts(User * seller) {
+void Driver::DisplayInactiveProducts(User *seller)
+{
     std::cout << "Inactive products from " << seller->get_name() << ":" << std::endl;
     std::vector<Product *> sellers_products;
     for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
@@ -350,7 +351,7 @@ bool Driver::UserExists(std::string name)
 {
     for (unsigned int i = 0; i < users_.size(); i++)
     {
-        if (users_.at(i).get_name() == name)
+        if (users_[i]->get_name() == name)
         {
             return true;
         }
@@ -367,10 +368,13 @@ void Driver::signIn()
         std::cout << "=================" << std::endl;
         std::cout << "Enter your name: ";
         std::getline(std::cin >> std::ws, userName);
-        std::cout << "=================" << std::endl;
         if (userName.length() > 0 && UserExists(userName))
         {
             validInput = true;
+        }
+        else
+        {
+            std::cout << "User not found. Please try again!" << std::endl;
         }
     }
     validInput = false;
@@ -378,26 +382,29 @@ void Driver::signIn()
     while (!validInput)
     {
         std::cout << "================================" << std::endl;
-        std::cout << std::endl
-                  << "Do you wish to (b)uy or (s)ell?: ";
+        std::cout << "Do you wish to (b)uy or (s)ell?: ";
         std::getline(std::cin, selection);
         std::cout << "================================" << std::endl;
         if (selection == "b" || selection == "s")
         {
             validInput = true;
         }
+        else
+        {
+            std::cout << "Invalid Entry. Please enter 'b' to buy or 's' to sell." << std::endl;
+        }
     }
     for (unsigned int i = 0; i < this->users_.size(); i++)
     {
-        if (this->users_.at(i).get_name() == userName)
+        if (this->users_[i]->get_name() == userName)
         {
             if (selection == "b")
             {
-                active_user_ = new Buyer(users_.at(i).get_userid(), users_.at(i).get_name(), users_.at(i).get_phone(), users_.at(i).get_address(), users_.at(i).get_balance());
+                active_user_ = new Buyer(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
             }
             else
             { // seller
-                active_user_ = new Seller(users_.at(i).get_userid(), users_.at(i).get_name(), users_.at(i).get_phone(), users_.at(i).get_address(), users_.at(i).get_balance());
+                active_user_ = new Seller(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
             }
         }
     }
@@ -467,18 +474,22 @@ void Driver::HandleProductCreation()
     this->unsold_products_.push_back(new_product);
 }
 
-void Driver::HandlePlaceBid() {
+void Driver::HandlePlaceBid()
+{
     bool validInput = false;
     std::string input = "";
     int selection;
-    while(!validInput) {
+    while (!validInput)
+    {
         this->DisplayActiveProducts(false, active_user_);
         std::cout << "Enter number of item to bid on or (q)uit: ";
         std::getline(std::cin >> std::ws, input);
         if (input == "q")
         {
             return;
-        } else if (input.length() > 0 && isNumeric(input)) {
+        }
+        else if (input.length() > 0 && isNumeric(input))
+        {
             selection = stoi(input);
             if (selection >= 0 && selection < this->unsold_products_.size())
             {
@@ -492,7 +503,8 @@ void Driver::HandlePlaceBid() {
                     if (isFloat(input))
                     {
                         bidAmount = stof(input);
-                        if (bidAmount > this->unsold_products_.at(selection)->get_last_bid()) {
+                        if (bidAmount > this->unsold_products_.at(selection)->get_last_bid())
+                        {
                             validInput2 = true;
                             this->unsold_products_.at(selection)->MakeBid(bidAmount, this->active_user_);
                         }
@@ -503,33 +515,42 @@ void Driver::HandlePlaceBid() {
     }
 }
 
-void Driver::HandleOpenCloseBid() {
+void Driver::HandleOpenCloseBid()
+{
     bool validInput = false;
-    bool working = true;    // flag for whether or not the user wants to continue working on bids
+    bool working = true; // flag for whether or not the user wants to continue working on bids
     std::string input = "";
-    while (working) {
+    while (working)
+    {
         validInput = false;
-        while(!validInput) {
-            std::cout << std::endl << "View (a)ctive products, (i)nactive products or (q)uit: ";
+        while (!validInput)
+        {
+            std::cout << std::endl
+                      << "View (a)ctive products, (i)nactive products or (q)uit: ";
             std::getline(std::cin >> std::ws, input);
             if (input == "q")
             {
                 working = false;
                 return;
-            } else if (input == "a") {
+            }
+            else if (input == "a")
+            {
                 validInput = true;
-            } else if (input == "i") {
+            }
+            else if (input == "i")
+            {
                 validInput = true;
             }
         }
 
         validInput = false;
         int selection;
-        if (input == "a") { // active products
-           this->DisplayActiveProducts(true, this->active_user_);
-           std::vector<Product*> activeProducts;
+        if (input == "a")
+        { // active products
+            this->DisplayActiveProducts(true, this->active_user_);
+            std::vector<Product *> activeProducts;
 
-           for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
+            for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
             {
                 if (this->unsold_products_[i]->get_seller()->get_name() == this->active_user_->get_name() && this->unsold_products_[i]->get_active())
                 {
@@ -537,26 +558,34 @@ void Driver::HandleOpenCloseBid() {
                 }
             }
 
-            while (!validInput) {
+            while (!validInput)
+            {
                 selection = promptValidInt("Enter number of item to finalize sale of or (q)uit: ");
-                if(selection >= 0 && (unsigned int)selection < activeProducts.size()) {
+                if (selection >= 0 && (unsigned int)selection < activeProducts.size())
+                {
                     validInput = true;
-                } else if (selection == -1) {
+                }
+                else if (selection == -1)
+                {
                     validInput = true;
                 }
             }
-            if(selection >= 0 && activeProducts.at(selection)->CloseBid()) {
+            if (selection >= 0 && activeProducts.at(selection)->CloseBid())
+            {
                 this->sold_products_.push_back(activeProducts.at(selection));
-                for (unsigned int i = 0; i < this->unsold_products_.size(); i++) {
+                for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
+                {
                     if (this->unsold_products_.at(i) == activeProducts.at(selection))
                     {
-                        this->unsold_products_.erase(this->unsold_products_.begin()+i);
+                        this->unsold_products_.erase(this->unsold_products_.begin() + i);
                         break;
                     }
                 }
             }
-        } else if (input == "i") {  // inactive products
-            std::vector<Product*> inactiveProducts;
+        }
+        else if (input == "i")
+        { // inactive products
+            std::vector<Product *> inactiveProducts;
             this->DisplayInactiveProducts(this->active_user_);
 
             for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
@@ -567,15 +596,20 @@ void Driver::HandleOpenCloseBid() {
                 }
             }
 
-            while (!validInput) {
+            while (!validInput)
+            {
                 selection = promptValidInt("Enter number of item to put back up for sale or (q)uit: ");
-                if(selection >= 0 && selection < inactiveProducts.size()) {
+                if (selection >= 0 && selection < inactiveProducts.size())
+                {
                     validInput = true;
-                } else if (selection == -1) {
+                }
+                else if (selection == -1)
+                {
                     validInput = true;
                 }
             }
-            if (selection >= 0) {
+            if (selection >= 0)
+            {
                 inactiveProducts.at(selection)->OpenBid();
             }
         }
@@ -605,7 +639,7 @@ void Driver::MainLoop()
                           << "Enter number of desired action: ";
                 std::cin >> userInput;
                 selection = std::stoi(userInput);
-                if (selection > 0 && selection < 8)
+                if (selection > 0 && selection < 9)
                 {
                     goodInput = true;
                 }
@@ -695,3 +729,42 @@ void Driver::OverviewBuyer(User *Buyer)
     std::cout << "Products that you have placed a bid on: " << std::endl;
     DisplayCurrentBids(Buyer);
 }
+
+void Driver::UpdateCsv()
+{
+    std::cout << "In update";
+    std::ofstream outfs("./runtime_data/user.csv", std::ios::trunc);
+    std::string id;
+    std::string name;
+    std::string phone;
+    std::string address;
+    std::string bal;
+    int count = 0;
+    
+    while (count != users_.size())
+    {
+        count++;
+        if (count > 1)
+        {
+            for (unsigned int i = 0; i < users_.size(); i++)
+            {
+                id = std::to_string(users_[i]->get_userid());
+                name = users_[i]->get_name();
+                phone = users_[i]->get_phone();
+                address = users_[i]->get_address();
+                bal = std::to_string(users_[i]->get_balance());
+
+                outfs << id << "," << name << "," << phone << "," << address << "," << bal << "\n";
+            }
+        }
+        else{
+            id = "id,";
+            name = "name,";
+            phone = "phone,";
+            address = "address,";
+            bal = "bal";
+            outfs << id << name << phone << address << bal << "\n";
+        }
+    }
+}
+
