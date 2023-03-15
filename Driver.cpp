@@ -51,8 +51,6 @@ Driver::Driver()
 
     std::ifstream fs("./runtime_data/user.csv"); // open file
     std::getline(fs, line);                      // get the header out of the way
-
-    std::string id;
     std::string name;
     std::string phone;
     std::string address;
@@ -65,10 +63,10 @@ Driver::Driver()
         std::getline(rowStream, name, ',');
         std::getline(rowStream, phone, ',');
         std::getline(rowStream, address, ',');
-        std::getline(rowStream, bal, ',');
+        std::getline(rowStream, bal);
 
         // User* tempUser = new User(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
-        User* tempUser = new User((std::string)name, (std::string)phone, (std::string)address, stof(bal));
+        User* tempUser = new User((std::string)name, (std::string)phone, (std::string)address, std::stod(bal));
         // User tempUser((std::string)id, (std::string)name, (std::string)phone, (std::string)address, stof(bal));
         this->users_.push_back(tempUser);
     }
@@ -832,7 +830,6 @@ void Driver::OverviewBuyer(User *Buyer)
 
 void Driver::UpdateCsv()
 {
-    std::cout << "In update";
     std::ofstream outfs("./runtime_data/user.csv", std::ios::trunc);
     std::string name;
     std::string phone;
