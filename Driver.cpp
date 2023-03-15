@@ -232,6 +232,11 @@ void Driver::DisplayInactiveProducts(User * seller) {
     }
 }
 
+/**
+ * @brief prints out all the bids that the given user has placed
+ * 
+ * @param Buyer Pointer to a User object that will have it's bids displayed
+ */
 void Driver::DisplayCurrentBids(User *Buyer)
 {
     std::cout << "Bids from " << Buyer->get_name() << ":" << std::endl;
@@ -263,6 +268,11 @@ void Driver::CreateConversation(User *buyer, User *seller)
     this->conversations_.push_back(convPtr);
 }
 
+/**
+ * @brief Handles the user interaction and logic for a user conversing
+ * 
+ * @param userPtr a pointer to a User object that will be conversing
+ */
 void Driver::handleConversing(User *userPtr)
 {
     std::vector<Conversation *> validConversations; // stores conversation that this user is a part of
@@ -350,6 +360,13 @@ void Driver::handleConversing(User *userPtr)
     }
 }
 
+/**
+ * @brief checks whether or not a user with the given username exists
+ * 
+ * @param name username to check if any user ahs
+ * @return true A user with the given name exists
+ * @return false A user with the give name does not exist
+ */
 bool Driver::UserExists(std::string name)
 {
     for (unsigned int i = 0; i < users_.size(); i++)
@@ -362,6 +379,9 @@ bool Driver::UserExists(std::string name)
     return false;
 }
 
+/**
+ * Signs the user in with a username and has them select to be a buyer or a seller
+*/
 void Driver::signIn()
 {
     std::string userName;
@@ -407,6 +427,9 @@ void Driver::signIn()
     }
 }
 
+/**
+ * handles the the user interaction and logic for a seller to make a new listing for a product
+*/
 void Driver::HandleProductCreation()
 {
     bool validInput = false;
@@ -472,6 +495,9 @@ void Driver::HandleProductCreation()
     this->unsold_products_.push_back(new_product);
 }
 
+/**
+ * Handles the user interaction and logic for a seller to view products for sale and place a bid on a product for sale
+*/
 void Driver::HandlePlaceBid() {
     bool validInput = false;
     std::string input = "";
@@ -511,6 +537,9 @@ void Driver::HandlePlaceBid() {
     }
 }
 
+/**
+ * Handles the user interaction and logic behind a seller opening inactive or closing active bids
+*/
 void Driver::HandleOpenCloseBid() {
     bool validInput = false;
     bool working = true;    // flag for whether or not the user wants to continue working on bids
