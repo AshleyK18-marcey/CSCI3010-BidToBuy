@@ -61,13 +61,14 @@ Driver::Driver()
     while (std::getline(fs, line))
     {                                     // read each line
         std::stringstream rowStream(line); // create a stringstream from the line
-        std::getline(rowStream, id, ',');
+        // std::getline(rowStream, id, ',');
         std::getline(rowStream, name, ',');
         std::getline(rowStream, phone, ',');
         std::getline(rowStream, address, ',');
         std::getline(rowStream, bal, ',');
 
-        User* tempUser = new User(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
+        // User* tempUser = new User(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
+        User* tempUser = new User((std::string)name, (std::string)phone, (std::string)address, stof(bal));
         // User tempUser((std::string)id, (std::string)name, (std::string)phone, (std::string)address, stof(bal));
         this->users_.push_back(tempUser);
     }
@@ -248,6 +249,8 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
  */
 void Driver::DisplayInactiveProducts(User * seller) {
     std::cout << "Inactive products from " << seller->get_name() << ":" << std::endl;
+
+    // collect inactive products
     std::vector<Product *> sellers_products;
     for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
     {
@@ -256,6 +259,8 @@ void Driver::DisplayInactiveProducts(User * seller) {
             sellers_products.push_back(this->unsold_products_[i]);
         }
     }
+
+    // print out collect inactive products
     for (unsigned int i = 0; i < sellers_products.size(); i++)
     {
         std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
@@ -292,6 +297,12 @@ void Driver::DisplayCurrentBids(User *Buyer)
     }
 }
 
+/**
+ * @brief creates a conversation between two users
+ * 
+ * @param buyer User pointer
+ * @param seller User pointer
+ */
 void Driver::CreateConversation(User *buyer, User *seller)
 {
     Conversation *convPtr = new Conversation(buyer, seller);
@@ -453,11 +464,13 @@ void Driver::signIn()
         {
             if (selection == "b")
             {
-                active_user_ = new Buyer(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                // active_user_ = new Buyer(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                active_user_ = new Buyer(users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
             }
             else
             { // seller
-                active_user_ = new Seller(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                // active_user_ = new Seller(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                active_user_ = new Seller(users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
             }
         }
     }

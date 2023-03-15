@@ -15,14 +15,14 @@
 class User
 {
 public:
-  User(unsigned int id, std::string name, std::string phone, std::string address, double balance);
-
+  // User(unsigned int id, std::string name, std::string phone, std::string address, double balance);
+  User(std::string name, std::string phone, std::string address, double balance);
   //~User();
  // ~User();
 
   float get_balance() { return balance_; };
 
-  unsigned int get_userid() { return userid_; };
+  // unsigned int get_userid() { return userid_; };
 
   std::string get_name() { return name_; };
 
@@ -52,7 +52,7 @@ public:
   
 
 private:
-  unsigned int userid_;
+  // unsigned int userid_;
 
 protected:
   std::string title_;
@@ -65,7 +65,8 @@ protected:
 class Seller : public User
 {
 public:
-  Seller(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
+  // Seller(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
+  Seller(std::string name, std::string phone, std::string address, double balance) : User(name, phone, address, balance) {}
 
   void ChangeBalance(double amount) override;
 
@@ -78,7 +79,8 @@ public:
 class Buyer : public User
 {
 public:
-  Buyer(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
+  // Buyer(unsigned int id, std::string name, std::string phone, std::string address, double balance) : User(id, name, phone, address, balance) {}
+  Buyer(std::string name, std::string phone, std::string address, double balance) : User(name, phone, address, balance) {}
   void ChangeBalance(double amount);
 
   // void addBidToProduct(Product *product); // could check if balace is enough
