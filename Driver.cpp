@@ -61,13 +61,14 @@ Driver::Driver()
     while (std::getline(fs, line))
     {                                      // read each line
         std::stringstream rowStream(line); // create a stringstream from the line
-        std::getline(rowStream, id, ',');
+        // std::getline(rowStream, id, ',');
         std::getline(rowStream, name, ',');
         std::getline(rowStream, phone, ',');
         std::getline(rowStream, address, ',');
         std::getline(rowStream, bal, ',');
 
-        User *tempUser = new User(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
+        // User* tempUser = new User(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
+        User* tempUser = new User((std::string)name, (std::string)phone, (std::string)address, stof(bal));
         // User tempUser((std::string)id, (std::string)name, (std::string)phone, (std::string)address, stof(bal));
         this->users_.push_back(tempUser);
     }
@@ -249,6 +250,8 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
 void Driver::DisplayInactiveProducts(User *seller)
 {
     std::cout << "Inactive products from " << seller->get_name() << ":" << std::endl;
+
+    // collect inactive products
     std::vector<Product *> sellers_products;
     for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
     {
@@ -257,6 +260,8 @@ void Driver::DisplayInactiveProducts(User *seller)
             sellers_products.push_back(this->unsold_products_[i]);
         }
     }
+
+    // print out collect inactive products
     for (unsigned int i = 0; i < sellers_products.size(); i++)
     {
         std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
@@ -293,6 +298,12 @@ void Driver::DisplayCurrentBids(User *Buyer)
     }
 }
 
+/**
+ * @brief creates a conversation between two users
+ * 
+ * @param buyer User pointer
+ * @param seller User pointer
+ */
 void Driver::CreateConversation(User *buyer, User *seller)
 {
     Conversation *convPtr = new Conversation(buyer, seller);
@@ -454,11 +465,13 @@ void Driver::signIn()
         {
             if (selection == "b")
             {
-                active_user_ = new Buyer(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                // active_user_ = new Buyer(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                active_user_ = new Buyer(users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
             }
             else
             { // seller
-                active_user_ = new Seller(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                // active_user_ = new Seller(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                active_user_ = new Seller(users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
             }
         }
     }
@@ -559,8 +572,6 @@ void Driver::HandlePlaceBid()
                 float bidAmount;
                 while (!validInput2)
                 {
-                    // std::cout << "Enter bid amount or (q)uit: ";
-                    // getline(std::cin >> std::ws, input);
                     bidAmount = promptValidFloat("Enter bid amount or (q)uit: ");
                     if (bidAmount >= 0)
                     {
@@ -592,10 +603,9 @@ void Driver::HandleOpenCloseBid()
     while (working)
     {
         validInput = false;
-        while (!validInput)
-        {
-            std::cout << std::endl
-                      << "View (a)ctive products, (i)nactive products or (q)uit: ";
+        // loops until the user inputs a valid option
+        while(!validInput) {
+            std::cout << std::endl << "View (a)ctive products, (i)nactive products or (q)uit: ";
             std::getline(std::cin >> std::ws, input);
             if (input == "q")
             {
@@ -612,14 +622,14 @@ void Driver::HandleOpenCloseBid()
             }
         }
 
-        validInput = false;
+        validInput = false; // reset flag to false
         int selection;
-        if (input == "a")
-        { // active products
-            this->DisplayActiveProducts(true, this->active_user_);
-            std::vector<Product *> activeProducts;
+        if (input == "a") { // active products
+           this->DisplayActiveProducts(true, this->active_user_);
 
-            for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
+           // collect the user's active products
+           std::vector<Product*> activeProducts;
+           for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
             {
                 if (this->unsold_products_[i]->get_seller()->get_name() == this->active_user_->get_name() && this->unsold_products_[i]->get_active())
                 {
@@ -627,8 +637,8 @@ void Driver::HandleOpenCloseBid()
                 }
             }
 
-            while (!validInput)
-            {
+            // loops until the user inputs a valid option
+            while (!validInput) {
                 selection = promptValidInt("Enter number of item to finalize sale of or (q)uit: ");
                 if (selection >= 0 && (unsigned int)selection < activeProducts.size())
                 {
@@ -639,8 +649,9 @@ void Driver::HandleOpenCloseBid()
                     validInput = true;
                 }
             }
-            if (selection >= 0 && activeProducts.at(selection)->CloseBid())
-            {
+
+            // close the selected bid and move it to sold products vector if valid sale was made
+            if(selection >= 0 && activeProducts.at(selection)->CloseBid()) {
                 this->sold_products_.push_back(activeProducts.at(selection));
                 for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
                 {
@@ -651,12 +662,11 @@ void Driver::HandleOpenCloseBid()
                     }
                 }
             }
-        }
-        else if (input == "i")
-        { // inactive products
-            std::vector<Product *> inactiveProducts;
+        } else if (input == "i") {  // inactive products
             this->DisplayInactiveProducts(this->active_user_);
 
+            // collect the user's inactive products
+            std::vector<Product*> inactiveProducts;
             for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
             {
                 if (this->unsold_products_[i]->get_seller()->get_name() == this->active_user_->get_name() && !this->unsold_products_[i]->get_active())
@@ -665,8 +675,8 @@ void Driver::HandleOpenCloseBid()
                 }
             }
 
-            while (!validInput)
-            {
+            // loops until the user inputs a valid option
+            while (!validInput) {
                 selection = promptValidInt("Enter number of item to put back up for sale or (q)uit: ");
                 if (selection >= 0 && selection < inactiveProducts.size())
                 {
@@ -677,8 +687,9 @@ void Driver::HandleOpenCloseBid()
                     validInput = true;
                 }
             }
-            if (selection >= 0)
-            {
+
+            //if the selection is less than 0 that means that the user wants to quit
+            if (selection >= 0) {
                 inactiveProducts.at(selection)->OpenBid();
             }
         }
@@ -691,27 +702,26 @@ void Driver::HandleOpenCloseBid()
  */
 void Driver::MainLoop()
 {
-    std::string userInput = "";
-    int selection = 0;
-    bool signedIn = false;
-    bool goodInput = false;
+    std::string userInput = ""; // stores the raw string input from the user
+    int selection = 0;  // the integer value of the user's inputted selection
+    bool signedIn = false;  // stores whether or not a user is signed in
+    bool goodInput = false; // stores whether or not the inputted value was a valid option
     while (running_)
     {
+        // check if a user is signed int
         if (!signedIn)
         {
+            // if not then have the user sign in with a username
             this->signIn();
             signedIn = true;
         }
-        active_user_->PrintOptions();
-        goodInput = false;
-        if (active_user_->CheckUser())
-        {                      // seller
+        active_user_->PrintOptions();   //print the options for the active user, this changes based on whether they are a seller or a buyer
+        goodInput = false;  // reset goodInput to false
+        if (active_user_->CheckUser())  // check whether the user is a buyer or a seller
+        {                      // seller case
+            // loops until the user inputs a valid option
             while (!goodInput) // get user input for main options
             {
-                // std::cout << std::endl
-                //           << "Enter number of desired action: ";
-                // std::cin >> userInput;
-                // selection = std::stoi(userInput);
                 selection = promptValidInt("Enter number of desired action: ");
                 if (selection > 0 && selection < 9)
                 {
@@ -751,13 +761,10 @@ void Driver::MainLoop()
             }
         }
         else
-        {                      // buyer
+        {                      // buyer case
+            // loops until the user inputs a valid option
             while (!goodInput) // get user input for main options
             {
-                // std::cout << std::endl
-                //           << "Enter number of desired action: ";
-                // std::cin >> userInput;
-                // selection = std::stoi(userInput);
                 selection = promptValidInt("Enter number of desired action: ");
                 if (selection > 0 && selection < 9)
                 {

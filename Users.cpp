@@ -4,9 +4,17 @@
 /**
     Constructor for a user
 */
-User::User(unsigned int id, std::string name, std::string phone, std::string address, double balance)
+// User::User(unsigned int id, std::string name, std::string phone, std::string address, double balance)
+// {
+//     this->userid_ = id;
+//     this->name_ = name;
+//     this->phone_ = phone;
+//     this->address_ = address;
+//     this->balance_ = balance;
+// }
+
+User::User(std::string name, std::string phone, std::string address, double balance)
 {
-    this->userid_ = id;
     this->name_ = name;
     this->phone_ = phone;
     this->address_ = address;
@@ -291,6 +299,19 @@ void Buyer::PrintOptions()
     std::cout << "===============================================================";
 }
 
+// /**
+//  * @brief equality operator overload
+//  * 
+//  * @param other other user object to compare against
+//  * @return true 
+//  * @return false 
+//  */
+// bool User::operator==(const User &other)
+// {
+//     return this->name_ == other.name_ && this->phone_ == other.phone_ && this->address_ == other.address_ && this->userid_ == other.userid_ && this->balance_ == other.balance_;
+// }
+
+
 /**
  * @brief equality operator overload
  * 
@@ -300,5 +321,5 @@ void Buyer::PrintOptions()
  */
 bool User::operator==(const User &other)
 {
-    return this->name_ == other.name_ && this->phone_ == other.phone_ && this->address_ == other.address_ && this->userid_ == other.userid_ && this->balance_ == other.balance_;
+    return this->name_ == other.name_ && this->phone_ == other.phone_ && this->address_ == other.address_ && this->balance_ == other.balance_;
 }
