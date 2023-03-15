@@ -2,7 +2,7 @@
 
 /**
  * @brief Converts a string to a ProductCategory to aid in reading from CSVs
- * 
+ *
  * @param type string that should be the same as one of the ProductCategory enums
  * @return ProductCategory Matched product category
  */
@@ -43,14 +43,14 @@ Driver *Driver::DriverPtr = NULL;
 
 /**
  * @brief Construct a new Driver:: Driver object and read in form the CSV files
- * 
+ *
  */
 Driver::Driver()
 {
     std::string line; // string to store each line
 
     std::ifstream fs("./runtime_data/user.csv"); // open file
-    std::getline(fs, line);                       // get the header out of the way
+    std::getline(fs, line);                      // get the header out of the way
 
     std::string id;
     std::string name;
@@ -59,7 +59,7 @@ Driver::Driver()
     std::string bal;
 
     while (std::getline(fs, line))
-    {                                     // read each line
+    {                                      // read each line
         std::stringstream rowStream(line); // create a stringstream from the line
         std::getline(rowStream, id, ',');
         std::getline(rowStream, name, ',');
@@ -67,7 +67,7 @@ Driver::Driver()
         std::getline(rowStream, address, ',');
         std::getline(rowStream, bal, ',');
 
-        User* tempUser = new User(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
+        User *tempUser = new User(stoi(id), (std::string)name, (std::string)phone, (std::string)address, stof(bal));
         // User tempUser((std::string)id, (std::string)name, (std::string)phone, (std::string)address, stof(bal));
         this->users_.push_back(tempUser);
     }
@@ -152,7 +152,7 @@ Driver::Driver()
 
 /**
  * @brief displays all users
- * 
+ *
  */
 void Driver::DisplayUsers()
 {
@@ -166,7 +166,7 @@ void Driver::DisplayUsers()
 
 /**
  * @brief Displays sold products
- * 
+ *
  * @param specific_to_user flag to set whether or not only products sold by a specified user are shown
  * @param Seller a pointer to a User object that is used if specific to user is true
  */
@@ -209,7 +209,7 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
 
 /**
  * @brief Displays active products
- * 
+ *
  * @param specific_to_user flag to set whether or not only products from a specified user are shown
  * @param seller Pointer to a User object to check check sold products for
  */
@@ -243,10 +243,11 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
 
 /**
  * @brief Displays inactive products from a seller meaning products that didn't succesfully sell
- * 
+ *
  * @param seller pointer to User object to match products to
  */
-void Driver::DisplayInactiveProducts(User * seller) {
+void Driver::DisplayInactiveProducts(User *seller)
+{
     std::cout << "Inactive products from " << seller->get_name() << ":" << std::endl;
     std::vector<Product *> sellers_products;
     for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
@@ -264,7 +265,7 @@ void Driver::DisplayInactiveProducts(User * seller) {
 
 /**
  * @brief prints out all the bids that the given user has placed
- * 
+ *
  * @param Buyer Pointer to a User object that will have it's bids displayed
  */
 void Driver::DisplayCurrentBids(User *Buyer)
@@ -300,7 +301,7 @@ void Driver::CreateConversation(User *buyer, User *seller)
 
 /**
  * @brief Handles the user interaction and logic for a user conversing
- * 
+ *
  * @param userPtr a pointer to a User object that will be conversing
  */
 void Driver::handleConversing(User *userPtr)
@@ -392,7 +393,7 @@ void Driver::handleConversing(User *userPtr)
 
 /**
  * @brief checks whether or not a user with the given username exists
- * 
+ *
  * @param name username to check if any user ahs
  * @return true A user with the given name exists
  * @return false A user with the give name does not exist
@@ -411,7 +412,7 @@ bool Driver::UserExists(std::string name)
 
 /**
  * Signs the user in with a username and has them select to be a buyer or a seller
-*/
+ */
 void Driver::signIn()
 {
     std::string userName;
@@ -465,7 +466,7 @@ void Driver::signIn()
 
 /**
  * handles the the user interaction and logic for a seller to make a new listing for a product
-*/
+ */
 void Driver::HandleProductCreation()
 {
     bool validInput = false;
@@ -533,8 +534,9 @@ void Driver::HandleProductCreation()
 
 /**
  * Handles the user interaction and logic for a seller to view products for sale and place a bid on a product for sale
-*/
-void Driver::HandlePlaceBid() {
+ */
+void Driver::HandlePlaceBid()
+{
     bool validInput = false;
     std::string input = "";
     int selection;
@@ -563,11 +565,14 @@ void Driver::HandlePlaceBid() {
                     if (bidAmount >= 0)
                     {
                         // bidAmount = stof(input);
-                        if (bidAmount > this->unsold_products_.at(selection)->get_last_bid()) {
+                        if (bidAmount > this->unsold_products_.at(selection)->get_last_bid())
+                        {
                             validInput2 = true;
                             this->unsold_products_.at(selection)->MakeBid(bidAmount, this->active_user_);
                         }
-                    } else { // user entered q
+                    }
+                    else
+                    { // user entered q
                         validInput2 = true;
                     }
                 }
@@ -578,8 +583,9 @@ void Driver::HandlePlaceBid() {
 
 /**
  * Handles the user interaction and logic behind a seller opening inactive or closing active bids
-*/
-void Driver::HandleOpenCloseBid() {
+ */
+void Driver::HandleOpenCloseBid()
+{
     bool validInput = false;
     bool working = true; // flag for whether or not the user wants to continue working on bids
     std::string input = "";
@@ -681,7 +687,7 @@ void Driver::HandleOpenCloseBid() {
 
 /**
  * @brief handles the main looping function and menu functionality
- * 
+ *
  */
 void Driver::MainLoop()
 {
@@ -738,6 +744,7 @@ void Driver::MainLoop()
                 break;
             case 8:
                 this->running_ = false;
+                UpdateCsv();
                 break;
             default:
                 break;
@@ -793,8 +800,8 @@ void Driver::MainLoop()
 
 /**
  * @brief prints out the sold products and products that are open for bidding for a given suer
- * 
- * @param Seller 
+ *
+ * @param Seller
  */
 void Driver::OverviewSeller(User *Seller)
 {
@@ -807,8 +814,8 @@ void Driver::OverviewSeller(User *Seller)
 
 /**
  * @brief prints out an overview of a user's bids
- * 
- * @param Buyer 
+ *
+ * @param Buyer
  */
 void Driver::OverviewBuyer(User *Buyer)
 {
@@ -820,37 +827,32 @@ void Driver::UpdateCsv()
 {
     std::cout << "In update";
     std::ofstream outfs("./runtime_data/user.csv", std::ios::trunc);
-    std::string id;
     std::string name;
     std::string phone;
     std::string address;
     std::string bal;
-    int count = 0;
-    
-    while (count != users_.size())
+
+    for (unsigned int k = 0; k < 2; k++)
     {
-        count++;
-        if (count > 1)
+        if (k == 1)
         {
             for (unsigned int i = 0; i < users_.size(); i++)
             {
-                id = std::to_string(users_[i]->get_userid());
                 name = users_[i]->get_name();
                 phone = users_[i]->get_phone();
                 address = users_[i]->get_address();
                 bal = std::to_string(users_[i]->get_balance());
 
-                outfs << id << "," << name << "," << phone << "," << address << "," << bal << "\n";
+                outfs << name << "," << phone << "," << address << "," << bal << "\n";
             }
         }
-        else{
-            id = "id,";
+        else
+        {
             name = "name,";
             phone = "phone,";
             address = "address,";
             bal = "bal";
-            outfs << id << name << phone << address << bal << "\n";
+            outfs << name << phone << address << bal << "\n";
         }
     }
 }
-
