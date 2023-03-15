@@ -1,12 +1,12 @@
 // Name: Tyler Scripps, Ashley Kastler
 
 #include "Driver.h"
-// #include "Users.h"
-// #include "Users.cpp"
 
-
-//  We plan to store bids as a pair of vector members in the product class, one for amounts and one for bidders
-// because of this a map of bids in main doesn't really make sense, I hope it is OK to not have in this submission
+/*
+To run the program run make, then execute the resulting "main" file
+When prompted enter a name identical to one in the runtime_data/user.csv file
+whenever a leter is in parenthesis that letter is a valid command for the current prompt.
+*/
 
 int main() {
     // Driver &mainDriver = Driver::GetInstance();
