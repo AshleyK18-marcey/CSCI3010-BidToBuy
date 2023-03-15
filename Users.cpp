@@ -4,15 +4,6 @@
 /**
     Constructor for a user
 */
-// User::User(unsigned int id, std::string name, std::string phone, std::string address, double balance)
-// {
-//     this->userid_ = id;
-//     this->name_ = name;
-//     this->phone_ = phone;
-//     this->address_ = address;
-//     this->balance_ = balance;
-// }
-
 User::User(std::string name, std::string phone, std::string address, double balance)
 {
     this->name_ = name;
@@ -20,10 +11,6 @@ User::User(std::string name, std::string phone, std::string address, double bala
     this->address_ = address;
     this->balance_ = balance;
 }
-
-/**
-    Destructor for user
-*/
 
 /**
     Sets the name of the user
@@ -59,13 +46,16 @@ void User::SetAddress(std::string newAddress)
 }
 
 /**
-    Asks the user what information they want to change, checks for valid input and changes the user information
-*/
+ * @brief Asks the user what information they want to change, checks for valid input and changes the user information
+ * 
+ * @param list_of_current_users vector of User pointers to compare usernames against so that there is no overlap
+ */
 void User::UpdateInformation(std::vector<User *> list_of_current_users)
 {
-    bool active = true;
-    while (active) // menu of options
+    bool active = true; // flag for whether the user wishes to continue editing their information
+    while (active)
     {
+        // menu of options
         std::cout << "===========================================" << std::endl;
         std::cout << "What information would you like to change?" << std::endl
                   << "(n)ame" << std::endl
@@ -81,22 +71,23 @@ void User::UpdateInformation(std::vector<User *> list_of_current_users)
             bool change_name = true;
             while (change_name)
             {
-                std::string current_name = get_name();
+                std::string current_name = get_name();  // get user's current name
                 std::cout << "==================================================================================================" << std::endl;
                 std::cout << "Current Name: " << current_name << std::endl;
                 std::cout << "What would you like to change it to? Enter (q) if you no longer want to change your information" << std::endl;
                 std::cout << "==================================================================================================" << std::endl;
                 std::string change_to;
-                std::getline(std::cin >> std::ws, change_to);
-                std::string custom_case = change_to;
+                std::getline(std::cin >> std::ws, change_to); // get user input
+                std::string custom_case = change_to;    // store the properly capitalized string
                 std::transform(change_to.begin(), change_to.end(), change_to.begin(), ::toupper); // translate their choice to uppercase
-                if (change_to == "Q")
+                if (change_to == "Q") // quit cahnge name
                 {
                     change_name = false;
                 }
                 else
                 {
                     bool taken = false;
+                    //check if the name is taken by another user and store in taken bool
                     for (unsigned int i = 0; i < list_of_current_users.size(); i++)
                     {
                         if (list_of_current_users[i]->get_name() == custom_case)
@@ -105,6 +96,8 @@ void User::UpdateInformation(std::vector<User *> list_of_current_users)
                             taken = true;
                         }
                     }
+
+                    // the name isn't taken so we will change it
                     if (!taken)
                     {
                         for (unsigned int i = 0; i < list_of_current_users.size(); i++)
@@ -146,8 +139,10 @@ void User::UpdateInformation(std::vector<User *> list_of_current_users)
                 }
                 else
                 {
+                    //make sure the phone number is a valid length
                     if (change_to.length() == 12 || change_to.length() == 10)
                     {
+                        //make sure the phone number string only contains numerals or dashes (-)
                         for (long unsigned int i = 0; i < change_to.length(); i++)
                         {
                             if (change_to[i] == 48 || change_to[i] == 49 || change_to[i] == 50 || change_to[i] == 51 || change_to[i] == 52 || change_to[i] == 53 || change_to[i] == 54 || change_to[i] == 55 || change_to[i] == 56 || change_to[i] == 57 || change_to[i] == 45)
