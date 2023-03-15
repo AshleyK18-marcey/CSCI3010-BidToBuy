@@ -40,6 +40,7 @@ public:
 
   virtual void ChangeBalance(double amount) { std::cout << balance_ << std::endl; };
 
+  // checks whether the user is a buyer or a seller
   virtual bool CheckUser() { return false; };
 
   virtual void PrintOptions() {};
@@ -68,6 +69,7 @@ public:
 
   void ChangeBalance(double amount) override;
 
+  // checks whether the user is a buyer or a seller
   bool CheckUser() override { return true; };
 
   void PrintOptions() override;
@@ -81,6 +83,7 @@ public:
 
   // void addBidToProduct(Product *product); // could check if balace is enough
 
+  // checks whether the user is a buyer or a seller
   bool CheckUser() override { return false; };
 
   void PrintOptions() override;

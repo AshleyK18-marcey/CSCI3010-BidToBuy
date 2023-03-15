@@ -557,12 +557,9 @@ void Driver::HandlePlaceBid() {
                 float bidAmount;
                 while (!validInput2)
                 {
-                    // std::cout << "Enter bid amount or (q)uit: ";
-                    // getline(std::cin >> std::ws, input);
                     bidAmount = promptValidFloat("Enter bid amount or (q)uit: ");
                     if (bidAmount >= 0)
                     {
-                        // bidAmount = stof(input);
                         if (bidAmount > this->unsold_products_.at(selection)->get_last_bid()) {
                             validInput2 = true;
                             this->unsold_products_.at(selection)->MakeBid(bidAmount, this->active_user_);
@@ -586,10 +583,9 @@ void Driver::HandleOpenCloseBid() {
     while (working)
     {
         validInput = false;
-        while (!validInput)
-        {
-            std::cout << std::endl
-                      << "View (a)ctive products, (i)nactive products or (q)uit: ";
+        // loops until the user inputs a valid option
+        while(!validInput) {
+            std::cout << std::endl << "View (a)ctive products, (i)nactive products or (q)uit: ";
             std::getline(std::cin >> std::ws, input);
             if (input == "q")
             {
@@ -606,14 +602,14 @@ void Driver::HandleOpenCloseBid() {
             }
         }
 
-        validInput = false;
+        validInput = false; // reset flag to false
         int selection;
-        if (input == "a")
-        { // active products
-            this->DisplayActiveProducts(true, this->active_user_);
-            std::vector<Product *> activeProducts;
+        if (input == "a") { // active products
+           this->DisplayActiveProducts(true, this->active_user_);
 
-            for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
+           // collect the user's active products
+           std::vector<Product*> activeProducts;
+           for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
             {
                 if (this->unsold_products_[i]->get_seller()->get_name() == this->active_user_->get_name() && this->unsold_products_[i]->get_active())
                 {
@@ -621,8 +617,8 @@ void Driver::HandleOpenCloseBid() {
                 }
             }
 
-            while (!validInput)
-            {
+            // loops until the user inputs a valid option
+            while (!validInput) {
                 selection = promptValidInt("Enter number of item to finalize sale of or (q)uit: ");
                 if (selection >= 0 && (unsigned int)selection < activeProducts.size())
                 {
@@ -633,8 +629,9 @@ void Driver::HandleOpenCloseBid() {
                     validInput = true;
                 }
             }
-            if (selection >= 0 && activeProducts.at(selection)->CloseBid())
-            {
+
+            // close the selected bid and move it to sold products vector if valid sale was made
+            if(selection >= 0 && activeProducts.at(selection)->CloseBid()) {
                 this->sold_products_.push_back(activeProducts.at(selection));
                 for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
                 {
@@ -645,12 +642,11 @@ void Driver::HandleOpenCloseBid() {
                     }
                 }
             }
-        }
-        else if (input == "i")
-        { // inactive products
-            std::vector<Product *> inactiveProducts;
+        } else if (input == "i") {  // inactive products
             this->DisplayInactiveProducts(this->active_user_);
 
+            // collect the user's inactive products
+            std::vector<Product*> inactiveProducts;
             for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
             {
                 if (this->unsold_products_[i]->get_seller()->get_name() == this->active_user_->get_name() && !this->unsold_products_[i]->get_active())
@@ -659,8 +655,8 @@ void Driver::HandleOpenCloseBid() {
                 }
             }
 
-            while (!validInput)
-            {
+            // loops until the user inputs a valid option
+            while (!validInput) {
                 selection = promptValidInt("Enter number of item to put back up for sale or (q)uit: ");
                 if (selection >= 0 && selection < inactiveProducts.size())
                 {
@@ -671,8 +667,9 @@ void Driver::HandleOpenCloseBid() {
                     validInput = true;
                 }
             }
-            if (selection >= 0)
-            {
+
+            //if the selection is less than 0 that means that the user wants to quit
+            if (selection >= 0) {
                 inactiveProducts.at(selection)->OpenBid();
             }
         }
@@ -685,27 +682,26 @@ void Driver::HandleOpenCloseBid() {
  */
 void Driver::MainLoop()
 {
-    std::string userInput = "";
-    int selection = 0;
-    bool signedIn = false;
-    bool goodInput = false;
+    std::string userInput = ""; // stores the raw string input from the user
+    int selection = 0;  // the integer value of the user's inputted selection
+    bool signedIn = false;  // stores whether or not a user is signed in
+    bool goodInput = false; // stores whether or not the inputted value was a valid option
     while (running_)
     {
+        // check if a user is signed int
         if (!signedIn)
         {
+            // if not then have the user sign in with a username
             this->signIn();
             signedIn = true;
         }
-        active_user_->PrintOptions();
-        goodInput = false;
-        if (active_user_->CheckUser())
-        {                      // seller
+        active_user_->PrintOptions();   //print the options for the active user, this changes based on whether they are a seller or a buyer
+        goodInput = false;  // reset goodInput to false
+        if (active_user_->CheckUser())  // check whether the user is a buyer or a seller
+        {                      // seller case
+            // loops until the user inputs a valid option
             while (!goodInput) // get user input for main options
             {
-                // std::cout << std::endl
-                //           << "Enter number of desired action: ";
-                // std::cin >> userInput;
-                // selection = std::stoi(userInput);
                 selection = promptValidInt("Enter number of desired action: ");
                 if (selection > 0 && selection < 9)
                 {
@@ -744,13 +740,10 @@ void Driver::MainLoop()
             }
         }
         else
-        {                      // buyer
+        {                      // buyer case
+            // loops until the user inputs a valid option
             while (!goodInput) // get user input for main options
             {
-                // std::cout << std::endl
-                //           << "Enter number of desired action: ";
-                // std::cin >> userInput;
-                // selection = std::stoi(userInput);
                 selection = promptValidInt("Enter number of desired action: ");
                 if (selection > 0 && selection < 9)
                 {
