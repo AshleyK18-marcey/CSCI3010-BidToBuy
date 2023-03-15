@@ -717,6 +717,55 @@ void Driver::HandleOpenCloseBid()
     }
 }
 
+void Driver::DisplaySimilarProductsSold() {
+    std::string typeString;
+    bool validInput = false;
+    int selection;
+    std::cout << "0) Car" << std::endl;
+    std::cout << "1) Furniture" << std::endl;
+    std::cout << "2) Book" << std::endl;
+    std::cout << "3) Computer" << std::endl;
+    std::cout << "4) Jewelry" << std::endl;
+    while(!validInput) {
+        selection = promptValidInt("Enter number of product type you wish to see historical sales for or (q)uit: ");
+        if (selection == -1)
+        {
+            return;
+        } else if (selection >= 0 && selection < 5) {
+            validInput = true;
+        }
+    }
+
+    switch (selection)
+    {
+    case 0:
+        typeString = "Car";
+        break;
+    case 1:
+        typeString = "Furniture";
+        break;
+    case 2:
+        typeString = "Book";
+        break;
+    case 3:
+        typeString = "Computer";
+        break;
+    case 4:
+        typeString = "Jewelry";
+        break;
+    }
+
+    int displayedItems = 0;
+    std::cout << "Products of type " << typeString << ":";
+    for (unsigned int i = 0; i < this->sold_products_.size(); i++) {
+        if (this->sold_products_.at(i)->get_type_string() == typeString)
+        {
+            std::cout << displayedItems << ") " << this->sold_products_.at(i)->Stringify() << std::endl;
+            displayedItems++;
+        }
+    }
+}
+
 /**
  * @brief handles the main looping function and menu functionality
  *
@@ -744,7 +793,7 @@ void Driver::MainLoop()
             while (!goodInput) // get user input for main options
             {
                 selection = promptValidInt("Enter number of desired action: ");
-                if (selection > 0 && selection < 9)
+                if (selection > 0 && selection < 10)
                 {
                     goodInput = true;
                 }
@@ -770,10 +819,13 @@ void Driver::MainLoop()
                 this->HandleOpenCloseBid();
                 break;
             case 7:
+                this->DisplaySimilarProductsSold();
+                break;
+            case 8:
                 this->active_user_ = nullptr;
                 signedIn = false;
                 break;
-            case 8:
+            case 9:
                 this->running_ = false;
                 UpdateUserCsv();
                 UpdateProductsCsv();

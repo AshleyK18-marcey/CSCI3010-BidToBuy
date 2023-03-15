@@ -276,8 +276,9 @@ void Seller::PrintOptions()
     std::cout << "4) Update your informaiton" << std::endl;
     std::cout << "5) Overview of sold products" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
-    std::cout << "7) Sign out" << std::endl;
-    std::cout << "8) Exit program" << std::endl;
+    std::cout << "7) Historical sales" << std::endl;
+    std::cout << "8) Sign out" << std::endl;
+    std::cout << "9) Exit program" << std::endl;
     std::cout << "===============================================================";
 }
 
