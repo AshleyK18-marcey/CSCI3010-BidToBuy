@@ -781,7 +781,7 @@ void Driver::MainLoop()
             while (!goodInput) // get user input for main options
             {
                 selection = promptValidInt("Enter number of desired action: ");
-                if (selection > 0 && selection < 9)
+                if (selection > 0 && selection < 8)
                 {
                     goodInput = true;
                 }
@@ -801,16 +801,13 @@ void Driver::MainLoop()
                 this->active_user_->UpdateInformation(this->get_users());
                 break;
             case 5: // overview of placed bids
-                this->DisplayCurrentBids(active_user_);
-                break;
-            case 6: // manage bids
                 this->DisplayCurrentBids(this->active_user_);
                 break;
-            case 7:
+            case 6:
                 this->active_user_ = nullptr;
                 signedIn = false;
                 break;
-            case 8:
+            case 7:
                 this->running_ = false;
                 break;
             default:
