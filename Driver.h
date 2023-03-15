@@ -73,7 +73,9 @@ public:
 	
 	bool IsRunning() { return running_; };
 
-	void UpdateCsv();
+	void UpdateUserCsv();
+
+	void UpdateProductsCsv();
 
 private:
 	static Driver *DriverPtr;
