@@ -37,7 +37,7 @@ public:
 
 	// void DisplaySimilarProductsSold(const unsigned int product_id);
 
-	void CreateConversation(User *buyer, User *seller);
+	void CreateConversation(User *buyer, User *seller, Product* won);
 
 	void handleConversing(User *userPtr);
 

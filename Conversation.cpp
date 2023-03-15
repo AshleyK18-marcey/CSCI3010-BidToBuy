@@ -47,7 +47,7 @@ void Conversation::DisplayMessages()
 */
 bool Conversation::UserPresent(User *user)
 {
-    if (user == this->buyerPtr_ || user == this->sellerPtr_)
+    if (user->get_name() == this->buyerPtr_->get_name() || user->get_name() == this->sellerPtr_->get_name())
     {
         return true;
     }

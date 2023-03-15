@@ -302,10 +302,16 @@ void Driver::DisplayCurrentBids(User *Buyer)
  * @param buyer User pointer
  * @param seller User pointer
  */
-void Driver::CreateConversation(User *buyer, User *seller)
+void Driver::CreateConversation(User *buyer, User *seller, Product* won)
 {
+    std::stringstream stream;
+    std::string message;
+    stream << buyer->get_name() << " you have won " << won->get_title() << " Sold by " << seller->get_name();
+    message = stream.str();
     Conversation *convPtr = new Conversation(buyer, seller);
+    convPtr->SendMessage(message, seller);
     this->conversations_.push_back(convPtr);
+
 }
 
 /**
@@ -647,7 +653,7 @@ void Driver::HandleOpenCloseBid()
                     validInput = true;
                 }
             }
-
+            Product* closing_product = activeProducts.at(selection);
             // close the selected bid and move it to sold products vector if valid sale was made
             if(selection >= 0 && activeProducts.at(selection)->CloseBid()) {
                 // check for conversation between the buyer and seller already existing
@@ -663,7 +669,7 @@ void Driver::HandleOpenCloseBid()
                 // if conversation was not found create a new one
                 if (!foundConversation)
                 {
-                    CreateConversation(activeProducts.at(selection)->get_buyer(), this->active_user_);
+                    CreateConversation(activeProducts.at(selection)->get_buyer(), this->active_user_, closing_product);
                 }
                 
                 
@@ -810,6 +816,8 @@ void Driver::MainLoop()
                 break;
             case 7:
                 this->running_ = false;
+                UpdateUserCsv();
+                UpdateProductsCsv();
                 break;
             default:
                 break;
