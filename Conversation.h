@@ -16,10 +16,6 @@ public:
 
     void DisplayMessages();
 
-    // unsigned int get_buyerid() { return buyerPtr_->get_userid(); };
-
-    // unsigned int get_sellerid() { return sellerPtr_->get_userid(); };
-
     User *get_buyer_ptr() { return buyerPtr_; };
 
     User *get_seller_ptr() { return sellerPtr_; };

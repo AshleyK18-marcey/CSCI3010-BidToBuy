@@ -1,5 +1,11 @@
 #include "Product.h"
 #include <sstream>
+/**
+ * @brief only accepts an string 
+ *
+ * @param prompt string to be displayed prompting user for input
+ * @return string
+ */
 std::string promptValidString(std::string prompt)
 {
     bool validInput = false;
@@ -77,6 +83,12 @@ float promptValidFloat(std::string prompt)
     return val;
 }
 
+/**
+ * @brief only accepts a double
+ *
+ * @param prompt string to be displayed prompting user for input
+ * @return double
+ */
 double promptValidDouble(std::string prompt)
 {
     bool validInput = false;
@@ -152,12 +164,22 @@ std::string Product::Stringify()
     return returnVal;
 }
 
+/**
+ * @brief Adds bid to a product
+ * 
+ * @param bid the amount the user wants to bid
+ * @param user the user making the bid
+*/
 void Product::MakeBid(double bid, User *user)
 {
     this->bid_vals_.push_back(bid);
     this->bidders_.push_back(user);
 }
 
+/**
+ * @brief Closes bidding for a product by checking the bidders balance and setting the winner and final bid price
+ * 
+*/
 bool Product::CloseBid()
 {
     this->active_ = false;
@@ -236,8 +258,7 @@ float Product::get_last_bid()
 /**
     When a seller closes a sale this sets the greatest value bid to the final bid that won
 
-    @param radius The radius of the circle.
-    @return The volume of the sphere.
+    @param bid the bid amount
 */
 void Product::SetFinalBid(double bid)
 {
@@ -251,11 +272,21 @@ void Product::SetFinalBid(double bid)
     }
 }
 
+/**
+ * @brief Sets the title of the product
+ * 
+ * @param newTitle the string to set the title to
+*/
 void Product::SetTitle(std::string newTitle)
 {
     title_ = newTitle;
 }
 
+/**
+ * @brief Sets the condition of the product
+ * 
+ * @param current_condition the condition in int form of the product
+*/
 bool Product::SetCondition(int current_condition)
 {
     switch (current_condition)
@@ -284,6 +315,11 @@ bool Product::SetCondition(int current_condition)
     }
 }
 
+/**
+ * @brief Returns the condition of a product as a string containing the enum title or correlating int
+ * 
+ * @param asString boolean flag to return condition as a string, if this is false then it returns a string containing an integer
+*/
 std::string Product::get_condition(bool asString)
 {
     if (asString)
@@ -328,27 +364,22 @@ std::string Product::get_condition(bool asString)
     }
 }
 
+/**
+ * @brief Adds bid to a product
+ * 
+ * @param bid the amount the user wants to bid
+ * @param user the user making the bid
+*/
 void Product::StartBid(double bid)
 {
     bid_vals_.push_back(bid);
     bidders_.push_back(get_seller());
 }
 
-/**
-    Displays the product id, the seller and buyer and the final price
-
-    @param os the stream
-    @param p the product to display the information of
-    @return the stream to display the information to the user
-
-std::ostream &operator<<(std::ostream &os, const Product &p)
-{
-    os << "ID: " << p.Stringify(p.get_type()) << ", seller -> buyer: " << p.seller_ptr_->get_name() << " -> " << p.buyer_ptr_->get_name() << ", final price: " << p.get_final_bid();
-    return os;
-}
-*/
-
 // -----Car-----
+/**
+ * @brief Assembles a car product by prompting the user for the meta data details
+*/
 void Car::AssembleProduct()
 {
     std::cout << "=========================================" << std::endl;
@@ -365,6 +396,16 @@ void Car::AssembleProduct()
     std::cout << "=========================================" << std::endl;
 }
 
+/**
+ * @brief Assigns the meta data read by csv to a new product added to sold products
+ * 
+ * @param title the title of the product
+ * @param make the make of the car
+ * @param model the model of car
+ * @param year the year of the car 
+ * @param blank blank meta data space - not used 
+ * @param condition the condition of the product 
+*/
 void Car::AssignMetaData(std::string title, std::string make, std::string model, std::string year, std::string blank, std::string condition)
 {
     this->SetTitle(title);
@@ -373,7 +414,9 @@ void Car::AssignMetaData(std::string title, std::string make, std::string model,
     this->SetYear(std::stoi(year));
     this->SetCondition(std::stoi(condition));
 }
-
+/**
+ * @brief Prints the details of a car product
+*/
 std::string Car::Stringify()
 {
     std::stringstream stream;
@@ -443,6 +486,10 @@ void Car::SetYear(unsigned int newYear)
     this->year_ = newYear;
 }
 
+/**
+ * @brief used to write out to the csv files, returns detail based on the parameter
+ * @param option the meta data number to return 
+*/
 std::string Car::get_metadata(int option)
 {
     if (option == 1)
@@ -461,6 +508,10 @@ std::string Car::get_metadata(int option)
 }
 
 // -----Furniture-----
+
+/**
+ * @brief prompts user for details of their furniture product 
+*/
 void Furniture::AssembleProduct()
 {
     std::cout << "=========================================" << std::endl;
@@ -479,6 +530,16 @@ void Furniture::AssembleProduct()
     this->StartBid(promptValidDouble("Starting Bid? "));
 }
 
+/**
+ * @brief Assigns the meta data read by csv to a new product added to sold products
+ * 
+ * @param title the title of the product
+ * @param material the material
+ * @param length the length of the product
+ * @param width the width of the product 
+ * @param height the height of the product
+ * @param condition the condition of the product 
+*/
 void Furniture::AssignMetaData(std::string title, std::string material, std::string length, std::string width, std::string height, std::string condition)
 {
     this->SetTitle(title);
@@ -489,6 +550,9 @@ void Furniture::AssignMetaData(std::string title, std::string material, std::str
     this->SetCondition(std::stoi(condition));
 };
 
+/**
+ * @brief prints the details of a furniture product
+*/
 std::string Furniture::Stringify()
 {
     std::stringstream stream;
@@ -580,6 +644,10 @@ void Furniture::SetHeight(float newHeight)
     height_ = newHeight;
 }
 
+/**
+ * @brief used for writing out to csv file returns string form of meta data 
+ * @param option the int of meta data 
+*/
 std::string Furniture::get_metadata(int option)
 {
     std::stringstream stream;

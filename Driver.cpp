@@ -469,13 +469,13 @@ void Driver::signIn()
         if (this->users_[i]->get_name() == userName)
         {
             if (selection == "b")
-            {
-                // active_user_ = new Buyer(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+            { //buyer
+                
                 active_user_ = new Buyer(users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
             }
             else
             { // seller
-                // active_user_ = new Seller(users_[i]->get_userid(), users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
+                
                 active_user_ = new Seller(users_[i]->get_name(), users_[i]->get_phone(), users_[i]->get_address(), users_[i]->get_balance());
             }
         }
@@ -717,18 +717,20 @@ void Driver::HandleOpenCloseBid()
         }
     }
 }
-
+/*
+    Asks the user for the product category they want to see similar prices of and displays all historically sold products of that category
+*/
 void Driver::DisplaySimilarProductsSold() {
     std::string typeString;
     bool validInput = false;
-    int selection;
+    int selection; 
     std::cout << "0) Car" << std::endl;
     std::cout << "1) Furniture" << std::endl;
     std::cout << "2) Book" << std::endl;
     std::cout << "3) Computer" << std::endl;
     std::cout << "4) Jewelry" << std::endl;
     while(!validInput) {
-        selection = promptValidInt("Enter number of product type you wish to see historical sales for or (q)uit: ");
+        selection = promptValidInt("Enter number of product type you wish to see historical sales for or (q)uit: "); //Asks the user what category they want to see
         if (selection == -1)
         {
             return;
@@ -757,7 +759,7 @@ void Driver::DisplaySimilarProductsSold() {
     }
 
     int displayedItems = 0;
-    std::cout << "Products of type " << typeString << ":";
+    std::cout << "Products of type " << typeString << ":"; //display products sold of selected type
     for (unsigned int i = 0; i < this->sold_products_.size(); i++) {
         if (this->sold_products_.at(i)->get_type_string() == typeString)
         {
@@ -819,14 +821,14 @@ void Driver::MainLoop()
             case 6: // manage bids
                 this->HandleOpenCloseBid();
                 break;
-            case 7:
+            case 7: //displays products sorted by category
                 this->DisplaySimilarProductsSold();
                 break;
-            case 8:
+            case 8: //sign out
                 this->active_user_ = nullptr;
                 signedIn = false;
                 break;
-            case 9:
+            case 9: //exit program and update csv data
                 this->running_ = false;
                 UpdateUserCsv();
                 UpdateProductsCsv();
@@ -863,11 +865,11 @@ void Driver::MainLoop()
             case 5: // overview of placed bids
                 this->DisplayCurrentBids(this->active_user_);
                 break;
-            case 6:
+            case 6: //sign out
                 this->active_user_ = nullptr;
                 signedIn = false;
                 break;
-            case 7:
+            case 7: //exit program and update csv files
                 this->running_ = false;
                 UpdateUserCsv();
                 UpdateProductsCsv();
@@ -903,20 +905,23 @@ void Driver::OverviewBuyer(User *Buyer)
     std::cout << "Products that you have placed a bid on: " << std::endl;
     DisplayCurrentBids(Buyer);
 }
-
+/*
+    Writes out to the user csv file to update any user information
+*/
 void Driver::UpdateUserCsv()
 {
-    std::ofstream outfs("./runtime_data/user.csv", std::ios::trunc);
+    
+    std::ofstream outfs("./runtime_data/user.csv", std::ios::trunc); //open the file to write to
     std::string name;
     std::string phone;
     std::string address;
     std::string bal;
 
-    for (unsigned int k = 0; k < 2; k++)
+    for (unsigned int k = 0; k < 2; k++) //avoid overwriting the header
     {
         if (k == 1)
         {
-            for (unsigned int i = 0; i < users_.size(); i++)
+            for (unsigned int i = 0; i < users_.size(); i++) //for each user, write out their current fields
             {
                 name = users_[i]->get_name();
                 phone = users_[i]->get_phone();
@@ -936,10 +941,12 @@ void Driver::UpdateUserCsv()
         }
     }
 }
-
+/*
+    Writes out to the products csv and updates the history of sold products
+*/
 void Driver::UpdateProductsCsv()
 {
-    std::ofstream outfs("./runtime_data/products.csv", std::ios::trunc);
+    std::ofstream outfs("./runtime_data/products.csv", std::ios::trunc); //open the file to write to
     std::string product_type;
     std::string seller;
     std::string buyer;
@@ -951,11 +958,11 @@ void Driver::UpdateProductsCsv()
     std::string meta_data4;
     std::string condition;
 
-    for (unsigned int k = 0; k < 2; k++)
+    for (unsigned int k = 0; k < 2; k++) //avoid overwriting the header
     {
         if (k == 1)
         {
-            for (unsigned int i = 0; i < sold_products_.size(); i++)
+            for (unsigned int i = 0; i < sold_products_.size(); i++) //traverse all sold products and update the csv with new entries
             {
                 product_type = sold_products_[i]->get_type_string();
                 seller = sold_products_[i]->get_seller()->get_name();

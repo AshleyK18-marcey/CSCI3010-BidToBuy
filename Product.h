@@ -1,9 +1,6 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 #include "Users.h"
-//#include "helpers.cpp"
-//#include "ProductFactory.h"
-//#include "ProductFactory.h"
 
 std::string promptValidString(std::string prompt);
 int promptValidInt(std::string prompt);
@@ -71,7 +68,6 @@ public:
         return final_bid_;
     }
     unsigned int get_UUID() { return uuid_; };
-    // friend std::ostream &operator<<(std::ostream &os, const Product &p);
 
     virtual void AssembleProduct() = 0;
 

@@ -2,7 +2,6 @@
 #define DRIVER_H
 #include "Product.h"
 #include "Conversation.h"
-//#include "Users.h"
 #include "ProductFactory.h"
 
 
@@ -29,12 +28,6 @@ public:
 	
 	~Driver();
 
-	// void PostProductForSale(Product *newProduct);
-
-	// void OpenBid(Product *product);
-
-	// void CloseBid(Product *product);
-
 	void DisplaySimilarProductsSold();
 
 	void CreateConversation(User *buyer, User *seller, Product* won);
@@ -50,8 +43,6 @@ public:
 	void HandlePlaceBid();
 
 	void HandleOpenCloseBid();
-
-	// void DisplayBoughtProducts(User* buyer);
 
 	void DisplayCurrentBids(User* Buyer);
 

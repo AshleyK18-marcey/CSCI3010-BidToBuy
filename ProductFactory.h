@@ -1,7 +1,6 @@
 #ifndef PRODUCTFACTORY_H
 #define PRODUCTFACTORY_H
 #include "Product.h"
-//#include "Users.h"
 
 class ProductFactory
 {
