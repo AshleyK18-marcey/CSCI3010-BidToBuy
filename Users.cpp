@@ -13,8 +13,10 @@ User::User(std::string name, std::string phone, std::string address, double bala
 }
 
 /**
-    Sets the name of the user
-*/
+ * @brief Sets the name of the user, will do nothing if an empty string is passed
+ * 
+ * @param newName the new name to be set
+ */
 void User::SetName(std::string newName)
 {
     if (newName.length() > 0)
@@ -24,8 +26,10 @@ void User::SetName(std::string newName)
 }
 
 /**
-    Sets the phone number of the user
-*/
+ * @brief Sets the phone number of the user, will do nothing if an empty string is passed
+ * 
+ * @param newPhone the new phone number to be set for the user
+ */
 void User::SetPhone(std::string newPhone)
 {
     if (newPhone.length() > 0)
@@ -35,8 +39,10 @@ void User::SetPhone(std::string newPhone)
 }
 
 /**
-    Sets the address of the user
-*/
+ * @brief sets the address of the user, will do nothing if an empty string is pased
+ * 
+ * @param newAddress the new address to be set for the user
+ */
 void User::SetAddress(std::string newAddress)
 {
     if (newAddress.length() > 0)
@@ -162,6 +168,7 @@ void User::UpdateInformation(std::vector<User *> list_of_current_users)
                         success = false;
                     }
                 }
+                // if good input then find the user and set their phone number
                 if (success)
                 {
                     for (unsigned int i = 0; i < list_of_current_users.size(); i++)
@@ -189,16 +196,20 @@ void User::UpdateInformation(std::vector<User *> list_of_current_users)
                 std::cout << "Current Address: " << get_address() << std::endl;
                 std::cout << "What would you like to change it to? Enter (q) if you no longer want to change your information" << std::endl;
                 std::cout << "==================================================================================================" << std::endl;
+
+                // normalize to uppercase
                 std::string change_to;
                 std::getline(std::cin >> std::ws, change_to);
                 std::string custom_case = change_to;
                 std::transform(change_to.begin(), change_to.end(), change_to.begin(), ::toupper); // translate their choice to uppercase
+
+                //quit option
                 if (change_to == "Q")
                 {
                     change_address = false;
                 }
                 else
-                {
+                { // address was entered, update the address
                     for (unsigned int i = 0; i < list_of_current_users.size(); i++)
                     {
                         if (list_of_current_users[i]->get_name() == get_name())
@@ -239,7 +250,7 @@ std::ostream &operator<<(std::ostream &os, const User &u)
 /**
     Adds the specified amount to the sellers balance
 
-    @param amount the amount to add
+    @param amount the amount to add to the balance
 */
 void Seller::ChangeBalance(double amount)
 {
@@ -250,7 +261,7 @@ void Seller::ChangeBalance(double amount)
 /**
     Subtracts the specified amount from the buyers balance
 
-    @param amount
+    @param amount   amount to subtract the balance by
 */
 void Buyer::ChangeBalance(double amount)
 {
@@ -293,19 +304,6 @@ void Buyer::PrintOptions()
     std::cout << "7) Exit program" << std::endl;
     std::cout << "===============================================================";
 }
-
-// /**
-//  * @brief equality operator overload
-//  * 
-//  * @param other other user object to compare against
-//  * @return true 
-//  * @return false 
-//  */
-// bool User::operator==(const User &other)
-// {
-//     return this->name_ == other.name_ && this->phone_ == other.phone_ && this->address_ == other.address_ && this->userid_ == other.userid_ && this->balance_ == other.balance_;
-// }
-
 
 /**
  * @brief equality operator overload
