@@ -22,12 +22,6 @@ public:
 		}
 	}
 
-	// static Driver& GetInstance() {
-	// 	// gets instantiated the first time
-	// 	static Driver instance; // guaranteed to be destroyed
-
-	// 	return instance;
-	// }
 
 	// Delete the methods we don't want
 	Driver(Driver const &) = delete;		 // copy constructor
@@ -35,11 +29,11 @@ public:
 	
 	~Driver();
 
-	void PostProductForSale(Product *newProduct);
+	// void PostProductForSale(Product *newProduct);
 
-	void OpenBid(Product *product);
+	// void OpenBid(Product *product);
 
-	void CloseBid(Product *product);
+	// void CloseBid(Product *product);
 
 	void DisplaySimilarProductsSold(const unsigned int product_id);
 

@@ -45,6 +45,12 @@ int promptValidInt(std::string prompt)
     return val;
 }
 
+/**
+ * @brief prompt for a valid float, meaning greater than zero or "q", if q returns -1
+ * 
+ * @param prompt string used to prompt user
+ * @return float value >= 0 or -1 if user entered q
+ */
 float promptValidFloat(std::string prompt)
 {
     bool validInput = false;
@@ -55,6 +61,9 @@ float promptValidFloat(std::string prompt)
         std::cout << std::endl
                   << prompt;
         std::getline(std::cin >> std::ws, userInput);
+        if (userInput == "q") {
+            return -1;
+        }
         val = atof(userInput.c_str());
         if (val > 0)
         {
@@ -106,6 +115,11 @@ bool isFloat(std::string myString)
 
 // -----Product-----
 
+/**
+ * @brief basic setter function to set the active status of a product
+ * 
+ * @param active desired active state
+ */
 void Product::SetActive(bool active) {
     this->active_ = active;
 }
@@ -143,7 +157,7 @@ bool Product::CloseBid()
 {
     this->active_ = false;
     // go to index 1 because 0 is seller
-    for (unsigned int i = this->bidders_.size(); i > 1; i--)
+    for (unsigned int i = this->bidders_.size() - 1; i >= 1; i--)
     {
         // check if bidder has sufficient balance
         if (this->bidders_.at(i)->get_balance() >= this->bid_vals_.at(i))
@@ -161,6 +175,7 @@ bool Product::CloseBid()
 */
 void Product::OpenBid()
 {
+    this->active_ = true;
     float startingBid = this->bid_vals_.at(0);
     this->bid_vals_.clear();
     this->bidders_.clear();

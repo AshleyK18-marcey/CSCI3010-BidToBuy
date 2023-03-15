@@ -1,7 +1,11 @@
 #include "Driver.h"
-// #include "Product.h"
-// #include "helpers.cpp"
 
+/**
+ * @brief Converts a string to a ProductCategory to aid in reading from CSVs
+ * 
+ * @param type string that should be the same as one of the ProductCategory enums
+ * @return ProductCategory Matched product category
+ */
 ProductCategory StringToProductCategory(std::string type)
 {
     if (type == "car")
@@ -25,6 +29,7 @@ ProductCategory StringToProductCategory(std::string type)
         return ProductCategory::Jewelry;
     }
 }
+
 // retrieved from: https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
 bool is_number(const std::string &s)
 {
@@ -36,6 +41,10 @@ bool is_number(const std::string &s)
 
 Driver *Driver::DriverPtr = NULL;
 
+/**
+ * @brief Construct a new Driver:: Driver object and read in form the CSV files
+ * 
+ */
 Driver::Driver()
 {
     std::string line; // string to store each line
@@ -141,6 +150,10 @@ Driver::Driver()
     fs.close();
 }
 
+/**
+ * @brief displays all users
+ * 
+ */
 void Driver::DisplayUsers()
 {
     std::cout << "Number of users: " << this->users_.size() << std::endl;
@@ -151,6 +164,12 @@ void Driver::DisplayUsers()
     }
 }
 
+/**
+ * @brief Displays sold products
+ * 
+ * @param specific_to_user flag to set whether or not only products sold by a specified user are shown
+ * @param Seller a pointer to a User object that is used if specific to user is true
+ */
 void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
 {
     if (specific_to_user)
@@ -188,6 +207,12 @@ void Driver::DisplaySoldProducts(bool specific_to_user, User *Seller)
     }
 }
 
+/**
+ * @brief Displays active products
+ * 
+ * @param specific_to_user flag to set whether or not only products from a specified user are shown
+ * @param seller Pointer to a User object to check check sold products for
+ */
 void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
 {
     if (specific_to_user)
@@ -216,15 +241,19 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
     }
 }
 
-void Driver::DisplayInactiveProducts(User *seller)
-{
+/**
+ * @brief Displays inactive products from a seller meaning products that didn't succesfully sell
+ * 
+ * @param seller pointer to User object to match products to
+ */
+void Driver::DisplayInactiveProducts(User * seller) {
     std::cout << "Inactive products from " << seller->get_name() << ":" << std::endl;
     std::vector<Product *> sellers_products;
     for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
     {
         if (this->unsold_products_[i]->get_seller()->get_name() == seller->get_name() && !this->unsold_products_[i]->get_active())
         {
-            sellers_products.push_back(this->sold_products_[i]);
+            sellers_products.push_back(this->unsold_products_[i]);
         }
     }
     for (unsigned int i = 0; i < sellers_products.size(); i++)
@@ -233,17 +262,26 @@ void Driver::DisplayInactiveProducts(User *seller)
     }
 }
 
+/**
+ * @brief prints out all the bids that the given user has placed
+ * 
+ * @param Buyer Pointer to a User object that will have it's bids displayed
+ */
 void Driver::DisplayCurrentBids(User *Buyer)
 {
-    std::cout << "Your bids:" << std::endl;
+    std::cout << "Bids from " << Buyer->get_name() << ":" << std::endl;
     std::vector<Product *> current_bids;
+    // std::cout << "unsold_products.size(): " << this->unsold_products_.size() << std::endl; //debugging
     for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
     {
+        // std::cout << "i: " << i << std::endl;   //debugging
         std::vector<User *> bids = this->unsold_products_[i]->get_bidders();
         for (unsigned int k = 0; k < bids.size(); k++)
         {
-            if (bids[i] == Buyer)
+            // std::cout << "k: " << k << std::endl;   //debugging
+            if (bids[k]->get_name() == Buyer->get_name())
             {
+                // std::cout << "found bid" << std::endl;  //debugging
                 current_bids.push_back(this->unsold_products_[i]);
             }
         }
@@ -260,6 +298,11 @@ void Driver::CreateConversation(User *buyer, User *seller)
     this->conversations_.push_back(convPtr);
 }
 
+/**
+ * @brief Handles the user interaction and logic for a user conversing
+ * 
+ * @param userPtr a pointer to a User object that will be conversing
+ */
 void Driver::handleConversing(User *userPtr)
 {
     std::vector<Conversation *> validConversations; // stores conversation that this user is a part of
@@ -347,6 +390,13 @@ void Driver::handleConversing(User *userPtr)
     }
 }
 
+/**
+ * @brief checks whether or not a user with the given username exists
+ * 
+ * @param name username to check if any user ahs
+ * @return true A user with the given name exists
+ * @return false A user with the give name does not exist
+ */
 bool Driver::UserExists(std::string name)
 {
     for (unsigned int i = 0; i < users_.size(); i++)
@@ -359,6 +409,9 @@ bool Driver::UserExists(std::string name)
     return false;
 }
 
+/**
+ * Signs the user in with a username and has them select to be a buyer or a seller
+*/
 void Driver::signIn()
 {
     std::string userName;
@@ -410,6 +463,9 @@ void Driver::signIn()
     }
 }
 
+/**
+ * handles the the user interaction and logic for a seller to make a new listing for a product
+*/
 void Driver::HandleProductCreation()
 {
     bool validInput = false;
@@ -426,7 +482,8 @@ void Driver::HandleProductCreation()
               << std::endl
               << "4) Computer"
               << std::endl
-              << "5) Jewelry";
+              << "5) Jewelry"
+              << std::endl;
     std::cout << "=========================================" << std::endl;
     while (!validInput)
     {
@@ -474,8 +531,10 @@ void Driver::HandleProductCreation()
     this->unsold_products_.push_back(new_product);
 }
 
-void Driver::HandlePlaceBid()
-{
+/**
+ * Handles the user interaction and logic for a seller to view products for sale and place a bid on a product for sale
+*/
+void Driver::HandlePlaceBid() {
     bool validInput = false;
     std::string input = "";
     int selection;
@@ -498,16 +557,18 @@ void Driver::HandlePlaceBid()
                 float bidAmount;
                 while (!validInput2)
                 {
-                    std::cout << "Enter bid amount: ";
-                    getline(std::cin >> std::ws, input);
-                    if (isFloat(input))
+                    // std::cout << "Enter bid amount or (q)uit: ";
+                    // getline(std::cin >> std::ws, input);
+                    bidAmount = promptValidFloat("Enter bid amount or (q)uit: ");
+                    if (bidAmount >= 0)
                     {
-                        bidAmount = stof(input);
-                        if (bidAmount > this->unsold_products_.at(selection)->get_last_bid())
-                        {
+                        // bidAmount = stof(input);
+                        if (bidAmount > this->unsold_products_.at(selection)->get_last_bid()) {
                             validInput2 = true;
                             this->unsold_products_.at(selection)->MakeBid(bidAmount, this->active_user_);
                         }
+                    } else { // user entered q
+                        validInput2 = true;
                     }
                 }
             }
@@ -515,8 +576,10 @@ void Driver::HandlePlaceBid()
     }
 }
 
-void Driver::HandleOpenCloseBid()
-{
+/**
+ * Handles the user interaction and logic behind a seller opening inactive or closing active bids
+*/
+void Driver::HandleOpenCloseBid() {
     bool validInput = false;
     bool working = true; // flag for whether or not the user wants to continue working on bids
     std::string input = "";
@@ -616,6 +679,10 @@ void Driver::HandleOpenCloseBid()
     }
 }
 
+/**
+ * @brief handles the main looping function and menu functionality
+ * 
+ */
 void Driver::MainLoop()
 {
     std::string userInput = "";
@@ -635,10 +702,11 @@ void Driver::MainLoop()
         {                      // seller
             while (!goodInput) // get user input for main options
             {
-                std::cout << std::endl
-                          << "Enter number of desired action: ";
-                std::cin >> userInput;
-                selection = std::stoi(userInput);
+                // std::cout << std::endl
+                //           << "Enter number of desired action: ";
+                // std::cin >> userInput;
+                // selection = std::stoi(userInput);
+                selection = promptValidInt("Enter number of desired action: ");
                 if (selection > 0 && selection < 9)
                 {
                     goodInput = true;
@@ -668,6 +736,9 @@ void Driver::MainLoop()
                 this->active_user_ = nullptr;
                 signedIn = false;
                 break;
+            case 8:
+                this->running_ = false;
+                break;
             default:
                 break;
             }
@@ -676,11 +747,12 @@ void Driver::MainLoop()
         {                      // buyer
             while (!goodInput) // get user input for main options
             {
-                std::cout << std::endl
-                          << "Enter number of desired action: ";
-                std::cin >> userInput;
-                selection = std::stoi(userInput);
-                if (selection > 0 && selection < 8)
+                // std::cout << std::endl
+                //           << "Enter number of desired action: ";
+                // std::cin >> userInput;
+                // selection = std::stoi(userInput);
+                selection = promptValidInt("Enter number of desired action: ");
+                if (selection > 0 && selection < 9)
                 {
                     goodInput = true;
                 }
@@ -703,10 +775,14 @@ void Driver::MainLoop()
                 this->DisplayCurrentBids(active_user_);
                 break;
             case 6: // manage bids
+                this->DisplayCurrentBids(this->active_user_);
                 break;
             case 7:
                 this->active_user_ = nullptr;
                 signedIn = false;
+                break;
+            case 8:
+                this->running_ = false;
                 break;
             default:
                 break;
@@ -715,6 +791,11 @@ void Driver::MainLoop()
     }
 }
 
+/**
+ * @brief prints out the sold products and products that are open for bidding for a given suer
+ * 
+ * @param Seller 
+ */
 void Driver::OverviewSeller(User *Seller)
 {
     std::cout << "Sold Products: " << std::endl;
@@ -724,6 +805,11 @@ void Driver::OverviewSeller(User *Seller)
     DisplayActiveProducts(true, Seller);
 }
 
+/**
+ * @brief prints out an overview of a user's bids
+ * 
+ * @param Buyer 
+ */
 void Driver::OverviewBuyer(User *Buyer)
 {
     std::cout << "Products that you have placed a bid on: " << std::endl;

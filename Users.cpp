@@ -241,7 +241,7 @@ std::ostream &operator<<(std::ostream &os, const User &u)
 void Seller::ChangeBalance(double amount)
 {
     balance_ += amount;
-    std::cout << "New Balance: " << balance_ << std::endl;
+    std::cout << "New Balance of " << this->get_name() << ": " << balance_ << std::endl;
 }
 
 /**
@@ -252,9 +252,13 @@ void Seller::ChangeBalance(double amount)
 void Buyer::ChangeBalance(double amount)
 {
     balance_ -= amount;
-    std::cout << "New Balance: " << balance_ << std::endl;
+    std::cout << "New Balance of " << this->get_name() << ": " << balance_ << std::endl;
 }
 
+/**
+ * @brief prints the main menu options for sellers
+ * 
+ */
 void Seller::PrintOptions()
 {
     std::cout << "===============================================================" << std::endl;
@@ -265,9 +269,14 @@ void Seller::PrintOptions()
     std::cout << "5) Overview of sold products" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
     std::cout << "7) Sign out" << std::endl;
+    std::cout << "8) Exit program" << std::endl;
     std::cout << "===============================================================";
 }
 
+/**
+ * @brief prints the main menu options for buyers
+ * 
+ */
 void Buyer::PrintOptions()
 {
     std::cout << "===============================================================" << std::endl;
@@ -278,9 +287,17 @@ void Buyer::PrintOptions()
     std::cout << "5) Overview of placed bids" << std::endl;
     std::cout << "6) Manage bids" << std::endl;
     std::cout << "7) Sign out" << std::endl;
+    std::cout << "8) Exit program" << std::endl;
     std::cout << "===============================================================";
 }
 
+/**
+ * @brief equality operator overload
+ * 
+ * @param other other user object to compare against
+ * @return true 
+ * @return false 
+ */
 bool User::operator==(const User &other)
 {
     return this->name_ == other.name_ && this->phone_ == other.phone_ && this->address_ == other.address_ && this->userid_ == other.userid_ && this->balance_ == other.balance_;
