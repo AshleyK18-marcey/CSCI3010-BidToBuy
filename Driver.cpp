@@ -652,6 +652,23 @@ void Driver::HandleOpenCloseBid()
 
             // close the selected bid and move it to sold products vector if valid sale was made
             if(selection >= 0 && activeProducts.at(selection)->CloseBid()) {
+                // check for conversation between the buyer and seller already existing
+                bool foundConversation = false;
+                for (unsigned int i = 0; i < this->conversations_.size(); i++)
+                {
+                    if(this->conversations_.at(i)->get_seller_ptr()->get_name() == this->active_user_->get_name() && this->conversations_.at(i)->get_buyer_ptr()->get_name() == activeProducts.at(selection)->get_buyer()->get_name()) {
+                        foundConversation = true;
+                        break;
+                    }
+                }
+
+                // if conversation was not found create a new one
+                if (!foundConversation)
+                {
+                    CreateConversation(activeProducts.at(selection)->get_buyer(), this->active_user_);
+                }
+                
+                
                 this->sold_products_.push_back(activeProducts.at(selection));
                 for (unsigned int i = 0; i < this->unsold_products_.size(); i++)
                 {

@@ -164,6 +164,7 @@ bool Product::CloseBid()
         {
             this->bidders_.at(i)->ChangeBalance(this->bid_vals_.at(i));
             this->seller_ptr_->ChangeBalance(this->bid_vals_.at(i));
+            this->SetBuyer(bidders_.at(i));
             return true;
         }
     }
