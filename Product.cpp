@@ -351,7 +351,7 @@ std::ostream &operator<<(std::ostream &os, const Product &p)
 // -----Car-----
 void Car::AssembleProduct()
 {
-
+    std::cout << "=========================================" << std::endl;
     this->SetTitle(promptValidString("Enter the listing title: "));
     this->SetMake(promptValidString("Enter make of car: "));
     this->SetModel(promptValidString("Enter model of car: "));
@@ -362,6 +362,7 @@ void Car::AssembleProduct()
         valid = this->SetCondition(promptValidInt("Enter the condition of your Car (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
     this->StartBid(promptValidDouble("Starting Bid? "));
+    std::cout << "=========================================" << std::endl;
 }
 
 void Car::AssignMetaData(std::string title, std::string make, std::string model, std::string year, std::string blank, std::string condition)
@@ -388,6 +389,7 @@ std::string Car::Stringify()
                << "Year: " << this->GetYear() << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
     else
     {
@@ -399,6 +401,7 @@ std::string Car::Stringify()
                << "Year: " << this->GetYear() << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
 
     return returnVal;
@@ -460,11 +463,13 @@ std::string Car::get_metadata(int option)
 // -----Furniture-----
 void Furniture::AssembleProduct()
 {
+    std::cout << "=========================================" << std::endl;
     this->SetTitle(promptValidString("Enter the listing title: "));
     this->SetMaterial(promptValidString("What is the material? "));
     this->SetLength(promptValidFloat("What is the length of the product in inches? "));
     this->SetWidth(promptValidFloat("What is the width of the product in inches? "));
     this->SetHeight(promptValidFloat("What is the height of the product in inches? "));
+    std::cout << "=========================================" << std::endl;
 
     bool valid = false;
     while (!valid)
@@ -500,6 +505,7 @@ std::string Furniture::Stringify()
                << "Height: " << this->GetHeight() << "in" << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
     else
     {
@@ -512,6 +518,7 @@ std::string Furniture::Stringify()
                << "Height: " << this->GetHeight() << "in" << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
 
     return returnVal;
@@ -604,6 +611,7 @@ std::string Furniture::get_metadata(int option)
 // ------ Book -------
 void Book::AssembleProduct()
 {
+    std::cout << "=========================================" << std::endl;
     this->SetTitle(promptValidString("Enter the listing title: "));
     this->SetBookTitle(promptValidString("What is the title of the book? "));
     this->SetAuthor(promptValidString("Who is the author? "));
@@ -613,6 +621,7 @@ void Book::AssembleProduct()
         valid = this->SetCondition(promptValidInt("Enter the condition of your Book (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
     this->StartBid(promptValidDouble("Starting Bid? "));
+    std::cout << "=========================================" << std::endl;
 }
 
 void Book::AssignMetaData(std::string title, std::string book_title, std::string author, std::string blank, std::string blank2, std::string condition)
@@ -637,6 +646,7 @@ std::string Book::Stringify()
                << "Author: " << this->GetAuthor() << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
     else
     {
@@ -647,6 +657,7 @@ std::string Book::Stringify()
                << "Author: " << this->GetAuthor() << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
 
     return returnVal;
@@ -679,6 +690,7 @@ std::string Book::get_metadata(int option)
 // --------- Computer -----------
 void Computer::AssembleProduct()
 {
+    std::cout << "=========================================" << std::endl;
     this->SetTitle(promptValidString("Enter the listing title: "));
     this->SetScreenSize(promptValidFloat("What is the screen size? "));
     this->SetProcessorSpeed(promptValidFloat("What is the processor speed of the computer? "));
@@ -689,6 +701,7 @@ void Computer::AssembleProduct()
         valid = this->SetCondition(promptValidInt("Enter the condition of your Computer (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
     this->StartBid(promptValidDouble("Starting Bid? "));
+    std::cout << "=========================================" << std::endl;
 }
 
 void Computer::AssignMetaData(std::string title, std::string screensize, std::string processorSpeed, std::string memory, std::string blank, std::string condition)
@@ -715,6 +728,7 @@ std::string Computer::Stringify()
                << "Memory: " << this->GetMemory() << "GB" << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
     else
     {
@@ -726,6 +740,7 @@ std::string Computer::Stringify()
                << "Memory: " << this->GetMemory() << "GB" << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
 
     return returnVal;
@@ -771,6 +786,7 @@ std::string Computer::get_metadata(int option)
 //------------- Jewelry ---------
 void Jewelry::AssembleProduct()
 {
+    std::cout << "=========================================" << std::endl;
     this->SetTitle(promptValidString("Enter the listing title: "));
     this->SetMaterial(promptValidString("What is the material (ex. silver or gold)? "));
     this->SetNumDiamonds(promptValidInt("How many jewels or diamonds? "));
@@ -780,6 +796,7 @@ void Jewelry::AssembleProduct()
         valid = this->SetCondition(promptValidInt("Enter the condition of your Jewelry (1 - New , 2 - Used Very Good, 3 - Used Good, 4 - Used Okay): "));
     }
     this->StartBid(promptValidDouble("Starting Bid? "));
+    std::cout << "=========================================" << std::endl;
 }
 
 void Jewelry::AssignMetaData(std::string title, std::string material, std::string numDiamonds, std::string blank, std::string blank2, std::string condition)
@@ -804,6 +821,7 @@ std::string Jewelry::Stringify()
                << "Number of jewels or diamonds: " << this->GetNumDiamonds() << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
     else
     {
@@ -814,6 +832,7 @@ std::string Jewelry::Stringify()
                << "Number of jewels or diamonds: " << this->GetNumDiamonds() << std::endl
                << "Condition: " << this->get_condition(true);
         returnVal = stream.str();
+        std::cout << "=========================================" << std::endl;
     }
 
     return returnVal;

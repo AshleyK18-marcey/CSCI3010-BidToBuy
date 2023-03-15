@@ -227,6 +227,7 @@ void Driver::DisplayActiveProducts(bool specific_to_user, User *seller)
         }
         for (unsigned int i = 0; i < sellers_products.size(); i++)
         {
+            //std::cout << "=========================================" << std::endl;
             std::cout << i << ") " << sellers_products[i]->Stringify() << std::endl;
         }
     }
