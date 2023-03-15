@@ -654,9 +654,10 @@ void Driver::HandleOpenCloseBid()
                     validInput = true;
                 }
             }
-            Product* closing_product = activeProducts.at(selection);
+            
             // close the selected bid and move it to sold products vector if valid sale was made
             if(selection >= 0 && activeProducts.at(selection)->CloseBid()) {
+                Product* closing_product = activeProducts.at(selection);
                 // check for conversation between the buyer and seller already existing
                 bool foundConversation = false;
                 for (unsigned int i = 0; i < this->conversations_.size(); i++)
