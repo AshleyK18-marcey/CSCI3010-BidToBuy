@@ -37,8 +37,10 @@ int promptValidInt(std::string prompt)
             return -1;
         }
         val = atoi(userInput.c_str());
-        if (val >= 0)
+        if (val > 0)
         {
+            validInput = true;
+        } else if(userInput == "0") {
             validInput = true;
         }
     }

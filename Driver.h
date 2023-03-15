@@ -35,7 +35,7 @@ public:
 
 	// void CloseBid(Product *product);
 
-	// void DisplaySimilarProductsSold(const unsigned int product_id);
+	void DisplaySimilarProductsSold();
 
 	void CreateConversation(User *buyer, User *seller);
 
